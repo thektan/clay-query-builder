@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Clay Query Builder</title>
+
+    <link rel="stylesheet" href="../node_modules/clay-css/lib/css/atlas.css">
+
+    <script src="../dist/build/globals/query-builder.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        new metal.ClayQueryBuilder({
+            criteria: {
+                "user.jobTitle": {
+                    value: "user.jobTitle", // Used when translating into the query
+                    label: "jobTitle", // Displayed on the sidebar
+                    type: "string", // Determines which operators are available
+                    acceptedValues: [
+                        {
+                            label: "developer",
+                            value: "developer"
+                        },
+                        {
+                            label: "engineer",
+                            value: "engineer"
+                        }
+                    ], // Will convert the value input into a select input
+                },
+                "user.age": {
+                    value: "user.age",
+                    label: "age",
+                    type: "number",
+                    acceptedValues: null
+                }
+            },
+            conjunctions: {
+                "AND": {
+                    label: "AND", // Button display text
+                    value: "AND" // Value used for constructing the query
+                },
+                "OR": {
+                    label: "OR",
+                    value: "OR"
+                }
+            },
+            operators: {
+                eq: {
+                    label: "equals",
+                    value: "eq",
+                    supportedTypes: ["boolean", "date", "number", "string"]
+                },
+                gt: {
+                    label: "greater-than",
+                    value: "gt",
+                    supportedTypes: ["date", "number"]
+                },
+                gte: {
+                    label: "greater than or equals",
+                    value: "gte",
+                    supportedTypes: ["date", "number"]
+                },
+                lt: {
+                    label: "less-than",
+                    value: "lt",
+                    supportedTypes: ["date", "number"]
+                },
+                lte: {
+                    label: "less-than-or-equals",
+                    value: "lte",
+                    supportedTypes: ["date", "number"]
+                }
+            },
+            maxNesting: 6,
+            canReorder: true,
+            spritemap: 'icons.svg',
+            queries: [
+                {
+                    conjunctionId: 'OR',
+                    criterionId: 'user.jobTitle',
+                    operatorId: 'eq'
+                },
+                {
+                    conjunctionId: 'OR',
+                    criterionId: 'user.jobTitle',
+                    operatorId: 'eq'
+                }
+            ]
+        });
+    </script>
+</body>
+
+</html>

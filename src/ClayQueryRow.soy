@@ -1,0 +1,75 @@
+{namespace ClayQueryRow}
+
+/**
+* Renders a query row.
+*/
+{template .render}
+	{@param spritemap: string}
+	// {@param criteria: list<?>}
+	// {@param options: list<?>}
+
+	<div class="query-row">
+		<div class="form-group-autofit">
+			<div class="form-group-item">
+				{call ClaySelect.render}
+					{param multiple: false /}
+					{param name: 'criteria' /}
+					{param options: [
+						[
+							'label': 'Option 1',
+							'value': '1'
+						],
+						[
+							'label': 'Option 2',
+							'value': '2'
+						]
+					] /}
+					{param type: 'button' /}
+				{/call}
+			</div>
+
+			<div class="form-group-item">
+				{call ClaySelect.render}
+					{param multiple: false /}
+					{param name: 'criteria' /}
+					{param options: [
+						[
+							'label': 'is',
+							'value': 'is'
+						],
+						[
+							'label': 'is not',
+							'value': 'is not'
+						]
+					] /}
+					{param type: 'button' /}
+				{/call}
+			</div>
+
+			<div class="form-group-item">
+				<input class="form-control" id="queryRowValue" type="text"/>
+			</div>
+
+			<div class="form-group-item form-group-item-shrink">
+				<div class="btn-group">
+					<div class="btn-group-item">
+						{call ClayButton.render}
+							{param icon: 'check' /}
+							{param monospaced: true /}
+							{param spritemap: $spritemap /}
+						{/call}
+					</div>
+
+					<div class="btn-group-item">
+						{call ClayButton.render}
+							{param icon: 'times' /}
+							{param monospaced: true /}
+							{param spritemap: $spritemap /}
+							{param style: 'secondary' /}
+						{/call}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/template}
