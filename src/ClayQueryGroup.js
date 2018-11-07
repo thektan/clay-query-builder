@@ -13,7 +13,7 @@ class ClayQueryGroup extends Component {
 	}
 
 	/**
-	 * Gets the
+	 * Gets the conjunction object from the selected id.
 	 *
 	 * @param {string} conjunctionId
 	 * @returns
