@@ -4,9 +4,10 @@
 * Renders a query row.
 */
 {template .render}
+	{@param criteria: list<?>}
+	{@param operators: list<?>}
 	{@param spritemap: string}
-	// {@param criteria: list<?>}
-	// {@param options: list<?>}
+	{@param? value: ?}
 
 	<div class="query-row">
 		<div class="form-group-autofit">
@@ -14,16 +15,7 @@
 				{call ClaySelect.render}
 					{param multiple: false /}
 					{param name: 'criteria' /}
-					{param options: [
-						[
-							'label': 'Option 1',
-							'value': '1'
-						],
-						[
-							'label': 'Option 2',
-							'value': '2'
-						]
-					] /}
+					{param options: $criteria /}
 					{param type: 'button' /}
 				{/call}
 			</div>
@@ -31,23 +23,14 @@
 			<div class="form-group-item">
 				{call ClaySelect.render}
 					{param multiple: false /}
-					{param name: 'criteria' /}
-					{param options: [
-						[
-							'label': 'is',
-							'value': 'is'
-						],
-						[
-							'label': 'is not',
-							'value': 'is not'
-						]
-					] /}
+					{param name: 'operator' /}
+					{param options: $operators /}
 					{param type: 'button' /}
 				{/call}
 			</div>
 
 			<div class="form-group-item">
-				<input class="form-control" id="queryRowValue" type="text"/>
+				<input class="form-control" id="queryRowValue" value="{$value}" type="text"/>
 			</div>
 
 			<div class="form-group-item form-group-item-shrink">

@@ -5,9 +5,40 @@
 */
 {template .render}
 	{@param spritemap: string}
-	{@param? queries: list<?>}
+	{@param criteria: list<?>}
+	{@param conjunctions: list<?>}
+	{@param? conjunctionSelected: ?}
+	{@param operators: list<?>}
+	{@param query: ?}
 
 	<div class="sheet">
+		{foreach $item in $query.items}
+			{if not isFirst($item)}
+				{call ClayButton.render}
+					{param label: $conjunctionSelected.label /}
+				{/call}
+			{/if}
 
+			{if isNonnull($item.items)}
+				{call ClayQueryGroup.render}
+					{param criteria: $criteria /}
+					{param conjunctions: $conjunctions /}
+					{param operators: $operators /}
+					{param query: $item /}
+					{param spritemap: $spritemap /}
+				{/call}
+			{else}
+				{call ClayQueryRow.render}
+					{param criteria: $criteria /}
+					{param conjunctions: $conjunctions /}
+					{param operators: $operators /}
+					{param query: $item /}
+					{param criteriaId: $item.criteriaId /}
+					{param operatorId: $item.operatorId /}
+					{param value: $item.value /}
+					{param spritemap: $spritemap /}
+				{/call}
+			{/if}
+		{/foreach}
 	</div>
 {/template}

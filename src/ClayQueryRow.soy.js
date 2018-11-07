@@ -35,8 +35,14 @@ var $templateAlias1 = Soy.getTemplate('ClaySelect.incrementaldom', 'render');
  */
 var $render = function(opt_data, opt_ijData, opt_ijData_deprecated) {
   opt_ijData = opt_ijData_deprecated || opt_ijData;
+  /** @type {!Array<?>} */
+  var criteria = soy.asserts.assertType(goog.isArray(opt_data.criteria), 'criteria', opt_data.criteria, '!Array<?>');
+  /** @type {!Array<?>} */
+  var operators = soy.asserts.assertType(goog.isArray(opt_data.operators), 'operators', opt_data.operators, '!Array<?>');
   /** @type {!goog.soy.data.SanitizedContent|string} */
   var spritemap = soy.asserts.assertType(goog.isString(opt_data.spritemap) || opt_data.spritemap instanceof goog.soy.data.SanitizedContent, 'spritemap', opt_data.spritemap, '!goog.soy.data.SanitizedContent|string');
+  /** @type {?} */
+  var value = opt_data.value;
   incrementalDom.elementOpenStart('div');
       incrementalDom.attr('class', 'query-row');
   incrementalDom.elementOpenEnd();
@@ -46,12 +52,12 @@ var $render = function(opt_data, opt_ijData, opt_ijData_deprecated) {
   incrementalDom.elementOpenStart('div');
       incrementalDom.attr('class', 'form-group-item');
   incrementalDom.elementOpenEnd();
-  $templateAlias1({multiple: false, name: 'criteria', options: [{label: 'Option 1', value: '1'}, {label: 'Option 2', value: '2'}], type: 'button'}, opt_ijData);
+  $templateAlias1({multiple: false, name: 'criteria', options: criteria, type: 'button'}, opt_ijData);
   incrementalDom.elementClose('div');
   incrementalDom.elementOpenStart('div');
       incrementalDom.attr('class', 'form-group-item');
   incrementalDom.elementOpenEnd();
-  $templateAlias1({multiple: false, name: 'criteria', options: [{label: 'is', value: 'is'}, {label: 'is not', value: 'is not'}], type: 'button'}, opt_ijData);
+  $templateAlias1({multiple: false, name: 'operator', options: operators, type: 'button'}, opt_ijData);
   incrementalDom.elementClose('div');
   incrementalDom.elementOpenStart('div');
       incrementalDom.attr('class', 'form-group-item');
@@ -59,6 +65,7 @@ var $render = function(opt_data, opt_ijData, opt_ijData_deprecated) {
   incrementalDom.elementOpenStart('input');
       incrementalDom.attr('class', 'form-control');
       incrementalDom.attr('id', 'queryRowValue');
+      incrementalDom.attr('value', value);
       incrementalDom.attr('type', 'text');
   incrementalDom.elementOpenEnd();
   incrementalDom.elementClose('input');
@@ -87,7 +94,10 @@ var $render = function(opt_data, opt_ijData, opt_ijData_deprecated) {
 exports.render = $render;
 /**
  * @typedef {{
+ *  criteria: !Array<?>,
+ *  operators: !Array<?>,
  *  spritemap: (!goog.soy.data.SanitizedContent|string),
+ *  value: (?|undefined),
  * }}
  */
 $render.Params;
@@ -95,8 +105,8 @@ if (goog.DEBUG) {
   $render.soyTemplateName = 'ClayQueryRow.render';
 }
 
-exports.render.params = ["spritemap"];
-exports.render.types = {"spritemap":"string"};
+exports.render.params = ["criteria","operators","spritemap","value"];
+exports.render.types = {"criteria":"list<?>","operators":"list<?>","spritemap":"string","value":"?"};
 templates = exports;
 return exports;
 

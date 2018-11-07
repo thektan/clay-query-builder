@@ -30,16 +30,20 @@ const CLAY_SELECT_ITEM_SHAPE = {
 	value: Config.string().required()
 };
 
-const CRITERION_SHAPE = {
-	value: Config.string().required(),
-	label: Config.string(),
-	type: Config.string(),
-	acceptedValues: Config.arrayOf(Config.shapeOf(CLAY_SELECT_ITEM_SHAPE))
+const QUERY_GROUP_SHAPE = {
+	conjunctionId: Config.string(),
+	items: Config.array()
+};
+
+const QUERY_ITEM_SHAPE = {
+	criteriaId: Config.string(),
+	operatorId: Config.string(),
+	value: Config.oneOfType([Config.string(), Config.array()])
 };
 
 ClayQueryBuilder.STATE = {
 	/**
-	 * A map of criteria that can be selected to create a query from.
+	 * A list of criteria that can be selected to create a query from.
 	 *
 	 * @prop {string} value Used when translating the criteria into a
 	 * 	query string.
@@ -51,37 +55,48 @@ ClayQueryBuilder.STATE = {
 	 * 	input regardless of the "type" prop.
 	 */
 
-	criteria: Config.object(Config.shapeOf(CRITERION_SHAPE)).required(),
+	criteria: Config.arrayOf(
+		Config.shapeOf({
+			value: Config.string().required(),
+			label: Config.string(),
+			type: Config.string(),
+			acceptedValues: Config.arrayOf(
+				Config.shapeOf(CLAY_SELECT_ITEM_SHAPE)
+			)
+		})
+	).required(),
 
 	/**
 	 * A map of conjunctions to combine multiple queries together.
-	 *
-	 * Example:
-	 * {
-	 * 	"AND": {
-	 * 		label: "AND", // String displayed on the button
-	 * 		value: "AND" // Value used for constructing the query
-	 * 	}
-	 * }
+	 * Example: [{label: 'AND', value: 'AND'}]
 	 */
 
-	conjunctions: Config.object(),
+	conjunctions: Config.arrayOf(
+		Config.shapeOf({
+			label: Config.string(),
+			value: Config.string()
+		})
+	),
 
 	/**
 	 * Supported operators and the types they support. According to the
 	 * criteria type, operators will be filtered to show only the supported ones.
 	 *
 	 * Example:
-	 * {
-	 * 	"eq": {
+	 * [{
 	 * 		label: "equals",
 	 * 		value: "eq"
 	 * 		supportedTypes": ["boolean", "date", "number", "string"]
-	 * 	}
-	 * }
+	 * }]
 	 */
 
-	operators: Config.object(),
+	operators: Config.arrayOf(
+		Config.shapeOf({
+			label: Config.string(),
+			supportedTypes: Config.arrayOf(Config.string()),
+			value: Config.string()
+		})
+	),
 
 	/**
 	 * Path to the spritemap svg for displaying the necessary icons throughout
@@ -92,22 +107,18 @@ ClayQueryBuilder.STATE = {
 
 	/**
 	 * Structure of the query.
-	 * @prop {array} childQueries Nested query groups with the same query
-	 * 	structure as this property.
-	 * @prop {object} criterion The criterion selected.
-	 * @prop {string} operatorId The operator id selected.
-	 * @prop {array} values The values selected.
 	 */
 
-	query: Config.arrayOf(
-		Config.shapeOf({
-			conjunctionId: Config.string(),
-			criterionId: Config.string(),
-			operatorId: Config.string(),
-			values: Config.array(),
-			childQueries: Config.array()
-		})
-	).value([]),
+	query: Config.shapeOf({
+		conjunctionId: Config.string(),
+		items: Config.arrayOf(
+			Config.oneOfType([
+				Config.shapeOf(QUERY_GROUP_SHAPE),
+				Config.shapeOf(QUERY_ITEM_SHAPE)
+			])
+		)
+	}),
+
 	rawQuery: Config.string(),
 
 	/**

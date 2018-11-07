@@ -8,23 +8,11 @@ import { Config } from "metal-state";
 import templates from "./ClayQueryRow.soy.js";
 
 class ClayQueryRow extends Component {
-	created() {
-		console.log("testing query row");
-
-		console.log("testing");
-	}
+	created() {}
 }
 
 ClayQueryRow.STATE = {
-    editing: Config.bool().value(false)
-}
-
-ClayQueryRow.PROPS = {
-	criteria: Config.object().required(),
-	criteriaChangeable: Config.bool(),
-	criteriaTypes: Config.object().required(),
-	fieldTypes: Config.object().required(),
-	operators: Config.array().required()
+	editing: Config.bool().value(false)
 };
 
 Soy.register(ClayQueryRow, templates);

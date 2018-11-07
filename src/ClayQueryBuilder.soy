@@ -4,29 +4,19 @@
 * Renders the query builder.
 */
 {template .render}
+	{@param conjunctions: list<?>}
+	{@param criteria: list<?>}
+	{@param operators: list<?>}
+	{@param? query: ?}
 	{@param spritemap: string}
-	{@param criteria: map<string, ?>}
-	{@param conjunctions: map<string, ?>}
-	{@param operators: map<string, ?>}
-	{@param queries: list<?>}
 
 	<div class="query-builder-root">
-		{foreach $query in $queries}
-			{if not isFirst($query)}
-				{let $conjunction: $conjunctions[$query.conjunctionId] /}
-
-				{call ClayButton.render}
-					{param label: $conjunction.label /}
-				{/call}
-			{/if}
-
-			{call ClayQueryGroup.render}
-				{param criteria: $criteria /}
-				{param conjunctions: $conjunctions /}
-				{param operators: $operators /}
-				{param queries: $query /}
-				{param spritemap: $spritemap /}
-			{/call}
-		{/foreach}
+		{call ClayQueryGroup.render}
+			{param criteria: $criteria /}
+			{param conjunctions: $conjunctions /}
+			{param operators: $operators /}
+			{param query: $query /}
+			{param spritemap: $spritemap /}
+		{/call}
 	</div>
 {/template}

@@ -14,8 +14,8 @@
 <body>
     <script type="text/javascript">
         new metal.ClayQueryBuilder({
-            criteria: {
-                "user.jobTitle": {
+            criteria: [
+                {
                     value: "user.jobTitle", // Used when translating into the query
                     label: "jobTitle", // Displayed on the sidebar
                     type: "string", // Determines which operators are available
@@ -30,65 +30,78 @@
                         }
                     ], // Will convert the value input into a select input
                 },
-                "user.age": {
+                {
                     value: "user.age",
                     label: "age",
                     type: "number",
                     acceptedValues: null
                 }
-            },
-            conjunctions: {
-                "AND": {
+            ],
+            conjunctions: [
+                {
                     label: "AND", // Button display text
                     value: "AND" // Value used for constructing the query
                 },
-                "OR": {
+                {
                     label: "OR",
                     value: "OR"
                 }
-            },
-            operators: {
-                eq: {
+            ],
+            operators: [
+                {
                     label: "equals",
                     value: "eq",
                     supportedTypes: ["boolean", "date", "number", "string"]
                 },
-                gt: {
+                {
                     label: "greater-than",
                     value: "gt",
                     supportedTypes: ["date", "number"]
                 },
-                gte: {
+                {
                     label: "greater than or equals",
                     value: "gte",
                     supportedTypes: ["date", "number"]
                 },
-                lt: {
+                {
                     label: "less-than",
                     value: "lt",
                     supportedTypes: ["date", "number"]
                 },
-                lte: {
+                {
                     label: "less-than-or-equals",
                     value: "lte",
                     supportedTypes: ["date", "number"]
                 }
-            },
+            ],
             maxNesting: 6,
             canReorder: true,
             spritemap: 'icons.svg',
-            queries: [
-                {
-                    conjunctionId: 'OR',
-                    criterionId: 'user.jobTitle',
-                    operatorId: 'eq'
-                },
-                {
-                    conjunctionId: 'OR',
-                    criterionId: 'user.jobTitle',
-                    operatorId: 'eq'
-                }
-            ]
+            query: {
+                conjunctionId: 'AND',
+                items: [
+                    {
+                        conjunctionId: 'AND',
+                        items: [
+                            {
+                                criteriaId: 'user.jobTitle',
+                                operatorId: 'eq',
+                                value: 'developer'
+                            }
+                        ]
+                    },
+                    {
+                        conjunctionId: 'AND',
+                        items: [
+                            {
+                                criteriaId: 'user.jobTitle',
+                                operatorId: 'eq',
+                                value: 'developer'
+                            }
+                        ]
+                    }
+                ]
+            }
         });
     </script>
 </body>

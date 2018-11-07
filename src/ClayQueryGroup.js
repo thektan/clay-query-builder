@@ -5,7 +5,30 @@ import { Config } from "metal-state";
 
 import templates from "./ClayQueryGroup.soy.js";
 
-class ClayQueryGroup extends Component {}
+class ClayQueryGroup extends Component {
+	created() {
+		this.conjunctionSelected = this.getConjunctionSelected(
+			this.query.conjunctionId
+		);
+	}
+
+	/**
+	 * Gets the
+	 *
+	 * @param {string} conjunctionId
+	 * @returns
+	 * @memberof ClayQueryGroup
+	 */
+	getConjunctionSelected(conjunctionId) {
+		return this.conjunctions.find(({ value }) => value === conjunctionId);
+	}
+}
+
+ClayQueryGroup.STATE = {
+	conjunctions: Config.array(),
+	conjunctionSelected: Config.object(),
+	query: Config.object()
+};
 
 Soy.register(ClayQueryGroup, templates);
 
