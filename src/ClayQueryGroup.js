@@ -13,10 +13,11 @@ class ClayQueryGroup extends Component {
 	}
 
 	/**
-	 * Gets the conjunction object from the selected id.
+	 * Gets the conjunction object containing a label and value from the
+	 * selected id.
 	 *
 	 * @param {string} conjunctionId
-	 * @returns
+	 * @returns Conjunction object
 	 * @memberof ClayQueryGroup
 	 */
 	getConjunctionSelected(conjunctionId) {

@@ -10,15 +10,7 @@ import templates from "./ClayQueryBuilder.soy.js";
  * Combines multiple queries together. A query has a
  * structure of criteria, operator, and value.
  */
-class ClayQueryBuilder extends Component {
-	created() {
-		console.log("state", this.conjunctions);
-	}
-
-	addQuery() {
-		console.log("state", this.conjunctions);
-	}
-}
+class ClayQueryBuilder extends Component {}
 
 /**
  * Options to be inserted into a clay select input.

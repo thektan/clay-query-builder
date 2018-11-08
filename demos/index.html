@@ -1,109 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Demo: Clay Query Builder</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo: Clay Query Builder</title>
+		<link
+			rel="stylesheet"
+			href="../node_modules/clay-css/lib/css/atlas.css"
+		/>
 
-    <link rel="stylesheet" href="../node_modules/clay-css/lib/css/atlas.css">
+		<script src="../dist/build/globals/query-builder.js"></script>
+	</head>
 
-    <script src="../dist/build/globals/query-builder.js"></script>
-</head>
-
-<body>
-    <script type="text/javascript">
-        new metal.ClayQueryBuilder({
-            criteria: [
-                {
-                    value: "user.jobTitle", // Used when translating into the query
-                    label: "jobTitle", // Displayed on the sidebar
-                    type: "string", // Determines which operators are available
-                    acceptedValues: [
-                        {
-                            label: "developer",
-                            value: "developer"
-                        },
-                        {
-                            label: "engineer",
-                            value: "engineer"
-                        }
-                    ], // Will convert the value input into a select input
-                },
-                {
-                    value: "user.age",
-                    label: "age",
-                    type: "number",
-                    acceptedValues: null
-                }
-            ],
-            conjunctions: [
-                {
-                    label: "AND", // Button display text
-                    value: "AND" // Value used for constructing the query
-                },
-                {
-                    label: "OR",
-                    value: "OR"
-                }
-            ],
-            operators: [
-                {
-                    label: "equals",
-                    value: "eq",
-                    supportedTypes: ["boolean", "date", "number", "string"]
-                },
-                {
-                    label: "greater-than",
-                    value: "gt",
-                    supportedTypes: ["date", "number"]
-                },
-                {
-                    label: "greater than or equals",
-                    value: "gte",
-                    supportedTypes: ["date", "number"]
-                },
-                {
-                    label: "less-than",
-                    value: "lt",
-                    supportedTypes: ["date", "number"]
-                },
-                {
-                    label: "less-than-or-equals",
-                    value: "lte",
-                    supportedTypes: ["date", "number"]
-                }
-            ],
-            maxNesting: 6,
-            canReorder: true,
-            spritemap: 'icons.svg',
-            query: {
-                conjunctionId: 'AND',
-                items: [
-                    {
-                        conjunctionId: 'AND',
-                        items: [
-                            {
-                                criteriaId: 'user.jobTitle',
-                                operatorId: 'eq',
-                                value: 'developer'
-                            }
-                        ]
-                    },
-                    {
-                        conjunctionId: 'AND',
-                        items: [
-                            {
-                                criteriaId: 'user.jobTitle',
-                                operatorId: 'eq',
-                                value: 'developer'
-                            }
-                        ]
-                    }
-                ]
-            }
-        });
-    </script>
-</body>
-
+	<body>
+		<script type="text/javascript">
+			new metal.ClayQueryBuilder({
+				criteria: [
+					{
+						value: "user.jobTitle", // Used when translating into the query
+						label: "jobTitle", // Displayed on the sidebar
+						type: "string", // Determines which operators are available
+						acceptedValues: [
+							{
+								label: "developer",
+								value: "developer"
+							},
+							{
+								label: "engineer",
+								value: "engineer"
+							}
+						] // Will convert the value input into a select input
+					},
+					{
+						value: "user.age",
+						label: "age",
+						type: "number",
+						acceptedValues: null
+					}
+				],
+				conjunctions: [
+					{
+						label: "AND", // Button display text
+						value: "AND" // Value used for constructing the query
+					},
+					{
+						label: "OR",
+						value: "OR"
+					}
+				],
+				operators: [
+					{
+						label: "equals",
+						value: "eq",
+						supportedTypes: ["boolean", "date", "number", "string"]
+					},
+					{
+						label: "greater-than",
+						value: "gt",
+						supportedTypes: ["date", "number"]
+					},
+					{
+						label: "greater than or equals",
+						value: "gte",
+						supportedTypes: ["date", "number"]
+					},
+					{
+						label: "less-than",
+						value: "lt",
+						supportedTypes: ["date", "number"]
+					},
+					{
+						label: "less-than-or-equals",
+						value: "lte",
+						supportedTypes: ["date", "number"]
+					}
+				],
+				maxNesting: 6,
+				canReorder: true,
+				spritemap: "icons.svg",
+				query: {
+					conjunctionId: "AND",
+					items: [
+						{
+							conjunctionId: "AND",
+							items: [
+								{
+									criteriaId: "user.jobTitle",
+									operatorId: "eq",
+									value: "developer"
+								},
+								{
+									criteriaId: "user.jobTitle",
+									operatorId: "eq",
+									value: "developer"
+								}
+							]
+						},
+						{
+							conjunctionId: "AND",
+							items: [
+								{
+									criteriaId: "user.jobTitle",
+									operatorId: "eq",
+									value: "developer"
+								}
+							]
+						}
+					]
+				}
+			});
+		</script>
+	</body>
 </html>
