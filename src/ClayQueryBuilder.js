@@ -72,7 +72,8 @@ ClayQueryBuilder.STATE = {
 
 	/**
 	 * Supported operators and the types they support. According to the
-	 * criteria type, operators will be filtered to show only the supported ones.
+	 * criteria type, operators will be filtered to show only the supported
+	 * ones. The supported types should match the type property on criteria.
 	 *
 	 * Example:
 	 * [{
