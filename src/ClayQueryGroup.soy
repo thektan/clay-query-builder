@@ -10,11 +10,13 @@
 	{@param? conjunctionSelected: ?}
 	{@param operators: list<?>}
 	{@param query: ?}
+	{@param? _handleConjunctionClick: any}
 
 	<div class="sheet">
 		{foreach $item in $query.items}
 			{if not isFirst($item)}
 				{call ClayButton.render}
+					{param events: ['click': $_handleConjunctionClick] /}
 					{param label: $conjunctionSelected.label /}
 				{/call}
 			{/if}
@@ -27,6 +29,7 @@
 					{param operators: $operators /}
 					{param query: $item /}
 					{param spritemap: $spritemap /}
+					{param _handleConjunctionClick: $_handleConjunctionClick /}
 				{/call}
 			{else}
 				{call ClayQueryRow.render}

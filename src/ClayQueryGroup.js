@@ -23,6 +23,25 @@ class ClayQueryGroup extends Component {
 	getConjunctionSelected(conjunctionId) {
 		return this.conjunctions.find(({ value }) => value === conjunctionId);
 	}
+
+	/**
+	 * Cycles through conjunctions.
+	 *
+	 * @param {!Event} event
+	 * @private
+	 */
+	_handleConjunctionClick(event) {
+		const { conjunctions, conjunctionSelected } = this;
+
+		const index = conjunctions.findIndex(
+			item => item.value === conjunctionSelected.value
+		);
+
+		this.conjunctionSelected =
+			index === conjunctions.length - 1
+				? conjunctions[0]
+				: conjunctions[index + 1];
+	}
 }
 
 ClayQueryGroup.STATE = {
