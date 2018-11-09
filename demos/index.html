@@ -93,13 +93,23 @@
 								{
 									criteriaId: "user.jobTitle",
 									operatorId: "eq",
-									value: "developer"
+									value: "doctor"
 								}
 							]
 						},
 						{
-							conjunctionId: "AND",
+							conjunctionId: "OR",
 							items: [
+								{
+									criteriaId: "user.age",
+									operatorId: "eq",
+									value: "developer"
+								},
+								{
+									criteriaId: "user.age",
+									operatorId: "eq",
+									value: "developer"
+								},
 								{
 									criteriaId: "user.age",
 									operatorId: "eq",
