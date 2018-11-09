@@ -8,12 +8,19 @@ import { Config } from "metal-state";
 import templates from "./ClayQueryRow.soy.js";
 
 class ClayQueryRow extends Component {
-	created() {
-		const { criteria, operators } = this;
-		const { criteriaId, operatorId } = this.queryItem;
+	prepareStateForRender(states) {
+		const {
+			criteria,
+			operators,
+			queryItem: { criteriaId, operatorId }
+		} = states;
 
-		this.criteria = this.formatWithSelected(criteria, criteriaId);
-		this.operators = this.formatWithSelected(operators, operatorId);
+		const newState = Object.assign(states, {
+			criteria: this._formatWithSelected(criteria, criteriaId),
+			operators: this._formatWithSelected(operators, operatorId)
+		});
+
+		return newState;
 	}
 
 	/**
@@ -25,7 +32,7 @@ class ClayQueryRow extends Component {
 	 * @returns List of items formatted for the options property on a select
 	 * input.
 	 */
-	formatWithSelected(list, idSelected) {
+	_formatWithSelected(list, idSelected) {
 		return list.map(item => {
 			item.selected = item.value === idSelected;
 
