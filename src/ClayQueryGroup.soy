@@ -7,9 +7,10 @@
 	{@param spritemap: string}
 	{@param criteria: list<?>}
 	{@param conjunctions: list<?>}
-	{@param? conjunctionSelected: ?}
+	{@param? selectedConjunctionName: string}
 	{@param operators: list<?>}
 	{@param query: ?}
+	{@param? _updateQueryRow: any}
 	{@param? _handleConjunctionClick: any}
 
 	<div class="query-group sheet">
@@ -17,7 +18,7 @@
 			{if not isFirst($queryItem)}
 				{call ClayButton.render}
 					{param events: ['click': $_handleConjunctionClick] /}
-					{param label: $conjunctionSelected.label /}
+					{param label: $selectedConjunctionName /}
 				{/call}
 			{/if}
 
@@ -25,6 +26,8 @@
 				{param queryItem: $queryItem /}
 				{param criteria: $criteria /}
 				{param conjunctions: $conjunctions /}
+				{param index: index($queryItem) /}
+				{param updateQueryRow: $_updateQueryRow /}
 				{param operators: $operators /}
 				{param spritemap: $spritemap /}
 			{/call}

@@ -10,7 +10,16 @@ import templates from "./ClayQueryBuilder.soy.js";
  * Combines multiple queries together. A query has a
  * structure of criteria, operator, and value.
  */
-class ClayQueryBuilder extends Component {}
+class ClayQueryBuilder extends Component {
+	created() {
+		this.initialQuery = this.query;
+	}
+
+	_updateQuery(newQuery) {
+		console.log("change!", newQuery);
+		this.query = newQuery;
+	}
+}
 
 /**
  * Options to be inserted into a clay select input.
@@ -69,6 +78,16 @@ ClayQueryBuilder.STATE = {
 			value: Config.string()
 		})
 	),
+
+	initialQuery: Config.shapeOf({
+		conjunctionId: Config.string(),
+		items: Config.arrayOf(
+			Config.oneOfType([
+				Config.shapeOf(QUERY_GROUP_SHAPE),
+				Config.shapeOf(QUERY_ITEM_SHAPE)
+			])
+		)
+	}),
 
 	/**
 	 * Supported operators and the types they support. According to the

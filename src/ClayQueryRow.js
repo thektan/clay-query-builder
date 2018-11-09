@@ -32,12 +32,39 @@ class ClayQueryRow extends Component {
 			return item;
 		});
 	}
+
+	_handleOperatorSelect(event) {
+		this.updateQueryRow(
+			this.index,
+			Object.assign(this.queryItem, {
+				operatorId: event.target.value
+			})
+		);
+	}
+
+	_handleCriteriaSelect(event) {
+		this.updateQueryRow(
+			this.index,
+			Object.assign(this.queryItem, {
+				criteriaId: event.target.value
+			})
+		);
+	}
+
+	_updateQuery(newQuery) {
+		this.updateQueryRow(
+			this.index,
+			Object.assign(this.queryItem, newQuery)
+		);
+	}
 }
 
 ClayQueryRow.STATE = {
 	queryItem: Config.object(),
 	criteria: Config.array(),
 	operators: Config.array(),
+	updateQueryRow: Config.func(),
+	index: Config.number(),
 	editing: Config.bool().value(false)
 };
 

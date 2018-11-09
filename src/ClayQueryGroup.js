@@ -8,10 +8,6 @@ import templates from "./ClayQueryGroup.soy.js";
 
 class ClayQueryGroup extends Component {
 	created() {
-		this.conjunctionSelected = this.getConjunctionSelected(
-			this.query.conjunctionId
-		);
-
 		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
 	}
 
@@ -23,8 +19,19 @@ class ClayQueryGroup extends Component {
 	 * @returns Conjunction object
 	 * @memberof ClayQueryGroup
 	 */
-	getConjunctionSelected(conjunctionId) {
-		return this.conjunctions.find(({ value }) => value === conjunctionId);
+	_getConjunctionName(conjunctionId) {
+		return this.conjunctions.find(({ value }) => value === conjunctionId)
+			.label;
+	}
+
+	prepareStateForRender(states) {
+		const newState = Object.assign(states, {
+			selectedConjunctionName: this._getConjunctionName(
+				states.query.conjunctionId
+			)
+		});
+
+		return newState;
 	}
 
 	/**
@@ -34,23 +41,40 @@ class ClayQueryGroup extends Component {
 	 * @private
 	 */
 	_handleConjunctionClick(event) {
-		const { conjunctions, conjunctionSelected } = this;
+		const { conjunctions, query } = this;
 
 		const index = conjunctions.findIndex(
-			item => item.value === conjunctionSelected.value
+			item => item.value === query.conjunctionId
 		);
 
-		this.conjunctionSelected =
+		const conjunctionSelected =
 			index === conjunctions.length - 1
-				? conjunctions[0]
-				: conjunctions[index + 1];
+				? conjunctions[0].value
+				: conjunctions[index + 1].value;
+
+		this.updateQuery(
+			Object.assign(this.query, {
+				conjunctionId: conjunctionSelected
+			})
+		);
+	}
+
+	_updateQueryRow(index, newQueryItems) {
+		this.updateQuery(
+			Object.assign(this.query, {
+				items: Object.assign(this.query.items, {
+					[index]: newQueryItems
+				})
+			})
+		);
 	}
 }
 
 ClayQueryGroup.STATE = {
 	conjunctions: Config.array(),
-	conjunctionSelected: Config.object(),
-	query: Config.object()
+	selectedConjunctionName: Config.string(),
+	query: Config.object(),
+	updateQuery: Config.func()
 };
 
 Soy.register(ClayQueryGroup, templates);

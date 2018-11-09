@@ -7,6 +7,9 @@
 	{@param queryItem: ?}
 	{@param criteria: list<?>}
 	{@param operators: list<?>}
+	{@param? _handleCriteriaSelect: any}
+	{@param? _handleOperatorSelect: any}
+	{@param? _updateQuery: any}
 	{@param conjunctions: list<?>}
 	{@param spritemap: string}
 
@@ -14,6 +17,7 @@
 		{call ClayQueryGroup.render}
 			{param criteria: $criteria /}
 			{param conjunctions: $conjunctions /}
+			{param updateQuery: $_updateQuery /}
 			{param operators: $operators /}
 			{param query: $queryItem /}
 			{param spritemap: $spritemap /}
@@ -25,6 +29,7 @@
 					{call ClaySelect.render}
 						{param multiple: false /}
 						{param name: 'criteria' /}
+						{param events: ['change': $_handleCriteriaSelect] /}
 						{param options: $criteria /}
 						{param type: 'button' /}
 					{/call}
@@ -34,6 +39,7 @@
 					{call ClaySelect.render}
 						{param multiple: false /}
 						{param name: 'operator' /}
+						{param events: ['change': $_handleOperatorSelect] /}
 						{param options: $operators /}
 						{param type: 'button' /}
 					{/call}
