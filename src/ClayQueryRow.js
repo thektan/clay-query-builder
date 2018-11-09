@@ -9,7 +9,8 @@ import templates from "./ClayQueryRow.soy.js";
 
 class ClayQueryRow extends Component {
 	created() {
-		const { criteria, criteriaId, operatorId, operators } = this;
+		const { criteria, operators } = this;
+		const { criteriaId, operatorId } = this.queryItem;
 
 		this.criteria = this.formatWithSelected(criteria, criteriaId);
 		this.operators = this.formatWithSelected(operators, operatorId);
@@ -34,9 +35,8 @@ class ClayQueryRow extends Component {
 }
 
 ClayQueryRow.STATE = {
+	queryItem: Config.object(),
 	criteria: Config.array(),
-	criteriaId: Config.string(),
-	operatorId: Config.string(),
 	operators: Config.array(),
 	editing: Config.bool().value(false)
 };

@@ -1,5 +1,6 @@
 import Component from "metal-component";
 import defineWebComponent from "metal-web-component";
+import { EventHandler } from "metal-events";
 import Soy from "metal-soy";
 import { Config } from "metal-state";
 
@@ -10,6 +11,8 @@ class ClayQueryGroup extends Component {
 		this.conjunctionSelected = this.getConjunctionSelected(
 			this.query.conjunctionId
 		);
+
+		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
 	}
 
 	/**

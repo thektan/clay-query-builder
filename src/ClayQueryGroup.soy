@@ -12,37 +12,22 @@
 	{@param query: ?}
 	{@param? _handleConjunctionClick: any}
 
-	<div class="sheet">
-		{foreach $item in $query.items}
-			{if not isFirst($item)}
+	<div class="query-group sheet">
+		{foreach $queryItem in $query.items}
+			{if not isFirst($queryItem)}
 				{call ClayButton.render}
 					{param events: ['click': $_handleConjunctionClick] /}
 					{param label: $conjunctionSelected.label /}
 				{/call}
 			{/if}
 
-			{if isNonnull($item.items)}
-				{call ClayQueryGroup.render}
-					{param criteria: $criteria /}
-					{param conjunctions: $conjunctions /}
-					{param conjunctionSelected: $conjunctionSelected /}
-					{param operators: $operators /}
-					{param query: $item /}
-					{param spritemap: $spritemap /}
-					{param _handleConjunctionClick: $_handleConjunctionClick /}
-				{/call}
-			{else}
-				{call ClayQueryRow.render}
-					{param criteria: $criteria /}
-					{param conjunctions: $conjunctions /}
-					{param operators: $operators /}
-					{param query: $item /}
-					{param criteriaId: $item.criteriaId /}
-					{param operatorId: $item.operatorId /}
-					{param value: $item.value /}
-					{param spritemap: $spritemap /}
-				{/call}
-			{/if}
+			{call ClayQueryRow.render}
+				{param queryItem: $queryItem /}
+				{param criteria: $criteria /}
+				{param conjunctions: $conjunctions /}
+				{param operators: $operators /}
+				{param spritemap: $spritemap /}
+			{/call}
 		{/foreach}
 	</div>
 {/template}
