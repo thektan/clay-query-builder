@@ -16,7 +16,7 @@ class ClayQueryBuilder extends Component {
 	}
 
 	_updateQuery(newQuery) {
-		console.log("change!", newQuery);
+		console.log("newQuery", newQuery);
 		this.query = newQuery;
 	}
 }
