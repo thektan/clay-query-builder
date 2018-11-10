@@ -1,5 +1,7 @@
 import Component from "metal-component";
 import defineWebComponent from "metal-web-component";
+import { EventHandler } from "metal-events";
+import { Drag, DragDrop } from "metal-drag-drop";
 import Soy from "metal-soy";
 import { Config } from "metal-state";
 
@@ -13,6 +15,23 @@ import templates from "./ClayQueryBuilder.soy.js";
 class ClayQueryBuilder extends Component {
 	created() {
 		this.initialQuery = this.query;
+
+		this._eventHandler = new EventHandler();
+
+		this._dragAndDrop = new DragDrop({
+			dragPlaceholder: Drag.Placeholder.CLONE,
+			handles: ".drag-handle",
+			sources: ".drag-item",
+			targets: ".drag-target"
+		});
+
+		// this._eventHandler.add(
+		// 	this._dragAndDrop.on(
+		// 		DragDrop.Events.END,
+		// 		this._handleDragEnded.bind(this)
+		// 	),
+		// 	this._dragAndDrop.on(DragDrop.Events.DRAG, this._handleDragStarted.bind(this))
+		// );
 	}
 
 	_updateQuery(newQuery) {
@@ -79,6 +98,9 @@ ClayQueryBuilder.STATE = {
 		})
 	),
 
+	/**
+	 * Used for restoring the initial query.
+	 */
 	initialQuery: Config.shapeOf({
 		conjunctionId: Config.string(),
 		items: Config.arrayOf(

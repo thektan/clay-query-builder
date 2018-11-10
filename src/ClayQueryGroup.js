@@ -1,6 +1,5 @@
 import Component from "metal-component";
 import defineWebComponent from "metal-web-component";
-import { EventHandler } from "metal-events";
 import Soy from "metal-soy";
 import { Config } from "metal-state";
 

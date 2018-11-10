@@ -24,6 +24,8 @@
 		"clay-select": "^2.3.4",
 		"metal": "^2.16.6",
 		"metal-component": "^2.16.6",
+		"metal-drag-drop": "^3.2.1",
+		"metal-events": "^2.16.6",
 		"metal-soy": "^2.16.6",
 		"metal-state": "^2.16.6",
 		"metal-web-component": "^2.16.6"
