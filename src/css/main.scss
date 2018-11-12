@@ -1,3 +1,9 @@
-body {
-	background-color: black;
+.query-row {
+	position: relative;
+
+	.drag-handle {
+		position: absolute;
+		left: 0;
+		margin-left: -20px;
+	}
 }
