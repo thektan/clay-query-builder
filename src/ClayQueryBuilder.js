@@ -5,6 +5,8 @@ import { Drag, DragDrop } from "metal-drag-drop";
 import Soy from "metal-soy";
 import { Config } from "metal-state";
 
+import "./css/main.scss";
+
 import templates from "./ClayQueryBuilder.soy.js";
 
 /**
