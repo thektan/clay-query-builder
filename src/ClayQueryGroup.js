@@ -23,8 +23,6 @@ class ClayQueryGroup extends Component {
 		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
 
 		this.groupId = generateId();
-
-		console.log("group created", this.groupId);
 	}
 
 	/**
