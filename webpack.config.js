@@ -7,6 +7,14 @@ module.exports = Object.assign(webpackCommonConfig, {
 	output: Object.assign(webpackCommonConfig.output, {
 		filename: "./build/globals/query-builder.js"
 	}),
+	module: {
+		rules: [
+			{
+				test: /\.(sass|scss)$/,
+				loader: ["style-loader", "css-loader", "sass-loader"]
+			}
+		]
+	},
 	devServer: {
 		contentBase: path.resolve(__dirname, "dist"),
 		hot: true,
