@@ -1,9 +1,9 @@
 import Component from "metal-component";
 import defineWebComponent from "metal-web-component";
-import { EventHandler } from "metal-events";
-import { Drag, DragDrop } from "metal-drag-drop";
 import Soy from "metal-soy";
+import { EventHandler } from "metal-events";
 import { Config } from "metal-state";
+import { Drag, DragDrop } from "metal-drag-drop";
 
 import "./css/main.scss";
 
@@ -21,20 +21,36 @@ class ClayQueryBuilder extends Component {
 		this._eventHandler = new EventHandler();
 
 		this._dragAndDrop = new DragDrop({
+			autoScroll: true,
 			dragPlaceholder: Drag.Placeholder.CLONE,
 			handles: ".drag-handle",
 			sources: ".drag-item",
 			targets: ".drag-target"
 		});
 
-		// this._eventHandler.add(
-		// 	this._dragAndDrop.on(
-		// 		DragDrop.Events.END,
-		// 		this._handleDragEnded.bind(this)
-		// 	),
-		// 	this._dragAndDrop.on(DragDrop.Events.DRAG, this._handleDragStarted.bind(this))
-		// );
+		this._eventHandler.add(
+			this._dragAndDrop.on(
+				DragDrop.Events.END,
+				this._handleDragEnd.bind(this)
+			),
+			this._dragAndDrop.on(
+				DragDrop.Events.DRAG,
+				this._handleDragStart.bind(this)
+			)
+		);
 	}
+
+	_handleDragEnd(data, event) {
+		console.log("dragend", data);
+
+		event.preventDefault();
+
+		if (!data.target) {
+			return;
+		}
+	}
+
+	_handleDragStart(data, event) {}
 
 	_updateQuery(newQuery) {
 		console.log("newQuery", newQuery);

@@ -5,9 +5,26 @@ import { Config } from "metal-state";
 
 import templates from "./ClayQueryGroup.soy.js";
 
+const ID_PREFIX = "group_";
+
+var groupId = 0;
+
+/**
+ * Generate a unique id for the group.
+ *
+ * @returns the unique group id.
+ */
+function generateId() {
+	return ID_PREFIX + groupId++;
+}
+
 class ClayQueryGroup extends Component {
 	created() {
 		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
+
+		this.groupId = generateId();
+
+		console.log("group created", this.groupId);
 	}
 
 	/**
@@ -70,6 +87,10 @@ class ClayQueryGroup extends Component {
 }
 
 ClayQueryGroup.STATE = {
+	/**
+	 * Unique id of the group used for identifying item groups.
+	 */
+	groupId: Config.string(),
 	conjunctions: Config.array(),
 	selectedConjunctionName: Config.string(),
 	query: Config.object(),

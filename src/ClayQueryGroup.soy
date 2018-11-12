@@ -20,6 +20,8 @@
 					{param events: ['click': $_handleConjunctionClick] /}
 					{param label: $selectedConjunctionName /}
 				{/call}
+			{else}
+				{call .dropTarget /}
 			{/if}
 
 			{call ClayQueryRow.render}
@@ -31,6 +33,12 @@
 				{param operators: $operators /}
 				{param spritemap: $spritemap /}
 			{/call}
+
+			{call .dropTarget /}
 		{/foreach}
 	</div>
+{/template}
+
+{template .dropTarget}
+	<div class="drag-target">TARGET</div>
 {/template}
