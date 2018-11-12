@@ -53,8 +53,6 @@ class ClayQueryRow extends Component {
 	}
 
 	_handleValueChange(event) {
-		console.log("update");
-
 		this.queryItem = Object.assign(this.queryItem, {
 			value: event.target.value
 		});
@@ -72,8 +70,6 @@ class ClayQueryRow extends Component {
 	}
 
 	_handleSave(event) {
-		console.log("save");
-
 		this.updateQueryRow(this.index, this.queryItem);
 	}
 }
