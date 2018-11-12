@@ -8,6 +8,16 @@ import "./css/main.scss";
 
 import templates from "./ClayQueryBuilder.soy.js";
 
+const RELATIONAL_OPERATORS = ["eq", "ne", "gt", "ge", "lt", "le"];
+const STRING_OPERATORS = [
+	"contains",
+	"not contains",
+	"endswith",
+	"not endswith",
+	"startswith",
+	"not startswith"
+];
+
 /**
  * A component used for building a query string.
  * Combines multiple queries together. A query has a
@@ -16,11 +26,66 @@ import templates from "./ClayQueryBuilder.soy.js";
 class ClayQueryBuilder extends Component {
 	created() {
 		this.initialQuery = this.query;
+
+		this.queryString = this.getQueryString();
+
+		console.log("queryString", this.queryString);
 	}
 
 	_updateQuery(newQuery) {
 		console.log("newQuery", newQuery);
+
 		this.query = newQuery;
+
+		this.queryString = this.getQueryString();
+
+		console.log("queryString", this.queryString);
+	}
+
+	/**
+	 * Converts a query object into an OData query string.
+	 *
+	 * @param {string} query
+	 * @return {string} The query string.
+	 */
+	getQueryString() {
+		return this.buildQueryString([this.query]);
+	}
+
+	buildQueryString(queryItems, queryConjunction) {
+		let queryString = "";
+
+		queryItems.forEach((item, index) => {
+			const {
+				items,
+				conjunctionId,
+				criteriaId,
+				operatorId,
+				value
+			} = item;
+
+			if (index > 0) {
+				queryString = queryString.concat(` ${queryConjunction} `);
+			}
+
+			if (conjunctionId) {
+				queryString = queryString.concat(
+					`(${this.buildQueryString(items, conjunctionId)})`
+				);
+			} else {
+				if (RELATIONAL_OPERATORS.includes(operatorId)) {
+					queryString = queryString.concat(
+						`(${criteriaId} ${operatorId} "${value}")`
+					);
+				} else if (STRING_OPERATORS.includes(operatorId)) {
+					queryString = queryString.concat(
+						`(${operatorId} (${criteriaId}, "${value}"))`
+					);
+				}
+			}
+		});
+
+		return queryString;
 	}
 }
 
@@ -137,7 +202,10 @@ ClayQueryBuilder.STATE = {
 		)
 	}),
 
-	rawQuery: Config.string(),
+	/**
+	 * Query string to save into a form field.
+	 */
+	queryString: Config.string(),
 
 	/**
 	 * @TODO Document and implement these props
