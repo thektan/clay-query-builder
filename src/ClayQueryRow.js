@@ -40,22 +40,24 @@ class ClayQueryRow extends Component {
 		});
 	}
 
-	_handleOperatorSelect(event) {
-		this.updateQueryRow(
-			this.index,
-			Object.assign(this.queryItem, {
-				operatorId: event.target.value
-			})
-		);
+	_handleOperatorChange(event) {
+		this.queryItem = Object.assign(this.queryItem, {
+			operatorId: event.target.value
+		});
 	}
 
-	_handleCriteriaSelect(event) {
-		this.updateQueryRow(
-			this.index,
-			Object.assign(this.queryItem, {
-				criteriaId: event.target.value
-			})
-		);
+	_handleCriteriaChange(event) {
+		this.queryItem = Object.assign(this.queryItem, {
+			criteriaId: event.target.value
+		});
+	}
+
+	_handleValueChange(event) {
+		console.log("update");
+
+		this.queryItem = Object.assign(this.queryItem, {
+			value: event.target.value
+		});
 	}
 
 	_updateQuery(newQuery) {
@@ -63,6 +65,16 @@ class ClayQueryRow extends Component {
 			this.index,
 			Object.assign(this.queryItem, newQuery)
 		);
+	}
+
+	_handleToggleEdit(event) {
+		this.editing = !this.editing;
+	}
+
+	_handleSave(event) {
+		console.log("save");
+
+		this.updateQueryRow(this.index, this.queryItem);
 	}
 }
 

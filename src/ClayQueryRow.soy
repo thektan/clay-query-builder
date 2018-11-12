@@ -7,8 +7,12 @@
 	{@param queryItem: ?}
 	{@param criteria: list<?>}
 	{@param operators: list<?>}
-	{@param? _handleCriteriaSelect: any}
-	{@param? _handleOperatorSelect: any}
+	{@param? editing: bool}
+	{@param? _handleCriteriaChange: any}
+	{@param? _handleToggleEdit: any}
+	{@param? _handleSave: any}
+	{@param? _handleValueChange: any}
+	{@param? _handleOperatorChange: any}
 	{@param? _updateQuery: any}
 	{@param conjunctions: list<?>}
 	{@param spritemap: string}
@@ -24,52 +28,83 @@
 		{/call}
 	{else}
 		<div class="query-row">
-			<div class="form-group-autofit">
-				<div class="form-group-item">
-					{call ClaySelect.render}
-						{param multiple: false /}
-						{param name: 'criteria' /}
-						{param events: ['change': $_handleCriteriaSelect] /}
-						{param options: $criteria /}
-						{param type: 'button' /}
-					{/call}
-				</div>
+			{if $editing}
+				<div class="form-group-autofit">
+					<div class="form-group-item">
+						{call ClaySelect.render}
+							{param multiple: false /}
+							{param name: 'criteria' /}
+							{param events: ['change': $_handleCriteriaChange] /}
+							{param options: $criteria /}
+							{param type: 'button' /}
+						{/call}
+					</div>
 
-				<div class="form-group-item">
-					{call ClaySelect.render}
-						{param multiple: false /}
-						{param name: 'operator' /}
-						{param events: ['change': $_handleOperatorSelect] /}
-						{param options: $operators /}
-						{param type: 'button' /}
-					{/call}
-				</div>
+					<div class="form-group-item">
+						{call ClaySelect.render}
+							{param multiple: false /}
+							{param name: 'operator' /}
+							{param events: ['change': $_handleOperatorChange] /}
+							{param options: $operators /}
+							{param type: 'button' /}
+						{/call}
+					</div>
 
-				<div class="form-group-item">
-					<input class="form-control" id="queryRowValue" value="{$queryItem.value}" type="text"/>
-				</div>
+					<div class="form-group-item">
+						<input class="form-control" id="queryRowValue" value="{$queryItem.value}" onInput="{$_handleValueChange}" type="text"/>
+					</div>
 
-				<div class="form-group-item form-group-item-shrink">
-					<div class="btn-group">
-						<div class="btn-group-item">
-							{call ClayButton.render}
-								{param icon: 'check' /}
-								{param monospaced: true /}
-								{param spritemap: $spritemap /}
-							{/call}
-						</div>
+					<div class="form-group-item form-group-item-shrink">
+						<div class="btn-group">
+							<div class="btn-group-item">
+								{call ClayButton.render}
+									{param events: ['click': $_handleSave] /}
+									{param icon: 'check' /}
+									{param monospaced: true /}
+									{param spritemap: $spritemap /}
+								{/call}
+							</div>
 
-						<div class="btn-group-item">
-							{call ClayButton.render}
-								{param icon: 'times' /}
-								{param monospaced: true /}
-								{param spritemap: $spritemap /}
-								{param style: 'secondary' /}
-							{/call}
+							<div class="btn-group-item">
+								{call ClayButton.render}
+									{param events: ['click': $_handleToggleEdit] /}
+									{param icon: 'times' /}
+									{param monospaced: true /}
+									{param spritemap: $spritemap /}
+									{param style: 'secondary' /}
+								{/call}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			{else}
+				<div class="query-row-display">
+					<div class="query">
+						<span class="criteria">{$queryItem.criteriaId}</span>
+
+						<span class="operator">{$queryItem.operatorId}</span>
+
+						<span class="value">{$queryItem.value}</span>
+					</div>
+
+					<div class="actions">
+						{call ClayButton.render}
+							{param events: ['click': $_handleToggleEdit] /}
+							{param icon: 'pencil' /}
+							{param monospaced: true /}
+							{param spritemap: $spritemap /}
+							{param style: 'unstyled' /}
+						{/call}
+
+						{call ClayButton.render}
+							{param icon: 'trash' /}
+							{param monospaced: true /}
+							{param spritemap: $spritemap /}
+							{param style: 'unstyled' /}
+						{/call}
+					</div>
+				</div>
+			{/if}
 		</div>
 	{/if}
 {/template}

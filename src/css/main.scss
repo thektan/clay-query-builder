@@ -1,9 +1,43 @@
 .query-row {
+	background-color: #fff;
 	position: relative;
 
 	.drag-handle {
 		position: absolute;
 		left: 0;
 		margin-left: -20px;
+	}
+
+	.form-group,
+	.form-group-autofit {
+		margin-bottom: 0;
+	}
+
+	.query-row-display {
+		display: flex;
+		align-items: center;
+
+		.actions {
+			visibility: hidden;
+		}
+
+		.criteria,
+		.value {
+			font-weight: 600;
+		}
+
+		.operator {
+			padding: 0 8px;
+		}
+
+		.query {
+			flex: 1;
+		}
+
+		&:hover {
+			.actions {
+				visibility: visible;
+			}
+		}
 	}
 }
