@@ -23,14 +23,7 @@
 			{param spritemap: $spritemap /}
 		{/call}
 	{else}
-		<div class="query-row drag-item">
-			<span class="drag-handle">
-				{call ClayIcon.render}
-					{param spritemap: $spritemap /}
-					{param symbol: 'drag' /}
-				{/call}
-			</span>
-
+		<div class="query-row">
 			<div class="form-group-autofit">
 				<div class="form-group-item">
 					{call ClaySelect.render}
