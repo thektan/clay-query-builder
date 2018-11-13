@@ -30,6 +30,7 @@ class ClayQueryBuilder extends Component {
 		this.queryString = this.getQueryString();
 
 		console.log("queryString", this.queryString);
+		console.log("_buildCriteriaTypes()", this._buildCriteriaTypes());
 	}
 
 	_updateQuery(newQuery) {
@@ -40,6 +41,22 @@ class ClayQueryBuilder extends Component {
 		this.queryString = this.getQueryString();
 
 		console.log("queryString", this.queryString);
+	}
+
+	_buildCriteriaTypes() {
+		const { operators } = this;
+
+		return operators.reduce((criteriaTypes, { supportedTypes }) => {
+			supportedTypes.forEach(type => {
+				if (!criteriaTypes[type]) {
+					criteriaTypes[type] = operators.filter(operator =>
+						operator.supportedTypes.includes(type)
+					);
+				}
+			});
+
+			return criteriaTypes;
+		}, new Map());
 	}
 
 	/**
@@ -146,6 +163,12 @@ ClayQueryBuilder.STATE = {
 			value: Config.string()
 		})
 	),
+
+	/**
+	 * A map of criteria types and their supported operators. Generated from
+	 * the operators list.
+	 */
+	criteriaTypes: Config.object(),
 
 	/**
 	 * Used for restoring the initial query.
