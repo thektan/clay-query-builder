@@ -17,7 +17,9 @@ class ClayQueryRow extends Component {
 
 		const newState = Object.assign(states, {
 			criteria: this._formatWithSelected(criteria, criteriaId),
-			operators: this._formatWithSelected(operators, operatorId)
+			operators: this._formatWithSelected(operators, operatorId),
+			criterion: this._getSelectedItem(criteria, criteriaId),
+			operator: this._getSelectedItem(operators, operatorId)
 		});
 
 		return newState;
@@ -38,6 +40,10 @@ class ClayQueryRow extends Component {
 
 			return item;
 		});
+	}
+
+	_getSelectedItem(list, idSelected) {
+		return list.find(item => item.value === idSelected);
 	}
 
 	_handleInputChange(event, propertyName) {
@@ -77,6 +83,8 @@ class ClayQueryRow extends Component {
 ClayQueryRow.STATE = {
 	queryItem: Config.object(),
 	criteria: Config.array(),
+	criterion: Config.object(),
+	operator: Config.object(),
 	operators: Config.array(),
 	updateQueryRow: Config.func(),
 	index: Config.number(),

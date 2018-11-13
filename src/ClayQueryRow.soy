@@ -7,6 +7,8 @@
 	{@param queryItem: ?}
 	{@param criteria: list<?>}
 	{@param operators: list<?>}
+	{@param? criterion: ?}
+	{@param? operator: ?}
 	{@param? editing: bool}
 	{@param? _handleCriteriaChange: any}
 	{@param? _handleToggleEdit: any}
@@ -80,9 +82,9 @@
 			{else}
 				<div class="query-row-display">
 					<div class="query">
-						<span class="criteria">{$queryItem.criteriaId}</span>
+						<span class="criteria">{$criterion.label}</span>
 
-						<span class="operator">{$queryItem.operatorId}</span>
+						<span class="operator">{$operator.label}</span>
 
 						<span class="value">{$queryItem.value}</span>
 					</div>
