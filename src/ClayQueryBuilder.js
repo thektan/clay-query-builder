@@ -32,15 +32,6 @@ class ClayQueryBuilder extends Component {
 		this.criteriaTypes = this._buildCriteriaTypes();
 	}
 
-	_updateQuery(newQuery) {
-		this.query = newQuery;
-
-		this.queryString = this.getQueryString();
-
-		console.log("queryString", this.query);
-		console.log("queryString", this.queryString);
-	}
-
 	/**
 	 * Builds a map of criteria types and their supported operators.
 	 *
@@ -60,6 +51,41 @@ class ClayQueryBuilder extends Component {
 
 			return criteriaTypes;
 		}, new Map());
+	}
+
+	/**
+	 * Cleans up the query state by removing any groups with no items.
+	 *
+	 * @param {array} queryItems The query to clean up.
+	 * @returns {object} The cleaned up query.
+	 */
+	_cleanUpQuery(queryItems) {
+		const test = queryItems
+			.filter(({ items }) => (items ? items.length : true))
+			.map(item =>
+				item.items
+					? Object.assign(item, {
+							items: this._cleanUpQuery(item.items)
+					  })
+					: item
+			);
+
+		return test;
+	}
+
+	/**
+	 * Updates the query state from changes made by the group and row
+	 * components.
+	 *
+	 * @param {object} newQuery
+	 */
+	_updateQuery(newQuery) {
+		this.query = this._cleanUpQuery([newQuery]).pop();
+
+		this.queryString = this.getQueryString();
+
+		console.log("query", this.query);
+		console.log("queryString", this.queryString);
 	}
 
 	/**

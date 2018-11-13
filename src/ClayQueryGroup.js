@@ -74,11 +74,15 @@ class ClayQueryGroup extends Component {
 	}
 
 	_updateQueryRow(index, newQueryItems) {
+		const { query } = this;
+
 		this.updateQuery(
-			Object.assign(this.query, {
-				items: Object.assign(this.query.items, {
-					[index]: newQueryItems
-				})
+			Object.assign(query, {
+				items: newQueryItems
+					? Object.assign(query.items, {
+							[index]: newQueryItems
+					  })
+					: query.items.filter((fItem, fIndex) => fIndex !== index)
 			})
 		);
 	}

@@ -12,10 +12,11 @@
 	{@param? operator: ?}
 	{@param? editing: bool}
 	{@param? _handleCriteriaChange: any}
-	{@param? _handleToggleEdit: any}
-	{@param? _handleSave: any}
-	{@param? _handleValueChange: any}
+	{@param? _handleDelete: any}
 	{@param? _handleOperatorChange: any}
+	{@param? _handleSave: any}
+	{@param? _handleToggleEdit: any}
+	{@param? _handleValueChange: any}
 	{@param? _updateQuery: any}
 	{@param conjunctions: list<?>}
 	{@param spritemap: string}
@@ -101,6 +102,7 @@
 						{/call}
 
 						{call ClayButton.render}
+							{param events: ['click': $_handleDelete] /}
 							{param icon: 'trash' /}
 							{param monospaced: true /}
 							{param spritemap: $spritemap /}

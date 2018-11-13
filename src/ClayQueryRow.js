@@ -84,6 +84,10 @@ class ClayQueryRow extends Component {
 	_handleSave(event) {
 		this.updateQueryRow(this.index, this.queryItem);
 	}
+
+	_handleDelete(event) {
+		this.updateQueryRow(this.index);
+	}
 }
 
 ClayQueryRow.STATE = {
