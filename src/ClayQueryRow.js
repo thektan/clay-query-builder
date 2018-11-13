@@ -40,22 +40,22 @@ class ClayQueryRow extends Component {
 		});
 	}
 
-	_handleOperatorChange(event) {
+	_handleInputChange(event, propertyName) {
 		this.queryItem = Object.assign(this.queryItem, {
-			operatorId: event.target.value
+			[propertyName]: event.target.value
 		});
+	}
+
+	_handleOperatorChange(event) {
+		this._handleInputChange(event, "operatorId");
 	}
 
 	_handleCriteriaChange(event) {
-		this.queryItem = Object.assign(this.queryItem, {
-			criteriaId: event.target.value
-		});
+		this._handleInputChange(event, "criteriaId");
 	}
 
 	_handleValueChange(event) {
-		this.queryItem = Object.assign(this.queryItem, {
-			value: event.target.value
-		});
+		this._handleInputChange(event, "value");
 	}
 
 	_updateQuery(newQuery) {
