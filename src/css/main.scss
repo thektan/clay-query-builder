@@ -1,41 +1,88 @@
-.query-row {
-	background-color: #fff;
-	position: relative;
+.query-builder-root {
+	.query-conjunction-section {
+		margin-left: 16px;
+		padding: 2px 0;
 
-	.drag-handle {
-		position: absolute;
-		left: 0;
-		margin-left: -20px;
+		.query-conjunction {
+			text-transform: uppercase;
+			border-width: 0;
+
+			&.query-conjunction-and {
+				background-color: #def7ed;
+				color: #21815c;
+
+				&:focus {
+					box-shadow: 0 0 0 2px rgba(33, 129, 92, 0.5);
+				}
+			}
+
+			&.query-conjunction-or {
+				background-color: #ffe9d4;
+				color: #d46600;
+
+				&:focus {
+					box-shadow: 0 0 0 2px rgba(212, 102, 0, 0.5);
+				}
+			}
+		}
 	}
 
-	.form-group,
-	.form-group-autofit {
-		margin-bottom: 0;
+	.query-group {
+		padding: 0;
+
+		> .query-group {
+			margin: 16px 16px 16px 12px;
+			border-left-width: 4px;
+		}
 	}
 
-	.query-row-display {
-		display: flex;
-		align-items: center;
+	.query-row {
+		background-color: #fff;
+		border-radius: 0.25rem;
+		padding: 8px 16px;
+		position: relative;
 
-		.actions {
-			visibility: hidden;
+		.drag-handle {
+			position: absolute;
+			left: 0;
+			margin-left: -20px;
 		}
 
-		.criteria,
-		.value {
-			font-weight: 600;
+		.form-group,
+		.form-group-autofit {
+			margin-bottom: 0;
 		}
 
-		.operator {
-			padding: 0 8px;
-		}
+		.query-row-display {
+			display: flex;
+			align-items: center;
 
-		.query {
-			flex: 1;
+			.actions {
+				visibility: hidden;
+
+				.lexicon-icon {
+					color: #6b6c7e;
+				}
+			}
+
+			.criteria,
+			.value {
+				font-weight: bold;
+			}
+
+			.operator {
+				padding: 0 8px;
+			}
+
+			.query {
+				flex: 1;
+			}
 		}
 
 		&:hover {
-			.actions {
+			background-color: #f0f5ff;
+
+			.query-row-display .actions {
 				visibility: visible;
 			}
 		}

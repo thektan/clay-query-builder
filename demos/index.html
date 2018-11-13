@@ -41,12 +41,12 @@
 				],
 				conjunctions: [
 					{
-						label: "AND", // Button display text
-						value: "AND" // Value used for constructing the query
+						label: "and", // Button display text
+						value: "and" // Value used for constructing the query
 					},
 					{
-						label: "OR",
-						value: "OR"
+						label: "or",
+						value: "or"
 					}
 				],
 				operators: [
@@ -85,10 +85,10 @@
 				canReorder: true,
 				spritemap: "icons.svg",
 				query: {
-					conjunctionId: "AND",
+					conjunctionId: "and",
 					items: [
 						{
-							conjunctionId: "OR",
+							conjunctionId: "or",
 							items: [
 								{
 									criteriaId: "user.jobTitle",
@@ -99,11 +99,41 @@
 									criteriaId: "user.jobTitle",
 									operatorId: "eq",
 									value: "doctor"
+								},
+								{
+									conjunctionId: "or",
+									items: [
+										{
+											criteriaId: "user.jobTitle",
+											operatorId: "gt",
+											value: "developer"
+										},
+										{
+											criteriaId: "user.jobTitle",
+											operatorId: "eq",
+											value: "doctor"
+										},
+										{
+											conjunctionId: "or",
+											items: [
+												{
+													criteriaId: "user.jobTitle",
+													operatorId: "gt",
+													value: "developer"
+												},
+												{
+													criteriaId: "user.jobTitle",
+													operatorId: "eq",
+													value: "doctor"
+												}
+											]
+										}
+									]
 								}
 							]
 						},
 						{
-							conjunctionId: "OR",
+							conjunctionId: "or",
 							items: [
 								{
 									criteriaId: "user.age",

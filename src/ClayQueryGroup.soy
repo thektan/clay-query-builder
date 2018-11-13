@@ -17,10 +17,14 @@
 	<div class="query-group sheet">
 		{foreach $queryItem in $query.items}
 			{if not isFirst($queryItem)}
-				{call ClayButton.render}
-					{param events: ['click': $_handleConjunctionClick] /}
-					{param label: $selectedConjunctionName /}
-				{/call}
+				<div class="query-conjunction-section">
+					{call ClayButton.render}
+						{param elementClasses: 'query-conjunction query-conjunction-' + $selectedConjunctionName /}
+						{param events: ['click': $_handleConjunctionClick] /}
+						{param label: $selectedConjunctionName /}
+						{param size: 'sm' /}
+					{/call}
+				</div>
 			{/if}
 
 			{call ClayQueryRow.render}
