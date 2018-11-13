@@ -29,20 +29,23 @@ class ClayQueryBuilder extends Component {
 
 		this.queryString = this.getQueryString();
 
-		console.log("queryString", this.queryString);
-		console.log("_buildCriteriaTypes()", this._buildCriteriaTypes());
+		this.criteriaTypes = this._buildCriteriaTypes();
 	}
 
 	_updateQuery(newQuery) {
-		console.log("newQuery", newQuery);
-
 		this.query = newQuery;
 
 		this.queryString = this.getQueryString();
 
+		console.log("queryString", this.query);
 		console.log("queryString", this.queryString);
 	}
 
+	/**
+	 * Builds a map of criteria types and their supported operators.
+	 *
+	 * @returns Map of criteria types.
+	 */
 	_buildCriteriaTypes() {
 		const { operators } = this;
 

@@ -11,14 +11,20 @@ class ClayQueryRow extends Component {
 	prepareStateForRender(states) {
 		const {
 			criteria,
+			criteriaTypes,
 			operators,
 			queryItem: { criteriaId, operatorId }
 		} = states;
 
+		const criterion = this._getSelectedItem(criteria, criteriaId);
+
 		const newState = Object.assign(states, {
 			criteria: this._formatWithSelected(criteria, criteriaId),
-			operators: this._formatWithSelected(operators, operatorId),
-			criterion: this._getSelectedItem(criteria, criteriaId),
+			operators: this._formatWithSelected(
+				criterion ? criteriaTypes[criterion.type] : operators,
+				operatorId
+			),
+			criterion,
 			operator: this._getSelectedItem(operators, operatorId)
 		});
 
@@ -83,6 +89,7 @@ class ClayQueryRow extends Component {
 ClayQueryRow.STATE = {
 	queryItem: Config.object(),
 	criteria: Config.array(),
+	criteriaTypes: Config.object(),
 	criterion: Config.object(),
 	operator: Config.object(),
 	operators: Config.array(),

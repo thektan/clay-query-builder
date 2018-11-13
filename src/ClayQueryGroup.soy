@@ -6,6 +6,7 @@
 {template .render}
 	{@param spritemap: string}
 	{@param criteria: list<?>}
+	{@param criteriaTypes: ?}
 	{@param conjunctions: list<?>}
 	{@param? selectedConjunctionName: string}
 	{@param operators: list<?>}
@@ -25,6 +26,7 @@
 			{call ClayQueryRow.render}
 				{param queryItem: $queryItem /}
 				{param criteria: $criteria /}
+				{param criteriaTypes: $criteriaTypes /}
 				{param conjunctions: $conjunctions /}
 				{param index: index($queryItem) /}
 				{param updateQueryRow: $_updateQueryRow /}

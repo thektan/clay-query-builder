@@ -6,6 +6,7 @@
 {template .render}
 	{@param conjunctions: list<?>}
 	{@param criteria: list<?>}
+	{@param criteriaTypes: ?}
 	{@param operators: list<?>}
 	{@param _updateQuery: ?}
 	{@param? query: ?}
@@ -14,6 +15,7 @@
 	<div class="query-builder-root">
 		{call ClayQueryGroup.render}
 			{param criteria: $criteria /}
+			{param criteriaTypes: $criteriaTypes /}
 			{param conjunctions: $conjunctions /}
 			{param operators: $operators /}
 			{param updateQuery: $_updateQuery /}

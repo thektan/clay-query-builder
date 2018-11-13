@@ -6,6 +6,7 @@
 {template .render}
 	{@param queryItem: ?}
 	{@param criteria: list<?>}
+	{@param criteriaTypes: ?}
 	{@param operators: list<?>}
 	{@param? criterion: ?}
 	{@param? operator: ?}
@@ -22,6 +23,7 @@
 	{if isNonnull($queryItem.items)}
 		{call ClayQueryGroup.render}
 			{param criteria: $criteria /}
+			{param criteriaTypes: $criteriaTypes /}
 			{param conjunctions: $conjunctions /}
 			{param updateQuery: $_updateQuery /}
 			{param operators: $operators /}
