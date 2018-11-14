@@ -1,21 +1,20 @@
-import Component from "metal-component";
-import defineWebComponent from "metal-web-component";
-import Soy from "metal-soy";
-import { EventHandler } from "metal-events";
-import { Config } from "metal-state";
+import Component from 'metal-component';
+import defineWebComponent from 'metal-web-component';
+import Soy from 'metal-soy';
+import {Config} from 'metal-state';
 
-import "./css/main.scss";
+import './css/main.scss';
 
-import templates from "./ClayQueryBuilder.soy.js";
+import templates from './ClayQueryBuilder.soy.js';
 
-const RELATIONAL_OPERATORS = ["eq", "ne", "gt", "ge", "lt", "le"];
+const RELATIONAL_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 const STRING_OPERATORS = [
-	"contains",
-	"not contains",
-	"endswith",
-	"not endswith",
-	"startswith",
-	"not startswith"
+	'contains',
+	'not contains',
+	'endswith',
+	'not endswith',
+	'startswith',
+	'not startswith'
 ];
 
 /**
@@ -38,9 +37,9 @@ class ClayQueryBuilder extends Component {
 	 * @returns Map of criteria types.
 	 */
 	_buildCriteriaTypes() {
-		const { operators } = this;
+		const {operators} = this;
 
-		return operators.reduce((criteriaTypes, { supportedTypes }) => {
+		return operators.reduce((criteriaTypes, {supportedTypes}) => {
 			supportedTypes.forEach(type => {
 				if (!criteriaTypes[type]) {
 					criteriaTypes[type] = operators.filter(operator =>
@@ -61,11 +60,11 @@ class ClayQueryBuilder extends Component {
 	 */
 	_cleanUpQuery(queryItems) {
 		const test = queryItems
-			.filter(({ items }) => (items ? items.length : true))
+			.filter(({items}) => (items ? items.length : true))
 			.map(item =>
 				item.items
 					? Object.assign(item, {
-							items: this._cleanUpQuery(item.items)
+						items: this._cleanUpQuery(item.items)
 					  })
 					: item
 			);
@@ -84,8 +83,8 @@ class ClayQueryBuilder extends Component {
 
 		this.queryString = this.getQueryString();
 
-		console.log("query", this.query);
-		console.log("queryString", this.queryString);
+		console.log('query', this.query);
+		console.log('queryString', this.queryString);
 	}
 
 	/**
@@ -99,16 +98,10 @@ class ClayQueryBuilder extends Component {
 	}
 
 	buildQueryString(queryItems, queryConjunction) {
-		let queryString = "";
+		let queryString = '';
 
 		queryItems.forEach((item, index) => {
-			const {
-				items,
-				conjunctionId,
-				criteriaId,
-				operatorId,
-				value
-			} = item;
+			const {items, conjunctionId, criteriaId, operatorId, value} = item;
 
 			if (index > 0) {
 				queryString = queryString.concat(` ${queryConjunction} `);
@@ -266,9 +259,9 @@ ClayQueryBuilder.STATE = {
 	readOnly: Config.bool().value(false)
 };
 
-defineWebComponent("clay-query-builder", ClayQueryBuilder);
+defineWebComponent('clay-query-builder', ClayQueryBuilder);
 
 Soy.register(ClayQueryBuilder, templates);
 
-export { ClayQueryBuilder };
+export {ClayQueryBuilder};
 export default ClayQueryBuilder;

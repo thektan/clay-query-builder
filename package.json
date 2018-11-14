@@ -13,9 +13,10 @@
 	"scripts": {
 		"build": "npm run soy && webpack --mode development",
 		"compile": "babel -d lib/ src/ -s --ignore src/__tests__",
-		"link": "npm link",
+		"format": "npm run prettier -- --write",
 		"prepublish": "npm run soy && npm run compile",
-		"soy": "metalsoy --soyDeps './node_modules/clay-+(button|icon|select)/src/**/*.soy'"
+		"soy": "metalsoy --soyDeps './node_modules/clay-+(button|icon|select)/src/**/*.soy'",
+		"prettier": "prettier-eslint src/*.js"
 	},
 	"author": "",
 	"license": "BSD",
@@ -42,6 +43,7 @@
 		"clay-css": "^2.3.4",
 		"css-loader": "^1.0.1",
 		"eslint": "^5.8.0",
+		"eslint-config-liferay": "^2.0.18",
 		"metal-tools-soy": "^6.0.0",
 		"node-sass": "^4.10.0",
 		"sass-loader": "^7.1.0",

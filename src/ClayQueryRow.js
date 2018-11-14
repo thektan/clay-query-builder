@@ -1,11 +1,11 @@
-import "clay-button";
-import "clay-icon";
-import "clay-select";
-import Component from "metal-component";
-import Soy from "metal-soy";
-import { Config } from "metal-state";
+import 'clay-button';
+import 'clay-icon';
+import 'clay-select';
+import Component from 'metal-component';
+import Soy from 'metal-soy';
+import {Config} from 'metal-state';
 
-import templates from "./ClayQueryRow.soy.js";
+import templates from './ClayQueryRow.soy.js';
 
 class ClayQueryRow extends Component {
 	prepareStateForRender(states) {
@@ -13,7 +13,7 @@ class ClayQueryRow extends Component {
 			criteria,
 			criteriaTypes,
 			operators,
-			queryItem: { criteriaId, operatorId }
+			queryItem: {criteriaId, operatorId}
 		} = states;
 
 		const criterion = this._getSelectedItem(criteria, criteriaId);
@@ -37,7 +37,7 @@ class ClayQueryRow extends Component {
 	 *
 	 * @param {array} list
 	 * @param {string} idSelected
-	 * @returns List of items formatted for the options property on a select
+	 * @return {array} List of items formatted for the options property on a select
 	 * input.
 	 */
 	_formatWithSelected(list, idSelected) {
@@ -59,15 +59,15 @@ class ClayQueryRow extends Component {
 	}
 
 	_handleOperatorChange(event) {
-		this._handleInputChange(event, "operatorId");
+		this._handleInputChange(event, 'operatorId');
 	}
 
 	_handleCriteriaChange(event) {
-		this._handleInputChange(event, "criteriaId");
+		this._handleInputChange(event, 'criteriaId');
 	}
 
 	_handleValueChange(event) {
-		this._handleInputChange(event, "value");
+		this._handleInputChange(event, 'value');
 	}
 
 	_updateQuery(newQuery) {
@@ -77,15 +77,15 @@ class ClayQueryRow extends Component {
 		);
 	}
 
-	_handleToggleEdit(event) {
+	_handleToggleEdit() {
 		this.editing = !this.editing;
 	}
 
-	_handleSave(event) {
+	_handleSave() {
 		this.updateQueryRow(this.index, this.queryItem);
 	}
 
-	_handleDelete(event) {
+	_handleDelete() {
 		this.updateQueryRow(this.index);
 	}
 }
@@ -104,5 +104,5 @@ ClayQueryRow.STATE = {
 
 Soy.register(ClayQueryRow, templates);
 
-export { ClayQueryRow };
+export {ClayQueryRow};
 export default ClayQueryRow;

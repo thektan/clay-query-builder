@@ -1,3 +1,18 @@
 {
-	"parser": "babel-eslint"
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
+	},
+	"extends": "liferay",
+	"parser": "babel-eslint",
+	"rules": {
+		"no-console": 0,
+		"require-jsdoc": 0,
+		"comma-dangle": 0,
+		"eol-last": [2, "never"],
+		"max-len": 0,
+		"sort-vars": 2,
+		"valid-jsdoc": 0
+	}
 }

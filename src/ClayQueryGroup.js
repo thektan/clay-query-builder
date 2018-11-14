@@ -1,24 +1,32 @@
-import Component from "metal-component";
-import defineWebComponent from "metal-web-component";
-import Soy from "metal-soy";
-import { Config } from "metal-state";
+import Component from 'metal-component';
+import Soy from 'metal-soy';
+import {Config} from 'metal-state';
 
-import templates from "./ClayQueryGroup.soy.js";
+import templates from './ClayQueryGroup.soy.js';
 
-const ID_PREFIX = "group_";
+const ID_PREFIX = 'group_';
 
-var groupId = 0;
+let groupId = 0;
 
 /**
  * Generate a unique id for the group.
  *
- * @returns the unique group id.
+ * @return {number} the unique group id.
  */
 function generateId() {
 	return ID_PREFIX + groupId++;
 }
 
+/**
+ * A container for query rows and query groups.
+ *
+ * @class ClayQueryGroup
+ * @extends {Component}
+ */
 class ClayQueryGroup extends Component {
+	/**
+	 * @inheritdoc
+	 */
 	created() {
 		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
 
@@ -30,14 +38,17 @@ class ClayQueryGroup extends Component {
 	 * selected id.
 	 *
 	 * @param {string} conjunctionId
-	 * @returns Conjunction object
+	 * @return {Object} Conjunction object
 	 * @memberof ClayQueryGroup
 	 */
 	_getConjunctionName(conjunctionId) {
-		return this.conjunctions.find(({ value }) => value === conjunctionId)
+		return this.conjunctions.find(({value}) => value === conjunctionId)
 			.label;
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	prepareStateForRender(states) {
 		const newState = Object.assign(states, {
 			selectedConjunctionName: this._getConjunctionName(
@@ -51,11 +62,10 @@ class ClayQueryGroup extends Component {
 	/**
 	 * Cycles through conjunctions.
 	 *
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleConjunctionClick(event) {
-		const { conjunctions, query } = this;
+	_handleConjunctionClick() {
+		const {conjunctions, query} = this;
 
 		const index = conjunctions.findIndex(
 			item => item.value === query.conjunctionId
@@ -73,14 +83,21 @@ class ClayQueryGroup extends Component {
 		);
 	}
 
+	/**
+	 * Update the query builder's query with the new query.
+	 *
+	 * @param {number} index
+	 * @param {Object} newQueryItems
+	 * @memberof ClayQueryGroup
+	 */
 	_updateQueryRow(index, newQueryItems) {
-		const { query } = this;
+		const {query} = this;
 
 		this.updateQuery(
 			Object.assign(query, {
 				items: newQueryItems
 					? Object.assign(query.items, {
-							[index]: newQueryItems
+						[index]: newQueryItems
 					  })
 					: query.items.filter((fItem, fIndex) => fIndex !== index)
 			})
@@ -101,5 +118,5 @@ ClayQueryGroup.STATE = {
 
 Soy.register(ClayQueryGroup, templates);
 
-export { ClayQueryGroup };
+export {ClayQueryGroup};
 export default ClayQueryGroup;
