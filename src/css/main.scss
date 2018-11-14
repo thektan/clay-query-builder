@@ -12,7 +12,7 @@
 				color: #21815c;
 
 				&:focus {
-					box-shadow: 0 0 0 2px rgba(33, 129, 92, 0.5);
+					box-shadow: 0 0 0 2px rgba(33, 129, 92, 0.3);
 				}
 			}
 
@@ -21,7 +21,7 @@
 				color: #d46600;
 
 				&:focus {
-					box-shadow: 0 0 0 2px rgba(212, 102, 0, 0.5);
+					box-shadow: 0 0 0 2px rgba(212, 102, 0, 0.3);
 				}
 			}
 		}
@@ -76,6 +76,12 @@
 
 			.query {
 				flex: 1;
+			}
+		}
+
+		&.editing {
+			&:hover {
+				background-color: #fff;
 			}
 		}
 
