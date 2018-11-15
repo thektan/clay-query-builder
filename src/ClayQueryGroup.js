@@ -60,6 +60,20 @@ class ClayQueryGroup extends Component {
 	}
 
 	/**
+	 * Adds a new criteria row.
+	 *
+	 * @param {Event} event
+	 * @param {Object} data
+	 * @memberof ClayQueryGroup
+	 */
+	_handleAddCriteria(event, data) {
+		console.log('event', event);
+		console.log('data', data);
+
+		console.log('data', data.target.data);
+	}
+
+	/**
 	 * Cycles through conjunctions.
 	 *
 	 * @private

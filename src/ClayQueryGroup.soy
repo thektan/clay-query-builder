@@ -8,11 +8,13 @@
 	{@param criteria: list<?>}
 	{@param criteriaTypes: ?}
 	{@param conjunctions: list<?>}
+	{@param? groupId: string}
 	{@param? selectedConjunctionName: string}
 	{@param operators: list<?>}
 	{@param query: ?}
 	{@param? _updateQueryRow: any}
 	{@param? _handleConjunctionClick: any}
+	{@param? _handleAddCriteria: any}
 
 	<div class="query-group sheet">
 		{foreach $queryItem in $query.items}
@@ -36,6 +38,14 @@
 				{param updateQueryRow: $_updateQueryRow /}
 				{param operators: $operators /}
 				{param spritemap: $spritemap /}
+			{/call}
+
+			{$groupId}
+
+			{call ClayButton.render}
+				{param data: ['groupId': $groupId, 'index': index($queryItem)] /}
+				{param events: ['click': $_handleAddCriteria] /}
+				{param label: 'Add' /}
 			{/call}
 		{/foreach}
 	</div>

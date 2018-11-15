@@ -239,6 +239,7 @@ ClayQueryBuilder.STATE = {
 
 	query: Config.shapeOf({
 		conjunctionId: Config.string(),
+		id: Config.string(),
 		items: Config.arrayOf(
 			Config.oneOfType([
 				Config.shapeOf(QUERY_GROUP_SHAPE),
