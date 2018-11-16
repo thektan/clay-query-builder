@@ -14,8 +14,9 @@
 	</head>
 
 	<body>
+		<div id="app"></div>
 		<script type="text/javascript">
-			new metal.ClayQueryBuilder({
+			new metal.initialize({
 				criteria: [
 					{
 						value: "user.jobTitle", // Used when translating into the query
@@ -154,7 +155,8 @@
 						}
 					]
 				}
-			});
+			},
+			"app");
 		</script>
 	</body>
 </html>
