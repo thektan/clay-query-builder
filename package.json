@@ -1,9 +1,4 @@
 {
-	"babel": {
-		"presets": [
-			"env"
-		]
-	},
 	"name": "clay-query-builder",
 	"version": "1.0.0",
 	"description": "",
@@ -11,10 +6,8 @@
 	"esnext:main": "src/ClayQueryBuilder.js",
 	"jsnext:main": "src/ClayQueryBuilder.js",
 	"scripts": {
-		"build": "npm run soy && webpack --mode development",
-		"compile": "babel -d lib/ src/ -s --ignore src/__tests__",
+		"build": "webpack --mode development",
 		"format": "npm run prettier -- --write",
-		"prepublish": "npm run soy && npm run compile",
 		"soy": "metalsoy --soyDeps './node_modules/clay-+(button|icon|select)/src/**/*.soy'",
 		"prettier": "prettier-eslint src/*.js"
 	},
@@ -23,6 +16,9 @@
 	"dependencies": {
 		"clay-button": "^2.3.4",
 		"clay-select": "^2.3.4",
+		"react": "^16.6.3",
+		"react-dom": "^16.6.3",
+		"prop-types": "^15.6.2",
 		"metal": "^2.16.6",
 		"metal-component": "^2.16.6",
 		"metal-drag-drop": "^3.2.1",
@@ -33,12 +29,12 @@
 	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
-		"babel-core": "^6.26.3",
+		"@babel/core": "^7.1.6",
+		"@babel/preset-env": "^7.1.6",
+		"@babel/preset-react": "^7.0.0",
+		"@babel/plugin-proposal-class-properties": "^7.1.0",
 		"babel-eslint": "^10.0.1",
-		"babel-loader": "^7.1.5",
-		"babel-plugin-transform-class-properties": "^6.24.1",
-		"babel-plugin-transform-node-env-inline": "^0.4.3",
-		"babel-preset-env": "^1.7.0",
+		"babel-loader": "^8.0.4",
 		"browserslist-config-clay": "^2.3.4",
 		"clay-css": "^2.3.4",
 		"css-loader": "^1.0.1",

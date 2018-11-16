@@ -1,11 +1,6 @@
-import Component from 'metal-component';
-import defineWebComponent from 'metal-web-component';
-import Soy from 'metal-soy';
-import {Config} from 'metal-state';
-
-import './css/main.scss';
-
-import templates from './ClayQueryBuilder.soy.js';
+import React from 'react';
+import PropTypes from 'prop-types';
+import ClayQueryGroup from './ClayQueryGroup';
 
 const RELATIONAL_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 const STRING_OPERATORS = [
@@ -22,13 +17,47 @@ const STRING_OPERATORS = [
  * Combines multiple queries together. A query has a
  * structure of criteria, operator, and value.
  */
-class ClayQueryBuilder extends Component {
-	created() {
-		this.initialQuery = this.query;
+class ClayQueryBuilder extends React.Component {
+	constructor(props) {
+		super(props);
 
-		this.queryString = this.getQueryString();
+		this.state = {
+			initialQuery: this.props.query
+		};
+	}
 
-		this.criteriaTypes = this._buildCriteriaTypes();
+	render() {
+		const {
+			criteria,
+			conjunctions,
+			operators,
+			query,
+			spritemap
+		} = this.props;
+
+		const {
+			initialQuery,
+			queryString
+		} = this.state;
+
+	
+		return (
+			<div className="query-builder-root">
+				<ClayQueryGroup 
+					criteria={criteria}
+					criteriaTypes={ClayQueryBuilder._buildCriteriaTypes(operators)}
+					conjunctions={conjunctions}
+					operators={operators}
+					updateQuery={this._updateQuery}
+					query={query}
+					spritemap={spritemap}
+				/>
+
+				<span className="query-string">
+					{ClayQueryBuilder._getQueryString(query)}
+				</span>
+			</div>
+		);
 	}
 
 	/**
@@ -36,9 +65,7 @@ class ClayQueryBuilder extends Component {
 	 *
 	 * @returns Map of criteria types.
 	 */
-	_buildCriteriaTypes() {
-		const {operators} = this;
-
+	static _buildCriteriaTypes(operators) {
 		return operators.reduce((criteriaTypes, {supportedTypes}) => {
 			supportedTypes.forEach(type => {
 				if (!criteriaTypes[type]) {
@@ -78,13 +105,10 @@ class ClayQueryBuilder extends Component {
 	 *
 	 * @param {object} newQuery
 	 */
-	_updateQuery(newQuery) {
-		this.query = this._cleanUpQuery([newQuery]).pop();
-
-		this.queryString = this.getQueryString();
-
-		console.log('query', this.query);
-		console.log('queryString', this.queryString);
+	_updateQuery = newQuery => {
+		this.setState({
+			query: this._cleanUpQuery([newQuery]).pop()
+		});
 	}
 
 	/**
@@ -93,11 +117,11 @@ class ClayQueryBuilder extends Component {
 	 * @param {string} query
 	 * @return {string} The query string.
 	 */
-	getQueryString() {
-		return this.buildQueryString([this.query]);
+	static _getQueryString(query) {
+		return ClayQueryBuilder.buildQueryString([query]);
 	}
 
-	buildQueryString(queryItems, queryConjunction) {
+	static buildQueryString(queryItems, queryConjunction) {
 		let queryString = '';
 
 		queryItems.forEach((item, index) => {
@@ -133,136 +157,63 @@ class ClayQueryBuilder extends Component {
  * Same definitions from https://github.com/liferay/clay/blob/master/packages/clay-select/src/ClaySelect.js#L93-L97
  */
 const CLAY_SELECT_ITEM_SHAPE = {
-	label: Config.string().required(),
-	selected: Config.bool(),
-	value: Config.string().required()
+	label: PropTypes.string.isRequired,
+	selected: PropTypes.bool,
+	value: PropTypes.string.isRequired
 };
 
 const QUERY_GROUP_SHAPE = {
-	conjunctionId: Config.string(),
-	items: Config.array()
+	conjunctionId: PropTypes.string,
+	items: PropTypes.array
 };
 
 const QUERY_ITEM_SHAPE = {
-	criteriaId: Config.string(),
-	operatorId: Config.string(),
-	value: Config.oneOfType([Config.string(), Config.array()])
+	criteriaId: PropTypes.string,
+	operatorId: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
-ClayQueryBuilder.STATE = {
-	/**
-	 * A list of criteria that can be selected to create a query from.
-	 *
-	 * @prop {string} value Used when translating the criteria into a
-	 * 	query string.
-	 * @prop {string} label Displayed for selecting the criteria. Defaults to
-	 * 	value prop.
-	 * @prop {string} type The type of criteria (i.e. "string|number") that will
-	 * 	determine the operations available.
-	 * @prop {array} acceptedValues Will convert the value input into a select
-	 * 	input regardless of the "type" prop.
-	 */
-
-	criteria: Config.arrayOf(
-		Config.shapeOf({
-			value: Config.string().required(),
-			label: Config.string(),
-			type: Config.string(),
-			acceptedValues: Config.arrayOf(
-				Config.shapeOf(CLAY_SELECT_ITEM_SHAPE)
+ClayQueryBuilder.propTypes = {
+	criteria: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.string.isRequired,
+			label: PropTypes.string,
+			type: PropTypes.string,
+			acceptedValues: PropTypes.arrayOf(
+				PropTypes.shape(CLAY_SELECT_ITEM_SHAPE)
 			)
 		})
-	).required(),
-
-	/**
-	 * A map of conjunctions to combine multiple queries together.
-	 * Example: [{label: 'AND', value: 'AND'}]
-	 */
-
-	conjunctions: Config.arrayOf(
-		Config.shapeOf({
-			label: Config.string(),
-			value: Config.string()
+	).isRequired,
+	conjunctions: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string,
+			value: PropTypes.string
 		})
 	),
-
-	/**
-	 * A map of criteria types and their supported operators. Generated from
-	 * the operators list.
-	 */
-	criteriaTypes: Config.object(),
-
-	/**
-	 * Used for restoring the initial query.
-	 */
-	initialQuery: Config.shapeOf({
-		conjunctionId: Config.string(),
-		items: Config.arrayOf(
-			Config.oneOfType([
-				Config.shapeOf(QUERY_GROUP_SHAPE),
-				Config.shapeOf(QUERY_ITEM_SHAPE)
+	operators: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string,
+			supportedTypes: PropTypes.arrayOf(PropTypes.string),
+			value: PropTypes.string
+		})
+	),
+	spritemap: PropTypes.string.isRequired,
+	query: PropTypes.shape({
+		conjunctionId: PropTypes.string,
+		id: PropTypes.string,
+		items: PropTypes.arrayOf(
+			PropTypes.oneOfType([
+				PropTypes.shape(QUERY_GROUP_SHAPE),
+				PropTypes.shape(QUERY_ITEM_SHAPE)
 			])
 		)
 	}),
-
-	/**
-	 * Supported operators and the types they support. According to the
-	 * criteria type, operators will be filtered to show only the supported
-	 * ones. The supported types should match the type property on criteria.
-	 *
-	 * Example:
-	 * [{
-	 * 		label: "equals",
-	 * 		value: "eq"
-	 * 		supportedTypes": ["boolean", "date", "number", "string"]
-	 * }]
-	 */
-
-	operators: Config.arrayOf(
-		Config.shapeOf({
-			label: Config.string(),
-			supportedTypes: Config.arrayOf(Config.string()),
-			value: Config.string()
-		})
-	),
-
-	/**
-	 * Path to the spritemap svg for displaying the necessary icons throughout
-	 * the component.
-	 */
-
-	spritemap: Config.string().required(),
-
-	/**
-	 * Structure of the query.
-	 */
-
-	query: Config.shapeOf({
-		conjunctionId: Config.string(),
-		id: Config.string(),
-		items: Config.arrayOf(
-			Config.oneOfType([
-				Config.shapeOf(QUERY_GROUP_SHAPE),
-				Config.shapeOf(QUERY_ITEM_SHAPE)
-			])
-		)
-	}),
-
-	/**
-	 * Query string to save into a form field.
-	 */
-	queryString: Config.string(),
-
-	/**
-	 * @TODO Document and implement these props
-	 */
-	maxNesting: Config.number(),
-	readOnly: Config.bool().value(false)
+	maxNesting: PropTypes.number,
+	readOnly: PropTypes.bool
 };
 
-defineWebComponent('clay-query-builder', ClayQueryBuilder);
+ClayQueryBuilder.defaultProps = {
+	readOnly: false
+};
 
-Soy.register(ClayQueryBuilder, templates);
-
-export {ClayQueryBuilder};
 export default ClayQueryBuilder;

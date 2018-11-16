@@ -1,8 +1,6 @@
-import Component from 'metal-component';
-import Soy from 'metal-soy';
-import {Config} from 'metal-state';
-
-import templates from './ClayQueryGroup.soy.js';
+import React from 'react';
+import {PropTypes} from 'prop-types';
+import ClayQueryRow from './ClayQueryRow';
 
 const ID_PREFIX = 'group_';
 
@@ -23,12 +21,12 @@ function generateId() {
  * @class ClayQueryGroup
  * @extends {Component}
  */
-class ClayQueryGroup extends Component {
+class ClayQueryGroup extends React.Component {
 	/**
 	 * @inheritdoc
 	 */
-	created() {
-		this._handleConjunctionClick = this._handleConjunctionClick.bind(this);
+	constructor(props) {
+		super(props);
 
 		this.groupId = generateId();
 	}
@@ -41,22 +39,63 @@ class ClayQueryGroup extends Component {
 	 * @return {Object} Conjunction object
 	 * @memberof ClayQueryGroup
 	 */
-	_getConjunctionName(conjunctionId) {
-		return this.conjunctions.find(({value}) => value === conjunctionId)
-			.label;
+	_getConjunctionName(conjunctionId, conjunctions) {
+		return conjunctions.find(
+			({value}) => value === conjunctionId
+		).label;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	prepareStateForRender(states) {
-		const newState = Object.assign(states, {
-			selectedConjunctionName: this._getConjunctionName(
-				states.query.conjunctionId
-			)
-		});
+	render() {
+		const {
+			conjunctions,
+			criteria,
+			criteriaTypes,
+			operators,
+			query,
+			spritemap
+		} = this.props;
 
-		return newState;
+		const selectedConjunctionName = this._getConjunctionName(query.conjunctionId, conjunctions);
+
+		return (
+			<div className="query-group sheet">
+				{query.items.map(
+					(queryItem, index) => {
+						return (
+							<div className="container" key={index}>
+								{index != 0 && (
+									<div className="query-conjunction-section">
+										<button 
+											className={`query-conjunction query conjunction-${selectedConjunctionName} sm`}
+											onClick={this._handleConjunctionClick}
+										>
+											<span>{selectedConjunctionName}</span>
+										</button>
+									</div>
+								)}
+
+								<ClayQueryRow
+									queryItem={queryItem}
+									criteria={criteria}
+									criteriaTypes={criteriaTypes}
+									conjunctions={conjunctions}
+									index={index}
+									updateQueryRow={this._updateQueryRow}
+									operators={operators}
+									spritemap={spritemap}
+								/>
+
+								<button 
+									onClick={this._handleAddCriteria(this.groupId, index)}
+								>
+									<span>Add</span>
+								</button>
+							</div>
+						)
+					}
+				)}
+			</div>
+		);
 	}
 
 	/**
@@ -66,11 +105,8 @@ class ClayQueryGroup extends Component {
 	 * @param {Object} data
 	 * @memberof ClayQueryGroup
 	 */
-	_handleAddCriteria(event, data) {
-		console.log('event', event);
-		console.log('data', data);
-
-		console.log('data', data.target.data);
+	_handleAddCriteria = index => event => {
+		
 	}
 
 	/**
@@ -78,8 +114,8 @@ class ClayQueryGroup extends Component {
 	 *
 	 * @private
 	 */
-	_handleConjunctionClick() {
-		const {conjunctions, query} = this;
+	_handleConjunctionClick = () => {
+		const {conjunctions, updateQuery, query} = this.props;
 
 		const index = conjunctions.findIndex(
 			item => item.value === query.conjunctionId
@@ -90,10 +126,13 @@ class ClayQueryGroup extends Component {
 				? conjunctions[0].value
 				: conjunctions[index + 1].value;
 
-		this.updateQuery(
-			Object.assign(this.query, {
-				conjunctionId: conjunctionSelected
-			})
+		updateQuery(
+			Object.assign(
+				query, 
+				{
+					conjunctionId: conjunctionSelected
+				}
+			)
 		);
 	}
 
@@ -104,10 +143,10 @@ class ClayQueryGroup extends Component {
 	 * @param {Object} newQueryItems
 	 * @memberof ClayQueryGroup
 	 */
-	_updateQueryRow(index, newQueryItems) {
-		const {query} = this;
+	_updateQueryRow = (index, newQueryItems) => {
+		const {query, updateQuery} = this.props;
 
-		this.updateQuery(
+		updateQuery(
 			Object.assign(query, {
 				items: newQueryItems
 					? Object.assign(query.items, {
@@ -119,18 +158,15 @@ class ClayQueryGroup extends Component {
 	}
 }
 
-ClayQueryGroup.STATE = {
+ClayQueryGroup.propTypes = {
 	/**
 	 * Unique id of the group used for identifying item groups.
 	 */
-	groupId: Config.string(),
-	conjunctions: Config.array(),
-	selectedConjunctionName: Config.string(),
-	query: Config.object(),
-	updateQuery: Config.func()
+	criteriaTypes: PropTypes.object,
+	conjunctions: PropTypes.array,
+	selectedConjunctionName: PropTypes.string,
+	query: PropTypes.object,
+	updateQuery: PropTypes.func
 };
 
-Soy.register(ClayQueryGroup, templates);
-
-export {ClayQueryGroup};
 export default ClayQueryGroup;
