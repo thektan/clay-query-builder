@@ -69,27 +69,27 @@ class ClayCriteriaGroup extends React.Component {
 							{index != 0 && (
 								<div className="query-conjunction-section">
 									<ClayButton
-										onClick={this._handleConjunctionClick}
 										label={selectedConjunctionName}
+										onClick={this._handleConjunctionClick}
 									/>
 								</div>
 							)}
 
 							<ClayCriteriaRow
+								conjunctions={conjunctions}
+								criteriaTypes={criteriaTypes}
 								criterion={criterion}
 								editing={editing}
-								properties={properties}
-								criteriaTypes={criteriaTypes}
-								conjunctions={conjunctions}
 								index={index}
 								onChange={this._updateCriterion}
 								operators={operators}
+								properties={properties}
 								spritemap={spritemap}
 							/>
 
 							<ClayButton
-								onClick={this._handleAddCriteria(index)}
 								label={'Add'}
+								onClick={this._handleAddCriteria(index)}
 							/>
 						</div>
 					);
@@ -154,14 +154,15 @@ class ClayCriteriaGroup extends React.Component {
 }
 
 ClayCriteriaGroup.propTypes = {
-	/**
-	 * Unique id of the group used for identifying item groups.
-	 */
 	criteriaTypes: PropTypes.object,
 	conjunctions: PropTypes.array,
+	editing: PropTypes.bool,
 	selectedConjunctionName: PropTypes.string,
 	criteria: PropTypes.object,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
+	operators: PropTypes.array,
+	properties: PropTypes.array,
+	spritemap: PropTypes.string
 };
 
 export default ClayCriteriaGroup;

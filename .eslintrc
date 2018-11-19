@@ -4,8 +4,9 @@
 		"es6": true,
 		"node": true
 	},
-	"extends": "liferay",
+	"extends": ["plugin:react/recommended", "liferay"],
 	"parser": "babel-eslint",
+	"plugins": ["babel", "react"],
 	"rules": {
 		"no-console": 0,
 		"require-jsdoc": 0,
@@ -13,6 +14,10 @@
 		"eol-last": [2, "never"],
 		"max-len": 0,
 		"sort-vars": 2,
-		"valid-jsdoc": 0
+		"valid-jsdoc": 0,
+		"no-invalid-this": 0,
+		"babel/no-invalid-this": 1,
+		"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
+		"react/jsx-sort-props": 2
 	}
 }

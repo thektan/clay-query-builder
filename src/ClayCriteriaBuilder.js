@@ -1,25 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClayButton from './ClayButton';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
 import './ClayCriteriaBuilder.scss';
-
-const RELATIONAL_OPERATORS = [
-	'equals',
-	'not-equals',
-	'greater-than',
-	'greater-than-or-equals',
-	'less-than',
-	'less-than-or-equals'
-];
-const STRING_OPERATORS = [
-	'contains',
-	'not contains',
-	'endswith',
-	'not endswith',
-	'startswith',
-	'not startswith'
-];
 
 /**
  * A component used for building a query string.
@@ -34,46 +16,6 @@ class ClayCriteriaBuilder extends React.Component {
 			initialCriteria: this.props.criteria,
 			editing: false
 		};
-	}
-
-	render() {
-		const {
-			properties,
-			conjunctions,
-			operators,
-			criteria,
-			spritemap
-		} = this.props;
-
-		const {initialCriteria, editing} = this.state;
-
-		return (
-			<div styleName="container">
-				<button
-					className="button btn-secondary"
-					onClick={this._handleToggleEdit}
-				>
-					<span>Edit</span>
-				</button>
-
-				{criteria ? (
-					<ClayCriteriaGroup
-						editing={editing}
-						properties={properties}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
-							operators
-						)}
-						conjunctions={conjunctions}
-						operators={operators}
-						onChange={this._updateCriteria}
-						criteria={criteria}
-						spritemap={spritemap}
-					/>
-				) : (
-					<span>{'There is nothing'}</span>
-				)}
-			</div>
-		);
 	}
 
 	/**
@@ -130,17 +72,47 @@ class ClayCriteriaBuilder extends React.Component {
 	_updateCriteria = newCriteria => {
 		this.props.onChange(this._cleanCriteria([newCriteria]).pop());
 	};
-}
 
-/**
- * Options to be inserted into a clay select input.
- * Same definitions from https://github.com/liferay/clay/blob/master/packages/clay-select/src/ClaySelect.js#L93-L97
- */
-const CLAY_SELECT_ITEM_SHAPE = {
-	label: PropTypes.string.isRequired,
-	selected: PropTypes.bool,
-	value: PropTypes.string.isRequired
-};
+	render() {
+		const {
+			properties,
+			conjunctions,
+			operators,
+			criteria,
+			spritemap
+		} = this.props;
+
+		const {editing} = this.state;
+
+		return (
+			<div styleName="container">
+				<button
+					className="button btn-secondary"
+					onClick={this._handleToggleEdit}
+				>
+					<span>Edit</span>
+				</button>
+
+				{criteria ? (
+					<ClayCriteriaGroup
+						conjunctions={conjunctions}
+						criteria={criteria}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+							operators
+						)}
+						editing={editing}
+						onChange={this._updateCriteria}
+						operators={operators}
+						properties={properties}
+						spritemap={spritemap}
+					/>
+				) : (
+					<span>{'There is nothing'}</span>
+				)}
+			</div>
+		);
+	}
+}
 
 const QUERY_GROUP_SHAPE = {
 	conjunctionId: PropTypes.string,
@@ -186,7 +158,8 @@ ClayCriteriaBuilder.propTypes = {
 		)
 	}),
 	maxNesting: PropTypes.number,
-	readOnly: PropTypes.bool
+	readOnly: PropTypes.bool,
+	spritemap: PropTypes.string
 };
 
 ClayCriteriaBuilder.defaultProps = {

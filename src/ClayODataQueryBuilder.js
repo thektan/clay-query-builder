@@ -193,6 +193,13 @@ class ClayODataQueryBuilder extends React.Component {
 		};
 	}
 
+	_updateQuery = newCriteriaMap => {
+		this.setState({
+			criteriaMap: newCriteriaMap,
+			query: buildQueryString([newCriteriaMap])
+		});
+	};
+
 	render() {
 		const {properties, maxNesting, readOnly} = this.props;
 
@@ -202,11 +209,11 @@ class ClayODataQueryBuilder extends React.Component {
 			<div>
 				<ClayCriteriaBuilder
 					conjunctions={conjunctions}
+					criteria={criteriaMap}
 					maxNesting={maxNesting}
+					onChange={this._updateQuery}
 					operators={operators}
 					properties={properties}
-					criteria={criteriaMap}
-					onChange={this._updateQuery}
 					readOnly={readOnly}
 				/>
 
@@ -214,13 +221,14 @@ class ClayODataQueryBuilder extends React.Component {
 			</div>
 		);
 	}
-
-	_updateQuery = newCriteriaMap => {
-		this.setState({
-			criteriaMap: newCriteriaMap,
-			query: buildQueryString([newCriteriaMap])
-		});
-	};
 }
+
+ClayODataQueryBuilder.propTypes = {
+	maxNesting: PropTypes.number,
+	operators: PropTypes.array,
+	readOnly: PropTypes.bool,
+	properties: PropTypes.array,
+	query: PropTypes.string
+};
 
 export default ClayODataQueryBuilder;
