@@ -1,9 +1,12 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
-import ClayQueryBuilder from './ClayQueryBuilder'
+import ClayODataQueryBuilder from './ClayODataQueryBuilder'
 
 export function initialize(props, id) {
     ReactDOM.render(
-        <ClayQueryBuilder {...props} />,
+        <ClayODataQueryBuilder 
+            {...props} 
+        />,
         document.getElementById(id)
     )
 }
