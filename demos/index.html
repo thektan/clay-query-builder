@@ -17,144 +17,51 @@
 		<div id="app"></div>
 		<script type="text/javascript">
 			new metal.initialize({
-				criteria: [
+				properties: [
 					{
-						value: "user.jobTitle", // Used when translating into the query
-						label: "jobTitle", // Displayed on the sidebar
+						label: "job-title",
 						type: "string", // Determines which operators are available
-						acceptedValues: [
-							{
-								label: "developer",
-								value: "developer"
-							},
-							{
-								label: "engineer",
-								value: "engineer"
-							}
-						] // Will convert the value input into a select input
+						name: "jobTitle" // Displayed on the sidebar
 					},
 					{
-						value: "user.age",
-						label: "age",
+						label: 'industry',
+						type: "string",
+						name: "industry"
+					},
+					{
+						label: 'city',
+						type: "string",
+						name: "city"
+					},
+					{
+						label: 'address',
+						type: "string",
+						name: "address"
+					},
+					{
+						label: 'first-name',
+						type: "string",
+						name: "firstName"
+					},
+					{
+						label: 'last-name',
+						type: "string",
+						name: "lastName"
+					},
+					{
+						label: 'email-address',
+						type: "string",
+						name: "emailAddress"
+					},
+					{
+						label: 'age',
 						type: "number",
-						acceptedValues: null
-					}
-				],
-				conjunctions: [
-					{
-						label: "and", // Button display text
-						value: "and" // Value used for constructing the query
-					},
-					{
-						label: "or",
-						value: "or"
-					}
-				],
-				operators: [
-					{
-						label: "equals",
-						value: "eq",
-						supportedTypes: ["boolean", "date", "number", "string"]
-					},
-					{
-						label: "greater-than",
-						value: "gt",
-						supportedTypes: ["date", "number"]
-					},
-					{
-						label: "greater than or equals",
-						value: "gte",
-						supportedTypes: ["date", "number"]
-					},
-					{
-						label: "less-than",
-						value: "lt",
-						supportedTypes: ["date", "number"]
-					},
-					{
-						label: "less-than-or-equals",
-						value: "lte",
-						supportedTypes: ["date", "number"]
-					},
-					{
-						label: "contains",
-						value: "contains",
-						supportedTypes: ["string"]
+						name: "age"
 					}
 				],
 				maxNesting: 6,
 				canReorder: true,
-				spritemap: "icons.svg",
-				query: {
-					conjunctionId: "and",
-					items: [
-						{
-							conjunctionId: "or",
-							items: [
-								{
-									criteriaId: "user.jobTitle",
-									operatorId: "gt",
-									value: "developer"
-								},
-								{
-									criteriaId: "user.jobTitle",
-									operatorId: "eq",
-									value: "doctor"
-								},
-								{
-									conjunctionId: "or",
-									items: [
-										{
-											criteriaId: "user.jobTitle",
-											operatorId: "gt",
-											value: "developer"
-										},
-										{
-											criteriaId: "user.jobTitle",
-											operatorId: "eq",
-											value: "doctor"
-										},
-										{
-											conjunctionId: "or",
-											items: [
-												{
-													criteriaId: "user.jobTitle",
-													operatorId: "gt",
-													value: "developer"
-												},
-												{
-													criteriaId: "user.jobTitle",
-													operatorId: "eq",
-													value: "doctor"
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							conjunctionId: "or",
-							items: [
-								{
-									criteriaId: "user.age",
-									operatorId: "eq",
-									value: "developer"
-								},
-								{
-									criteriaId: "user.age",
-									operatorId: "eq",
-									value: "developer"
-								},
-								{
-									criteriaId: "user.age",
-									operatorId: "eq",
-									value: "developer"
-								}
-							]
-						}
-					]
-				}
+				query: `(emailAddress eq 'test@liferay.com' and firstName eq 'wow') or jobTitle eq 'magician'`
 			},
 			"app");
 		</script>
