@@ -72,7 +72,10 @@ class ClayCriteriaRow extends React.Component {
 										onChange={this._handleInputChange(
 											'propertyName'
 										)}
-										value={selectedProperty.name}
+										value={
+											selectedProperty &&
+											selectedProperty.name
+										}
 									>
 										{properties.map((property, index) => (
 											<option
@@ -91,7 +94,10 @@ class ClayCriteriaRow extends React.Component {
 										onChange={this._handleInputChange(
 											'operatorName'
 										)}
-										value={selectedOperator.name}
+										value={
+											selectedOperator &&
+											selectedOperator.name
+										}
 									>
 										{operators.map((operator, index) => (
 											<option

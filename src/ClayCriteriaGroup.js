@@ -10,11 +10,21 @@ let groupId = 0;
 
 /**
  * Generate a unique id for the group.
- *
  * @return {number} the unique group id.
  */
 function generateId() {
 	return ID_PREFIX + groupId++;
+}
+
+/**
+ * Inserts an item at the specified index.
+ * @param {?} item Item to insert into the list.
+ * @param {array} list The list the item will be inserted in.
+ * @param {number} index Position where the item will be inserted in.
+ * @return {array} Array with the inserted item.
+ */
+function insertAtIndex(item, list, index) {
+	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
 }
 
 /**
@@ -87,10 +97,12 @@ class ClayCriteriaGroup extends React.Component {
 								spritemap={spritemap}
 							/>
 
-							<ClayButton
-								label={'Add'}
-								onClick={this._handleAddCriteria(index)}
-							/>
+							{editing && (
+								<ClayButton
+									label={'Add'}
+									onClick={this._handleAddCriteria(index)}
+								/>
+							)}
 						</div>
 					);
 				})}
@@ -101,11 +113,23 @@ class ClayCriteriaGroup extends React.Component {
 	/**
 	 * Adds a new criteria row.
 	 *
-	 * @param {Event} event
-	 * @param {Object} data
-	 * @memberof ClayQueryGroup
+	 * @private
 	 */
-	_handleAddCriteria = index => event => {};
+	_handleAddCriteria = index => () => {
+		const {criteria, onChange, operators, properties} = this.props;
+
+		const emptyItem = {
+			operatorName: operators[0].name,
+			propertyName: properties[0].name,
+			value: ''
+		};
+
+		onChange(
+			Object.assign(criteria, {
+				items: insertAtIndex(emptyItem, criteria.items, index + 1)
+			})
+		);
+	};
 
 	/**
 	 * Cycles through conjunctions.
@@ -136,7 +160,6 @@ class ClayCriteriaGroup extends React.Component {
 	 *
 	 * @param {number} index
 	 * @param {Object} newCriterion
-	 * @memberof ClayQueryGroup
 	 */
 	_updateCriterion = (index, newCriterion) => {
 		const {criteria, onChange} = this.props;
