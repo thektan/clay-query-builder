@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
-import './ClayCriteriaBuilder.scss';
+import './css/ClayCriteriaBuilder.scss';
 
 /**
  * A component used for building a query string.

@@ -2,7 +2,7 @@ import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaRow from './ClayCriteriaRow';
 import ClayButton from './ClayButton';
-import './ClayCriteriaGroup.scss';
+import './css/ClayCriteriaGroup.scss';
 
 const ID_PREFIX = 'group_';
 
