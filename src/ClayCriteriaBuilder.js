@@ -4,7 +4,14 @@ import ClayButton from './ClayButton';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
 import './ClayCriteriaBuilder.scss';
 
-const RELATIONAL_OPERATORS = ['equals', 'not-equals', 'greater-than', 'greater-than-or-equals', 'less-than', 'less-than-or-equals'];
+const RELATIONAL_OPERATORS = [
+	'equals',
+	'not-equals',
+	'greater-than',
+	'greater-than-or-equals',
+	'less-than',
+	'less-than-or-equals'
+];
 const STRING_OPERATORS = [
 	'contains',
 	'not contains',
@@ -38,22 +45,24 @@ class ClayCriteriaBuilder extends React.Component {
 			spritemap
 		} = this.props;
 
-		const {
-			initialCriteria,
-			editing
-		} = this.state;
-	
+		const {initialCriteria, editing} = this.state;
+
 		return (
 			<div styleName="container">
-				<button className="button btn-secondary" onClick={this._handleToggleEdit}>
+				<button
+					className="button btn-secondary"
+					onClick={this._handleToggleEdit}
+				>
 					<span>Edit</span>
 				</button>
 
 				{criteria ? (
-					<ClayCriteriaGroup 
+					<ClayCriteriaGroup
 						editing={editing}
 						properties={properties}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(operators)}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+							operators
+						)}
 						conjunctions={conjunctions}
 						operators={operators}
 						onChange={this._updateCriteria}
@@ -109,8 +118,8 @@ class ClayCriteriaBuilder extends React.Component {
 	_handleToggleEdit = () => {
 		this.setState({
 			editing: !this.state.editing
-		})
-	}
+		});
+	};
 
 	/**
 	 * Updates the query state from changes made by the group and row
@@ -119,8 +128,8 @@ class ClayCriteriaBuilder extends React.Component {
 	 * @param {object} newCriteria
 	 */
 	_updateCriteria = newCriteria => {
-		this.props.onChange(this._cleanCriteria([newCriteria]).pop())
-	}
+		this.props.onChange(this._cleanCriteria([newCriteria]).pop());
+	};
 }
 
 /**
@@ -151,7 +160,7 @@ ClayCriteriaBuilder.propTypes = {
 			label: PropTypes.string,
 			name: PropTypes.string.isRequired,
 			options: PropTypes.array,
-			type: PropTypes.string,
+			type: PropTypes.string
 		})
 	).isRequired,
 	conjunctions: PropTypes.arrayOf(

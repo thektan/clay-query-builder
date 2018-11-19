@@ -42,9 +42,7 @@ class ClayCriteriaGroup extends React.Component {
 	 * @memberof ClayQueryGroup
 	 */
 	_getConjunctionLabel(conjunctionName, conjunctions) {
-		return conjunctions.find(
-			({name}) => name === conjunctionName
-		).label;
+		return conjunctions.find(({name}) => name === conjunctionName).label;
 	}
 
 	render() {
@@ -58,37 +56,44 @@ class ClayCriteriaGroup extends React.Component {
 			spritemap
 		} = this.props;
 
-		const selectedConjunctionName = this._getConjunctionLabel(criteria.conjunctionName, conjunctions);
+		const selectedConjunctionName = this._getConjunctionLabel(
+			criteria.conjunctionName,
+			conjunctions
+		);
 
 		return (
 			<div className="query-group sheet" styleName="container">
-				{criteria.items.map(
-					(criterion, index) => {
-						return (
-							<div className="container" key={index}>
-								{index != 0 && (
-									<div className="query-conjunction-section" >
-										<ClayButton onClick={this._handleConjunctionClick} label={selectedConjunctionName}  />
-									</div>
-								)}
+				{criteria.items.map((criterion, index) => {
+					return (
+						<div className="container" key={index}>
+							{index != 0 && (
+								<div className="query-conjunction-section">
+									<ClayButton
+										onClick={this._handleConjunctionClick}
+										label={selectedConjunctionName}
+									/>
+								</div>
+							)}
 
-								<ClayCriteriaRow
-									criterion={criterion}
-									editing={editing}
-									properties={properties}
-									criteriaTypes={criteriaTypes}
-									conjunctions={conjunctions}
-									index={index}
-									onChange={this._updateCriterion}
-									operators={operators}
-									spritemap={spritemap}
-								/>
+							<ClayCriteriaRow
+								criterion={criterion}
+								editing={editing}
+								properties={properties}
+								criteriaTypes={criteriaTypes}
+								conjunctions={conjunctions}
+								index={index}
+								onChange={this._updateCriterion}
+								operators={operators}
+								spritemap={spritemap}
+							/>
 
-								<ClayButton onClick={this._handleAddCriteria(index)} label={'Add'} />
-							</div>
-						)
-					}
-				)}
+							<ClayButton
+								onClick={this._handleAddCriteria(index)}
+								label={'Add'}
+							/>
+						</div>
+					);
+				})}
 			</div>
 		);
 	}
@@ -100,9 +105,7 @@ class ClayCriteriaGroup extends React.Component {
 	 * @param {Object} data
 	 * @memberof ClayQueryGroup
 	 */
-	_handleAddCriteria = index => event => {
-		
-	}
+	_handleAddCriteria = index => event => {};
 
 	/**
 	 * Cycles through conjunctions.
@@ -122,14 +125,11 @@ class ClayCriteriaGroup extends React.Component {
 				: conjunctions[index + 1].name;
 
 		onChange(
-			Object.assign(
-				criteria, 
-				{
-					conjunctionName: conjunctionSelected
-				}
-			)
+			Object.assign(criteria, {
+				conjunctionName: conjunctionSelected
+			})
 		);
-	}
+	};
 
 	/**
 	 * Update the query builder's query with the new query.
@@ -150,7 +150,7 @@ class ClayCriteriaGroup extends React.Component {
 					: criteria.items.filter((fItem, fIndex) => fIndex !== index)
 			})
 		);
-	}
+	};
 }
 
 ClayCriteriaGroup.propTypes = {
