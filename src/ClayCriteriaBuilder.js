@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClayQueryGroup from './ClayQueryGroup';
+import ClayButton from './ClayButton';
+import ClayCriteriaGroup from './ClayCriteriaGroup';
+import './ClayCriteriaBuilder.scss';
 
-const RELATIONAL_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
+const RELATIONAL_OPERATORS = ['equals', 'not-equals', 'greater-than', 'greater-than-or-equals', 'less-than', 'less-than-or-equals'];
 const STRING_OPERATORS = [
 	'contains',
 	'not contains',
@@ -17,45 +19,50 @@ const STRING_OPERATORS = [
  * Combines multiple queries together. A query has a
  * structure of criteria, operator, and value.
  */
-class ClayQueryBuilder extends React.Component {
+class ClayCriteriaBuilder extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			initialQuery: this.props.query
+			initialCriteria: this.props.criteria,
+			editing: false
 		};
 	}
 
 	render() {
 		const {
-			criteria,
+			properties,
 			conjunctions,
 			operators,
-			query,
+			criteria,
 			spritemap
 		} = this.props;
 
 		const {
-			initialQuery,
-			queryString
+			initialCriteria,
+			editing
 		} = this.state;
-
 	
 		return (
-			<div className="query-builder-root">
-				<ClayQueryGroup 
-					criteria={criteria}
-					criteriaTypes={ClayQueryBuilder._buildCriteriaTypes(operators)}
-					conjunctions={conjunctions}
-					operators={operators}
-					updateQuery={this._updateQuery}
-					query={query}
-					spritemap={spritemap}
-				/>
+			<div styleName="container">
+				<button className="button btn-secondary" onClick={this._handleToggleEdit}>
+					<span>Edit</span>
+				</button>
 
-				<span className="query-string">
-					{ClayQueryBuilder._getQueryString(query)}
-				</span>
+				{criteria ? (
+					<ClayCriteriaGroup 
+						editing={editing}
+						properties={properties}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(operators)}
+						conjunctions={conjunctions}
+						operators={operators}
+						onChange={this._updateCriteria}
+						criteria={criteria}
+						spritemap={spritemap}
+					/>
+				) : (
+					<span>{'There is nothing'}</span>
+				)}
 			</div>
 		);
 	}
@@ -82,16 +89,16 @@ class ClayQueryBuilder extends React.Component {
 	/**
 	 * Cleans up the query state by removing any groups with no items.
 	 *
-	 * @param {array} queryItems The query to clean up.
+	 * @param {array} criterion The criteria to clean up.
 	 * @returns {object} The cleaned up query.
 	 */
-	_cleanUpQuery(queryItems) {
-		const test = queryItems
+	_cleanCriteria(criterion) {
+		const test = criterion
 			.filter(({items}) => (items ? items.length : true))
 			.map(item =>
 				item.items
 					? Object.assign(item, {
-						items: this._cleanUpQuery(item.items)
+						items: this._cleanCriteria(item.items)
 					  })
 					: item
 			);
@@ -99,56 +106,20 @@ class ClayQueryBuilder extends React.Component {
 		return test;
 	}
 
+	_handleToggleEdit = () => {
+		this.setState({
+			editing: !this.state.editing
+		})
+	}
+
 	/**
 	 * Updates the query state from changes made by the group and row
 	 * components.
 	 *
-	 * @param {object} newQuery
+	 * @param {object} newCriteria
 	 */
-	_updateQuery = newQuery => {
-		this.setState({
-			query: this._cleanUpQuery([newQuery]).pop()
-		});
-	}
-
-	/**
-	 * Converts a query object into an OData query string.
-	 *
-	 * @param {string} query
-	 * @return {string} The query string.
-	 */
-	static _getQueryString(query) {
-		return ClayQueryBuilder.buildQueryString([query]);
-	}
-
-	static buildQueryString(queryItems, queryConjunction) {
-		let queryString = '';
-
-		queryItems.forEach((item, index) => {
-			const {items, conjunctionId, criteriaId, operatorId, value} = item;
-
-			if (index > 0) {
-				queryString = queryString.concat(` ${queryConjunction} `);
-			}
-
-			if (conjunctionId) {
-				queryString = queryString.concat(
-					`(${this.buildQueryString(items, conjunctionId)})`
-				);
-			} else {
-				if (RELATIONAL_OPERATORS.includes(operatorId)) {
-					queryString = queryString.concat(
-						`(${criteriaId} ${operatorId} "${value}")`
-					);
-				} else if (STRING_OPERATORS.includes(operatorId)) {
-					queryString = queryString.concat(
-						`(${operatorId} (${criteriaId}, "${value}"))`
-					);
-				}
-			}
-		});
-
-		return queryString;
+	_updateCriteria = newCriteria => {
+		this.props.onChange(this._cleanCriteria([newCriteria]).pop())
 	}
 }
 
@@ -168,20 +139,19 @@ const QUERY_GROUP_SHAPE = {
 };
 
 const QUERY_ITEM_SHAPE = {
-	criteriaId: PropTypes.string,
-	operatorId: PropTypes.string,
+	propertyName: PropTypes.string,
+	operatorName: PropTypes.string,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
-ClayQueryBuilder.propTypes = {
-	criteria: PropTypes.arrayOf(
+ClayCriteriaBuilder.propTypes = {
+	properties: PropTypes.arrayOf(
 		PropTypes.shape({
-			value: PropTypes.string.isRequired,
+			entityUrl: PropTypes.string,
 			label: PropTypes.string,
+			name: PropTypes.string.isRequired,
+			options: PropTypes.array,
 			type: PropTypes.string,
-			acceptedValues: PropTypes.arrayOf(
-				PropTypes.shape(CLAY_SELECT_ITEM_SHAPE)
-			)
 		})
 	).isRequired,
 	conjunctions: PropTypes.arrayOf(
@@ -190,17 +160,15 @@ ClayQueryBuilder.propTypes = {
 			value: PropTypes.string
 		})
 	),
+	onChange: PropTypes.func,
 	operators: PropTypes.arrayOf(
 		PropTypes.shape({
-			label: PropTypes.string,
 			supportedTypes: PropTypes.arrayOf(PropTypes.string),
 			value: PropTypes.string
 		})
 	),
-	spritemap: PropTypes.string.isRequired,
-	query: PropTypes.shape({
+	criteria: PropTypes.shape({
 		conjunctionId: PropTypes.string,
-		id: PropTypes.string,
 		items: PropTypes.arrayOf(
 			PropTypes.oneOfType([
 				PropTypes.shape(QUERY_GROUP_SHAPE),
@@ -212,8 +180,8 @@ ClayQueryBuilder.propTypes = {
 	readOnly: PropTypes.bool
 };
 
-ClayQueryBuilder.defaultProps = {
+ClayCriteriaBuilder.defaultProps = {
 	readOnly: false
 };
 
-export default ClayQueryBuilder;
+export default ClayCriteriaBuilder;

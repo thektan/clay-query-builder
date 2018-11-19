@@ -1,6 +1,8 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import ClayQueryRow from './ClayQueryRow';
+import ClayCriteriaRow from './ClayCriteriaRow';
+import ClayButton from './ClayButton';
+import './ClayCriteriaGroup.scss';
 
 const ID_PREFIX = 'group_';
 
@@ -21,7 +23,7 @@ function generateId() {
  * @class ClayQueryGroup
  * @extends {Component}
  */
-class ClayQueryGroup extends React.Component {
+class ClayCriteriaGroup extends React.Component {
 	/**
 	 * @inheritdoc
 	 */
@@ -35,61 +37,54 @@ class ClayQueryGroup extends React.Component {
 	 * Gets the conjunction object containing a label and value from the
 	 * selected id.
 	 *
-	 * @param {string} conjunctionId
+	 * @param {string} conjunctionName
 	 * @return {Object} Conjunction object
 	 * @memberof ClayQueryGroup
 	 */
-	_getConjunctionName(conjunctionId, conjunctions) {
+	_getConjunctionLabel(conjunctionName, conjunctions) {
 		return conjunctions.find(
-			({value}) => value === conjunctionId
+			({name}) => name === conjunctionName
 		).label;
 	}
 
 	render() {
 		const {
 			conjunctions,
-			criteria,
+			editing,
+			properties,
 			criteriaTypes,
 			operators,
-			query,
+			criteria,
 			spritemap
 		} = this.props;
 
-		const selectedConjunctionName = this._getConjunctionName(query.conjunctionId, conjunctions);
+		const selectedConjunctionName = this._getConjunctionLabel(criteria.conjunctionName, conjunctions);
 
 		return (
-			<div className="query-group sheet">
-				{query.items.map(
-					(queryItem, index) => {
+			<div className="query-group sheet" styleName="container">
+				{criteria.items.map(
+					(criterion, index) => {
 						return (
 							<div className="container" key={index}>
 								{index != 0 && (
-									<div className="query-conjunction-section">
-										<button 
-											className={`query-conjunction query conjunction-${selectedConjunctionName} sm`}
-											onClick={this._handleConjunctionClick}
-										>
-											<span>{selectedConjunctionName}</span>
-										</button>
+									<div className="query-conjunction-section" >
+										<ClayButton onClick={this._handleConjunctionClick} label={selectedConjunctionName}  />
 									</div>
 								)}
 
-								<ClayQueryRow
-									queryItem={queryItem}
-									criteria={criteria}
+								<ClayCriteriaRow
+									criterion={criterion}
+									editing={editing}
+									properties={properties}
 									criteriaTypes={criteriaTypes}
 									conjunctions={conjunctions}
 									index={index}
-									updateQueryRow={this._updateQueryRow}
+									onChange={this._updateCriterion}
 									operators={operators}
 									spritemap={spritemap}
 								/>
 
-								<button 
-									onClick={this._handleAddCriteria(this.groupId, index)}
-								>
-									<span>Add</span>
-								</button>
+								<ClayButton onClick={this._handleAddCriteria(index)} label={'Add'} />
 							</div>
 						)
 					}
@@ -115,22 +110,22 @@ class ClayQueryGroup extends React.Component {
 	 * @private
 	 */
 	_handleConjunctionClick = () => {
-		const {conjunctions, updateQuery, query} = this.props;
+		const {conjunctions, onChange, criteria} = this.props;
 
 		const index = conjunctions.findIndex(
-			item => item.value === query.conjunctionId
+			item => item.name === criteria.conjunctionName
 		);
 
 		const conjunctionSelected =
 			index === conjunctions.length - 1
-				? conjunctions[0].value
-				: conjunctions[index + 1].value;
+				? conjunctions[0].name
+				: conjunctions[index + 1].name;
 
-		updateQuery(
+		onChange(
 			Object.assign(
-				query, 
+				criteria, 
 				{
-					conjunctionId: conjunctionSelected
+					conjunctionName: conjunctionSelected
 				}
 			)
 		);
@@ -140,33 +135,33 @@ class ClayQueryGroup extends React.Component {
 	 * Update the query builder's query with the new query.
 	 *
 	 * @param {number} index
-	 * @param {Object} newQueryItems
+	 * @param {Object} newCriterion
 	 * @memberof ClayQueryGroup
 	 */
-	_updateQueryRow = (index, newQueryItems) => {
-		const {query, updateQuery} = this.props;
+	_updateCriterion = (index, newCriterion) => {
+		const {criteria, onChange} = this.props;
 
-		updateQuery(
-			Object.assign(query, {
-				items: newQueryItems
-					? Object.assign(query.items, {
-						[index]: newQueryItems
+		onChange(
+			Object.assign(criteria, {
+				items: newCriterion
+					? Object.assign(criteria.items, {
+						[index]: newCriterion
 					  })
-					: query.items.filter((fItem, fIndex) => fIndex !== index)
+					: criteria.items.filter((fItem, fIndex) => fIndex !== index)
 			})
 		);
 	}
 }
 
-ClayQueryGroup.propTypes = {
+ClayCriteriaGroup.propTypes = {
 	/**
 	 * Unique id of the group used for identifying item groups.
 	 */
 	criteriaTypes: PropTypes.object,
 	conjunctions: PropTypes.array,
 	selectedConjunctionName: PropTypes.string,
-	query: PropTypes.object,
-	updateQuery: PropTypes.func
+	criteria: PropTypes.object,
+	onChange: PropTypes.func
 };
 
-export default ClayQueryGroup;
+export default ClayCriteriaGroup;
