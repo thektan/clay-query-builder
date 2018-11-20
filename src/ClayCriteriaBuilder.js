@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
+import ClayButton from './ClayButton';
 import './css/ClayCriteriaBuilder.scss';
 
 /**
