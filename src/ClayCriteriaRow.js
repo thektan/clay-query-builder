@@ -1,6 +1,12 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
+<<<<<<< HEAD
+=======
+import ClayButton from './ClayButton';
+import ClaySelect from './ClaySelect';
+import './ClayCriteriaRow.scss';
+>>>>>>> LPS-85743 Styling
 
 class ClayCriteriaRow extends React.Component {
 	_getSelectedItem(list, idSelected) {
@@ -56,7 +62,7 @@ class ClayCriteriaRow extends React.Component {
 		}
 
 		return (
-			<div className="container">
+			<div styleName="criterion-container">
 				{criterion.items ? (
 					<ClayCriteriaGroup
 						conjunctions={conjunctions}
@@ -65,103 +71,56 @@ class ClayCriteriaRow extends React.Component {
 						editing={editing}
 						onChange={this._updateCriteria}
 						operators={operators}
-						properties={properties}
-						spritemap={spritemap}
+						criteria={criterion}
 					/>
 				) : (
-					<div className={`query-row ${editing ? 'editing' : ''}`}>
+					<div styleName={`criterion-row ${editing ? 'editing': ''}`}>
 						{editing ? (
-							<div className="form-group-autofit">
-								<div className="form-group-item">
-									<select
-										className="criteria"
-										onChange={this._handleInputChange(
-											'propertyName'
-										)}
-										value={
-											selectedProperty &&
-											selectedProperty.name
-										}
-									>
-										{properties.map((property, index) => (
-											<option
-												key={index}
-												value={property.name}
-											>
-												{property.label}
-											</option>
-										))}
-									</select>
-								</div>
+							<div styleName='edit-container'>
+								<ClaySelect 
+									options={properties.map(({name, label}) => ({value: name, label}))} 
+									selected={selectedProperty.name} 
+									className='form-control'
+									styleName='criterion-input'
+									onChange={this._handleInputChange('propertyName')}
+									key="property"
+								/>
 
-								<div className="form-group-item">
-									<select
-										className="operator"
-										onChange={this._handleInputChange(
-											'operatorName'
-										)}
-										value={
-											selectedOperator &&
-											selectedOperator.name
-										}
-									>
-										{operators.map((operator, index) => (
-											<option
-												key={index}
-												value={operator.name}
-											>
-												{operator.label}
-											</option>
-										))}
-									</select>
-								</div>
+								<ClaySelect 
+									options={operators.map(({name, label}) => ({value: name, label}))} 
+									selected={selectedOperator.name} 
+									className='form-control'
+									styleName='criterion-input operator-input'
+									onChange={this._handleInputChange('operatorName')}
+									key="operator"
+								/>
 
-								<div className="form-group-item">
-									<input
-										className="form-control"
-										id="queryRowValue"
-										onChange={this._handleInputChange(
-											'value'
-										)}
-										type="text"
-										value={criterion.value}
-									/>
-								</div>
+								<input className="form-control" styleName='criterion-input' id="queryRowValue" key="value" value={criterion.value} onChange={this._handleInputChange('value')} type="text"/>
 
-								<div className="form-group-item form-group-item-shrink">
-									<div className="btn-group-item">
-										<button
-											className="button btn-monospaced"
-											onClick={this._handleDelete}
-										>
-											<span>Delete</span>
-										</button>
-									</div>
-								</div>
+								<ClayButton
+									className='btn-monospaced'
+									styleName='delete-button'
+									onClick={this._handleDelete}
+									iconName='trash'
+									key="delete"
+								/>
 							</div>
 						) : (
-							<div className="query-row-display">
-								<div className="query">
-									<span className="criteria">
-										{selectedProperty.label}
-									</span>
-
-									<span className="operator">
-										{selectedOperator.label}
-									</span>
-
-									<span className="value">
-										{criterion.value}
-									</span>
-								</div>
+							<div styleName="read-only-container">
+								<span styleName="criteria-string">
+									{`Property `}
+									<strong styleName='property-string'>{`${selectedProperty.label} `}</strong>
+									{`${selectedOperator.label} `}
+									<strong styleName='value-string'>{`${criterion.value}.`}</strong>
+								</span>
 							</div>
 						)}
 					</div>
 				)}
 			</div>
-		)
+		)	
 	}
-		
+
 	_createPlaceholderGroup(criterion) {
 		return [Object.assign({}, criterion)];
 	}
@@ -192,12 +151,13 @@ ClayCriteriaRow.propTypes = {
 	index: PropTypes.number,
 	operators: PropTypes.array,
 	onChange: PropTypes.func,
-	properties: PropTypes.array,
-	spritemap: PropTypes.string
+	index: PropTypes.number,
+	root: PropTypes.bool
 };
 
 ClayCriteriaRow.defaultProps = {
-	editing: true
-};
+	editing: true,
+	root: false
+}
 
 export default ClayCriteriaRow;

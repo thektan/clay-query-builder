@@ -1,5 +1,15 @@
-.container {
+.criteria-builder {
+    max-width: 1280px;
+}
 
+.toolbar {
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit {
 }
 
 .query-string {}

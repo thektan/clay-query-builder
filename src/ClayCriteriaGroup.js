@@ -63,50 +63,48 @@ class ClayCriteriaGroup extends React.Component {
 			criteriaTypes,
 			operators,
 			criteria,
-			root,
-			spritemap
+			root
 		} = this.props;
 
-		const selectedConjunctionName = this._getConjunctionLabel(
-			criteria.conjunctionName,
-			conjunctions
-		);
-
 		return (
-			<div className="query-group sheet" styleName="container">
-				{criteria.items.map((criterion, index) => {
-					return (
-						<div className="container" key={index}>
-							{index != 0 && (
-								<div className="query-conjunction-section">
-									<ClayButton
-										label={selectedConjunctionName}
-										onClick={this._handleConjunctionClick}
+			<div className="query-group" styleName={root ? 'root-criteria-group' : ' criteria-group'}>
+				{criteria.items.map(
+					(criterion, index) => {
+						return (
+							<div styleName="criterion" key={index}>
+								{index != 0 && (
+									<ClayButton 
+										className='btn-sm btn btn-secondary' 
+										styleName='conjunction' 
+										onClick={this._handleConjunctionClick} 
+										label={this._getConjunctionLabel(criteria.conjunctionName, conjunctions)} 
+									/>
+								)}
+								
+								<div styleName="criterion-row">
+									<ClayCriteriaRow
+										criterion={criterion}
+										editing={editing}
+										properties={properties}
+										criteriaTypes={criteriaTypes}
+										conjunctions={conjunctions}
+										index={index}
+										root={root}
+										onChange={this._updateCriterion}
+										operators={operators}
+									/>
+									
+									<ClayButton 
+										className='btn-sm btn btn-secondary' 
+										styleName='add' 
+										onClick={this._handleAddCriteria(index)} 
+										iconName='plus'
 									/>
 								</div>
-							)}
-
-							<ClayCriteriaRow
-								conjunctions={conjunctions}
-								criteriaTypes={criteriaTypes}
-								criterion={criterion}
-								editing={editing}
-								index={index}
-								onChange={this._updateCriterion}
-								operators={operators}
-								properties={properties}
-								spritemap={spritemap}
-							/>
-
-							{editing && (
-								<ClayButton
-									label={'Add'}
-									onClick={this._handleAddCriteria(index)}
-								/>
-							)}
-						</div>
-					);
-				})}
+							</div>
+						)
+					}
+				)}
 			</div>
 		);
 	}
