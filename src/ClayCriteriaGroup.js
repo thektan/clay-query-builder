@@ -103,7 +103,8 @@ class ClayCriteriaGroup extends React.Component {
 	};
 
 	/**
-	 * Update the query builder's query with the new query.
+	 * Update the query builder's query with the new query. If newCriterion
+	 * is undefined, the criterion at the index will be removed.
 	 *
 	 * @param {number} index
 	 * @param {Object} newCriterion
@@ -175,12 +176,14 @@ class ClayCriteriaGroup extends React.Component {
 										root={root}
 									/>
 
-									<ClayButton
-										className="btn-sm btn btn-secondary"
-										iconName="plus"
-										onClick={this._handleAddCriteria(index)}
-										styleName="add"
-									/>
+									{editing &&
+										<ClayButton
+											className="btn-sm btn btn-secondary"
+											iconName="plus"
+											onClick={this._handleAddCriteria(index)}
+											styleName="add"
+										/>
+									}
 								</div>
 							</div>
 						);

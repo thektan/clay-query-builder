@@ -18,6 +18,12 @@ class ClayCriteriaRow extends React.Component {
 		this._updateCriteria({[propertyName]: event.target.value});
 	};
 
+	_handleDelete = () => {
+		const {index, onChange} = this.props;
+
+		onChange(index);
+	}
+
 	_updateCriteria = newCriteria => {
 		const {criterion, index, onChange} = this.props;
 
