@@ -163,8 +163,8 @@ ClayCriteriaRow.propTypes = {
 	criterion: PropTypes.object,
 	editing: PropTypes.bool,
 	index: PropTypes.number,
-	operators: PropTypes.array,
 	onChange: PropTypes.func,
+	operators: PropTypes.array,
 	properties: PropTypes.array,
 	spritemap: PropTypes.string
 };

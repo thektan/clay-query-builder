@@ -131,16 +131,14 @@ const buildQueryString = (queryItems, queryConjunction) => {
 			queryString = queryString.concat(
 				`(${buildQueryString(items, conjunctionName)})`
 			);
-		} else {
-			if (RELATIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`(${propertyName} ${operatorName} "${value}")`
-				);
-			} else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`(${operatorName} (${propertyName}, "${value}"))`
-				);
-			}
+		} else if (RELATIONAL_OPERATORS.includes(operatorName)) {
+			queryString = queryString.concat(
+				`(${propertyName} ${operatorName} "${value}")`
+			);
+		} else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
+			queryString = queryString.concat(
+				`(${operatorName} (${propertyName}, "${value}"))`
+			);
 		}
 	});
 

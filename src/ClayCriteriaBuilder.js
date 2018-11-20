@@ -13,8 +13,8 @@ class ClayCriteriaBuilder extends React.Component {
 		super(props);
 
 		this.state = {
-			initialCriteria: this.props.criteria,
-			editing: false
+			editing: false,
+			initialCriteria: this.props.criteria
 		};
 	}
 
@@ -120,31 +120,15 @@ const QUERY_GROUP_SHAPE = {
 };
 
 const QUERY_ITEM_SHAPE = {
-	propertyName: PropTypes.string,
 	operatorName: PropTypes.string,
+	propertyName: PropTypes.string,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
 ClayCriteriaBuilder.propTypes = {
-	properties: PropTypes.arrayOf(
-		PropTypes.shape({
-			entityUrl: PropTypes.string,
-			label: PropTypes.string,
-			name: PropTypes.string.isRequired,
-			options: PropTypes.array,
-			type: PropTypes.string
-		})
-	).isRequired,
 	conjunctions: PropTypes.arrayOf(
 		PropTypes.shape({
 			label: PropTypes.string,
-			value: PropTypes.string
-		})
-	),
-	onChange: PropTypes.func,
-	operators: PropTypes.arrayOf(
-		PropTypes.shape({
-			supportedTypes: PropTypes.arrayOf(PropTypes.string),
 			value: PropTypes.string
 		})
 	),
@@ -158,6 +142,22 @@ ClayCriteriaBuilder.propTypes = {
 		)
 	}),
 	maxNesting: PropTypes.number,
+	onChange: PropTypes.func,
+	operators: PropTypes.arrayOf(
+		PropTypes.shape({
+			supportedTypes: PropTypes.arrayOf(PropTypes.string),
+			value: PropTypes.string
+		})
+	),
+	properties: PropTypes.arrayOf(
+		PropTypes.shape({
+			entityUrl: PropTypes.string,
+			label: PropTypes.string,
+			name: PropTypes.string.isRequired,
+			options: PropTypes.array,
+			type: PropTypes.string
+		})
+	).isRequired,
 	readOnly: PropTypes.bool,
 	spritemap: PropTypes.string
 };

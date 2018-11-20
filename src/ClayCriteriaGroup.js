@@ -177,14 +177,14 @@ class ClayCriteriaGroup extends React.Component {
 }
 
 ClayCriteriaGroup.propTypes = {
-	criteriaTypes: PropTypes.object,
 	conjunctions: PropTypes.array,
-	editing: PropTypes.bool,
-	selectedConjunctionName: PropTypes.string,
 	criteria: PropTypes.object,
+	criteriaTypes: PropTypes.object,
+	editing: PropTypes.bool,
 	onChange: PropTypes.func,
 	operators: PropTypes.array,
 	properties: PropTypes.array,
+	selectedConjunctionName: PropTypes.string,
 	spritemap: PropTypes.string
 };
 

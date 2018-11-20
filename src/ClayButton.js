@@ -3,7 +3,7 @@ import {PropTypes} from 'prop-types';
 
 class ClayButton extends React.Component {
 	render() {
-		const {label, type} = this.props;
+		const {label} = this.props;
 
 		return (
 			<button className="btn btn-secondary" {...this.props}>
