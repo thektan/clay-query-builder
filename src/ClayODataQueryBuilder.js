@@ -199,7 +199,7 @@ class ClayODataQueryBuilder extends React.Component {
 	};
 
 	render() {
-		const {properties, maxNesting, readOnly} = this.props;
+		const {properties, maxNesting, readOnly, spritemap} = this.props;
 
 		const {criteriaMap} = this.state;
 
@@ -213,6 +213,7 @@ class ClayODataQueryBuilder extends React.Component {
 					operators={operators}
 					properties={properties}
 					readOnly={readOnly}
+					spritemap={spritemap}
 				/>
 
 				<span>{buildQueryString([criteriaMap])}</span>
@@ -224,9 +225,10 @@ class ClayODataQueryBuilder extends React.Component {
 ClayODataQueryBuilder.propTypes = {
 	maxNesting: PropTypes.number,
 	operators: PropTypes.array,
-	readOnly: PropTypes.bool,
 	properties: PropTypes.array,
-	query: PropTypes.string
+	query: PropTypes.string,
+	readOnly: PropTypes.bool,
+	spritemap: PropTypes.string
 };
 
 export default ClayODataQueryBuilder;

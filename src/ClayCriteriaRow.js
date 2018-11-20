@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
+import ClayButton from './ClayButton';
 
 class ClayCriteriaRow extends React.Component {
 	_getSelectedItem(list, idSelected) {
@@ -124,12 +125,11 @@ class ClayCriteriaRow extends React.Component {
 
 								<div className="form-group-item form-group-item-shrink">
 									<div className="btn-group-item">
-										<button
-											className="button btn-monospaced"
+										<ClayButton
+											icon="times"
 											onClick={this._handleDelete}
-										>
-											<span>Delete</span>
-										</button>
+											spritemap={spritemap}
+										/>
 									</div>
 								</div>
 							</div>
