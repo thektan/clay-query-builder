@@ -63,6 +63,7 @@ class ClayCriteriaGroup extends React.Component {
 			criteriaTypes,
 			operators,
 			criteria,
+			root,
 			spritemap
 		} = this.props;
 
@@ -187,5 +188,9 @@ ClayCriteriaGroup.propTypes = {
 	properties: PropTypes.array,
 	spritemap: PropTypes.string
 };
+
+ClayCriteriaGroup.defaultProps = {
+	root: false
+}
 
 export default ClayCriteriaGroup;
