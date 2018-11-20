@@ -173,7 +173,7 @@ class ClayCriteriaGroup extends React.Component {
 				items: newCriterion ?
 					Object.assign(criteria.items, {
 						[index]: newCriterion
-						}) :
+					}) :
 					criteria.items.filter((fItem, fIndex) => fIndex !== index)
 			})
 		);

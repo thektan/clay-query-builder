@@ -86,7 +86,7 @@ class ClayCriteriaBuilder extends React.Component {
 				item.items ?
 					Object.assign(item, {
 						items: this._cleanCriteria(item.items)
-						}) :
+					}) :
 					item
 			);
 

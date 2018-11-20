@@ -82,8 +82,8 @@ const comparatorTransformation = ({
 				queryAST: queryAST.value.right,
 				prevConjunction: queryAST.type
 			})
-		]
-	: toCriteriaMap(addNewGroup(queryAST, prevConjunction));
+		] :
+	toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
 
 const addNewGroup = (queryAST, prevConjunction) => ({
@@ -276,9 +276,9 @@ class ClayODataQueryBuilder extends React.Component {
 		super(props);
 
 		this.state = {
+			criteriaMap: translateToCriteria(props.query),
 			initialQuery: props.query,
-			query: props.query,
-			criteriaMap: translateToCriteria(props.query)
+			query: props.query
 		};
 	}
 
@@ -290,7 +290,7 @@ class ClayODataQueryBuilder extends React.Component {
 	};
 
 	render() {
-		const {properties, maxNesting, readOnly} = this.props;
+		const {maxNesting, properties, readOnly} = this.props;
 
 		const {criteriaMap} = this.state;
 
@@ -315,9 +315,9 @@ class ClayODataQueryBuilder extends React.Component {
 ClayODataQueryBuilder.propTypes = {
 	maxNesting: PropTypes.number,
 	operators: PropTypes.array,
-	readOnly: PropTypes.bool,
 	properties: PropTypes.array,
-	query: PropTypes.string
+	query: PropTypes.string,
+	readOnly: PropTypes.bool
 };
 
 export default ClayODataQueryBuilder;
