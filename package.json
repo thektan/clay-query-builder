@@ -1,4 +1,36 @@
 {
+	"csfConfig": {
+		"js": {
+			"lint": {
+				"parserOptions": {
+					"ecmaVersion": 7
+				},
+				"env": {
+					"browser": true,
+					"es6": true,
+					"node": true
+				},
+				"parser": "babel-eslint",
+				"rules": {
+					"no-console": 0,
+					"require-jsdoc": 0,
+					"comma-dangle": 0,
+					"eol-last": [
+						2,
+						"never"
+					],
+					"max-len": 0,
+					"sort-vars": 2,
+					"valid-jsdoc": 0,
+					"no-invalid-this": 0,
+					"no-mixed-spaces-and-tabs": [
+						"warn",
+						"smart-tabs"
+					]
+				}
+			}
+		}
+	},
 	"name": "clay-query-builder",
 	"version": "1.0.0",
 	"description": "",
@@ -7,9 +39,10 @@
 	"jsnext:main": "src/ClayQueryBuilder.js",
 	"scripts": {
 		"build": "webpack --mode development",
-		"format": "npm run prettier -- --write",
 		"soy": "metalsoy --soyDeps './node_modules/clay-+(button|icon|select)/src/**/*.soy'",
-		"prettier": "prettier-eslint src/*.js"
+		"checkFormat": "npm run csf",
+		"csf": "csf src/**/*.js",
+		"format": "npm run csf -- -i"
 	},
 	"author": "",
 	"license": "BSD",
@@ -38,6 +71,7 @@
 		"babel-loader": "^8.0.4",
 		"babel-plugin-react-css-modules": "^3.4.2",
 		"browserslist-config-clay": "^2.3.4",
+		"check-source-formatting": "^2.0.13",
 		"clay-css": "^2.3.4",
 		"css-loader": "^1.0.1",
 		"eslint": "^5.8.0",
