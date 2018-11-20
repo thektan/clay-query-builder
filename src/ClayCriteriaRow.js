@@ -42,6 +42,7 @@ class ClayCriteriaRow extends React.Component {
 						onChange={this._updateCriteria}
 						operators={operators}
 						criteria={criterion}
+						properties={properties}
 					/>
 				) : (
 					<div styleName={`criterion-row ${editing ? 'editing': ''}`}>
