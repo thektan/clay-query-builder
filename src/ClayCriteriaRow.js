@@ -36,7 +36,7 @@ class ClayCriteriaRow extends React.Component {
 			criteriaTypes,
 			operators,
 			conjunctions,
-			spritemap
+			root
 		} = this.props;
 
 		const selectedProperty = this._getSelectedItem(
@@ -48,6 +48,12 @@ class ClayCriteriaRow extends React.Component {
 			operators,
 			criterion.operatorName
 		);
+
+		const selectedOperator = this._getSelectedItem(operators, criterion.operatorName);
+
+		if (root && !criterion.items) {
+			criterion.items = this._createPlaceholderGroup(criterion);
+		}
 
 		return (
 			<div className="container">
@@ -153,6 +159,27 @@ class ClayCriteriaRow extends React.Component {
 					</div>
 				)}
 			</div>
+		)
+	}
+		
+	_createPlaceholderGroup(criterion) {
+		return [Object.assign({}, criterion)];
+	}
+
+	_getSelectedItem(list, idSelected) {
+		return list.find(item => item.name === idSelected);
+	}
+
+	_handleInputChange = propertyName =>　event => {
+		this._updateCriteria({[propertyName]: event.target.value});
+	}
+
+	_updateCriteria = newCriteria => {
+		const {onChange, index, criterion} = this.props;
+
+		onChange(
+			index,
+			Object.assign(criterion, newCriteria)
 		);
 	}
 }
