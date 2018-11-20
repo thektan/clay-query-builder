@@ -72,8 +72,8 @@ const comparatorTransformation = ({
 	prevConjunction,
 	lastNodeWasGroup
 }) => {
-	if (prevConjunction === queryAST.type || lastNodeWasGroup) {
-		return [
+	return (prevConjunction === queryAST.type || lastNodeWasGroup) ?
+		[
 			...toCriteriaMap({
 				queryAST: queryAST.value.left,
 				prevConjunction: queryAST.type
@@ -82,10 +82,8 @@ const comparatorTransformation = ({
 				queryAST: queryAST.value.right,
 				prevConjunction: queryAST.type
 			})
-		];
-	} else {
-		return toCriteriaMap(addNewGroup(queryAST, prevConjunction));
-	}
+		]
+	: toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
 
 const addNewGroup = (queryAST, prevConjunction) => ({
