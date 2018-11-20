@@ -1,39 +1,11 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
-<<<<<<< HEAD
-=======
 import ClayButton from './ClayButton';
 import ClaySelect from './ClaySelect';
 import './ClayCriteriaRow.scss';
->>>>>>> LPS-85743 Styling
 
 class ClayCriteriaRow extends React.Component {
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
-
-	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
-	};
-
-	_updateCriteria = newCriteria => {
-		const {onChange, index, criterion} = this.props;
-
-		onChange(index, Object.assign(criterion, newCriteria));
-	};
-
-	_handleToggleEdit = () => {
-		this.setState({
-			editing: !this.state.editing
-		});
-	};
-
-	_handleDelete = () => {
-		const {onChange, index} = this.props;
-		onChange(index);
-	};
-
 	render() {
 		const {
 			criterion,
@@ -54,8 +26,6 @@ class ClayCriteriaRow extends React.Component {
 			operators,
 			criterion.operatorName
 		);
-
-		const selectedOperator = this._getSelectedItem(operators, criterion.operatorName);
 
 		if (root && !criterion.items) {
 			criterion.items = this._createPlaceholderGroup(criterion);
