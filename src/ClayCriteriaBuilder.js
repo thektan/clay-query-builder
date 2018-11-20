@@ -14,8 +14,8 @@ class ClayCriteriaBuilder extends React.Component {
 		super(props);
 
 		this.state = {
-			initialCriteria: this.props.criteria,
-			editing: false
+			editing: false,
+			initialCriteria: this.props.criteria
 		};
 	}
 
@@ -60,17 +60,19 @@ class ClayCriteriaBuilder extends React.Component {
 	 * @returns Map of criteria types.
 	 */
 	static _buildCriteriaTypes(operators) {
-		return operators.reduce((criteriaTypes, {supportedTypes}) => {
-			supportedTypes.forEach(type => {
-				if (!criteriaTypes[type]) {
-					criteriaTypes[type] = operators.filter(operator =>
-						operator.supportedTypes.includes(type)
-					);
-				}
-			});
+		return operators.reduce(
+			(criteriaTypes, {supportedTypes}) => {
+				supportedTypes.forEach(type => {
+					if (!criteriaTypes[type]) {
+						criteriaTypes[type] = operators.filter(operator =>
+							operator.supportedTypes.includes(type)
+						);
+					}
+				});
 
-			return criteriaTypes;
-		}, new Map());
+				return criteriaTypes;
+			},
+			new Map());
 	}
 
 	/**

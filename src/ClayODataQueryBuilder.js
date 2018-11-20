@@ -83,7 +83,7 @@ const comparatorTransformation = ({
 				prevConjunction: queryAST.type
 			})
 		] :
-	toCriteriaMap(addNewGroup(queryAST, prevConjunction));
+		toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
 
 const addNewGroup = (queryAST, prevConjunction) => ({
@@ -107,7 +107,8 @@ const groupTransformation = ({queryAST, prevConjunction, lastNodeWasGroup}) => {
 		isNotConjunction(nextNodeType)
 	) {
 		return toCriteriaMap(skipGroup(queryAST, prevConjunction));
-	} else if (queryAST.value.left) {
+	}
+	else if (queryAST.value.left) {
 		const childType = getChildNodeTypeName(queryAST);
 
 		return [
@@ -117,14 +118,14 @@ const groupTransformation = ({queryAST, prevConjunction, lastNodeWasGroup}) => {
 					: AND,
 				items: [
 					...toCriteriaMap({
-						queryAST: queryAST.value.left,
+						lastNodeWasGroup: true,
 						prevConjunction: queryAST.type,
-						lastNodeWasGroup: true
+						queryAST: queryAST.value.left
 					}),
 					...toCriteriaMap({
-						queryAST: queryAST.value.right,
+						lastNodeWasGroup: true,
 						prevConjunction: queryAST.type,
-						lastNodeWasGroup: true
+						queryAST: queryAST.value.right
 					})
 				]
 			}
@@ -139,9 +140,9 @@ const groupTransformation = ({queryAST, prevConjunction, lastNodeWasGroup}) => {
 					: AND,
 				items: [
 					...toCriteriaMap({
-						queryAST: queryAST.value,
+						lastNodeWasGroup: true,
 						prevConjunction,
-						lastNodeWasGroup: true
+						queryAST: queryAST.value
 					})
 				]
 			}
@@ -173,16 +174,16 @@ const operatorTransformation = ({queryAST}) => {
 };
 
 const toCriteriaMap = ({
-	queryAST,
+	lastNodeWasGroup = false,
 	prevConjunction,
-	lastNodeWasGroup = false
+	queryAST
 }) => {
 	const oDataParserType = oDataTransformationMap[queryAST.type];
 
 	return oDataParserType.transformationFunction({
-		queryAST,
+		lastNodeWasGroup,
 		prevConjunction,
-		lastNodeWasGroup
+		queryAST
 	});
 };
 
@@ -201,10 +202,10 @@ const buildQueryString = (queryItems, queryConjunction) => {
 
 	queryItems.forEach((item, index) => {
 		const {
-			items,
 			conjunctionName,
-			propertyName,
+			items,
 			operatorName,
+			propertyName,
 			value
 		} = item;
 
@@ -233,41 +234,41 @@ const buildQueryString = (queryItems, queryConjunction) => {
 };
 
 const oDataTransformationMap = {
-	BoolParenExpression: {
-		transformationFunction: groupTransformation,
-		name: GROUP
-	},
-	OrExpression: {
-		transformationFunction: comparatorTransformation,
-		name: OR
-	},
 	AndExpression: {
-		transformationFunction: comparatorTransformation,
-		name: AND
+		name: AND,
+		transformationFunction: comparatorTransformation
 	},
-	GreaterOrEqualsExpression: {
-		transformationFunction: operatorTransformation,
-		name: GE
-	},
-	GreaterThanExpression: {
-		transformationFunction: operatorTransformation,
-		name: GT
-	},
-	LesserOrEqualsExpression: {
-		transformationFunction: operatorTransformation,
-		name: LE
-	},
-	LesserThanExpression: {
-		transformationFunction: operatorTransformation,
-		name: LT
+	BoolParenExpression: {
+		name: GROUP,
+		transformationFunction: groupTransformation
 	},
 	EqualsExpression: {
-		transformationFunction: operatorTransformation,
-		name: EQ
+		name: EQ,
+		transformationFunction: operatorTransformation
+	},
+	GreaterOrEqualsExpression: {
+		name: GE,
+		transformationFunction: operatorTransformation
+	},
+	GreaterThanExpression: {
+		name: GT,
+		transformationFunction: operatorTransformation
+	},
+	LesserOrEqualsExpression: {
+		name: LE,
+		transformationFunction: operatorTransformation
+	},
+	LesserThanExpression: {
+		name: LT,
+		transformationFunction: operatorTransformation
 	},
 	NotEqualsExpression: {
-		transformationFunction: operatorTransformation,
-		name: NE
+		name: NE,
+		transformationFunction: operatorTransformation
+	},
+	OrExpression: {
+		name: OR,
+		transformationFunction: comparatorTransformation
 	}
 };
 
