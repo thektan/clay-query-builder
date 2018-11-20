@@ -28,26 +28,29 @@ class ClayCriteriaBuilder extends React.Component {
 			spritemap
 		} = this.props;
 
-		const {
-			initialCriteria,
-			editing
-		} = this.state;
-	
+		const {initialCriteria, editing} = this.state;
+
 		return (
 			<div styleName="criteria-builder">
-				<div styleName='toolbar'>
-					<ClayButton styleName='edit' onClick={this._handleToggleEdit} label='Edit' />
+				<div styleName="toolbar">
+					<ClayButton
+						label="Edit"
+						onClick={this._handleToggleEdit}
+						styleName="edit"
+					/>
 				</div>
-			
+
 				{criteria ? (
-					<ClayCriteriaGroup 
-						editing={editing}
-						properties={properties}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(operators)}
+					<ClayCriteriaGroup
 						conjunctions={conjunctions}
-						operators={operators}
-						onChange={this._updateCriteria}
 						criteria={criteria}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+							operators
+						)}
+						editing={editing}
+						onChange={this._updateCriteria}
+						operators={operators}
+						properties={properties}
 						root
 					/>
 				) : (

@@ -3,7 +3,7 @@ import {PropTypes} from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup';
 import ClayButton from './ClayButton';
 import ClaySelect from './ClaySelect';
-import './ClayCriteriaRow.scss';
+import './css/ClayCriteriaRow.scss';
 
 class ClayCriteriaRow extends React.Component {
 	render() {
@@ -41,55 +41,80 @@ class ClayCriteriaRow extends React.Component {
 						editing={editing}
 						onChange={this._updateCriteria}
 						operators={operators}
-						criteria={criterion}
 						properties={properties}
 					/>
 				) : (
-					<div styleName={`criterion-row ${editing ? 'editing': ''}`}>
+					<div
+						styleName={`criterion-row ${editing ? 'editing' : ''}`}
+					>
 						{editing ? (
-							<div styleName='edit-container'>
-								<ClaySelect 
-									options={properties.map(({name, label}) => ({value: name, label}))} 
-									selected={selectedProperty.name} 
-									className='form-control'
-									styleName='criterion-input'
-									onChange={this._handleInputChange('propertyName')}
+							<div styleName="edit-container">
+								<ClaySelect
+									className="form-control"
 									key="property"
+									onChange={this._handleInputChange(
+										'propertyName'
+									)}
+									options={properties.map(
+										({name, label}) => ({
+											value: name,
+											label
+										})
+									)}
+									selected={selectedProperty.name}
+									styleName="criterion-input"
 								/>
 
-								<ClaySelect 
-									options={operators.map(({name, label}) => ({value: name, label}))} 
-									selected={selectedOperator.name} 
-									className='form-control'
-									styleName='criterion-input operator-input'
-									onChange={this._handleInputChange('operatorName')}
+								<ClaySelect
+									className="form-control"
 									key="operator"
+									onChange={this._handleInputChange(
+										'operatorName'
+									)}
+									options={operators.map(({name, label}) => ({
+										value: name,
+										label
+									}))}
+									selected={selectedOperator.name}
+									styleName="criterion-input operator-input"
 								/>
 
-								<input className="form-control" styleName='criterion-input' id="queryRowValue" key="value" value={criterion.value} onChange={this._handleInputChange('value')} type="text"/>
+								<input
+									className="form-control"
+									id="queryRowValue"
+									key="value"
+									onChange={this._handleInputChange('value')}
+									styleName="criterion-input"
+									type="text"
+									value={criterion.value}
+								/>
 
 								<ClayButton
-									className='btn-monospaced'
-									styleName='delete-button'
-									onClick={this._handleDelete}
-									iconName='trash'
+									className="btn-monospaced"
+									iconName="trash"
 									key="delete"
+									onClick={this._handleDelete}
+									styleName="delete-button"
 								/>
 							</div>
 						) : (
 							<div styleName="read-only-container">
 								<span styleName="criteria-string">
 									{`Property `}
-									<strong styleName='property-string'>{`${selectedProperty.label} `}</strong>
+									<strong styleName="property-string">{`${
+										selectedProperty.label
+									} `}</strong>
 									{`${selectedOperator.label} `}
-									<strong styleName='value-string'>{`${criterion.value}.`}</strong>
+									<strong styleName="value-string">{`${
+										criterion.value
+									}.`}</strong>
 								</span>
 							</div>
 						)}
 					</div>
 				)}
 			</div>
-		)	
+		);
 	}
 
 	_createPlaceholderGroup(criterion) {
@@ -100,18 +125,15 @@ class ClayCriteriaRow extends React.Component {
 		return list.find(item => item.name === idSelected);
 	}
 
-	_handleInputChange = propertyName =>　event => {
+	_handleInputChange = propertyName => event => {
 		this._updateCriteria({[propertyName]: event.target.value});
-	}
+	};
 
 	_updateCriteria = newCriteria => {
 		const {onChange, index, criterion} = this.props;
 
-		onChange(
-			index,
-			Object.assign(criterion, newCriteria)
-		);
-	}
+		onChange(index, Object.assign(criterion, newCriteria));
+	};
 }
 
 ClayCriteriaRow.propTypes = {
@@ -122,13 +144,13 @@ ClayCriteriaRow.propTypes = {
 	index: PropTypes.number,
 	operators: PropTypes.array,
 	onChange: PropTypes.func,
-	index: PropTypes.number,
-	root: PropTypes.bool
+	root: PropTypes.bool,
+	properties: PropTypes.array
 };
 
 ClayCriteriaRow.defaultProps = {
 	editing: true,
 	root: false
-}
+};
 
 export default ClayCriteriaRow;
