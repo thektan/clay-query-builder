@@ -72,44 +72,46 @@ class ClayCriteriaGroup extends React.Component {
 				className="query-group"
 				styleName={root ? 'root-criteria-group' : ' criteria-group'}
 			>
-				{criteria.items.map((criterion, index) => {
-					return (
-						<div key={index} styleName="criterion">
-							{index != 0 && (
-								<ClayButton
-									className="btn-sm btn btn-secondary"
-									label={this._getConjunctionLabel(
-										criteria.conjunctionName,
-										conjunctions
-									)}
-									onClick={this._handleConjunctionClick}
-									styleName="conjunction"
-								/>
-							)}
+				{criteria.items.map(
+					(criterion, index) => {
+						return (
+							<div key={index} styleName="criterion">
+								{index != 0 && (
+									<ClayButton
+										className="btn-sm btn btn-secondary"
+										label={this._getConjunctionLabel(
+											criteria.conjunctionName,
+											conjunctions
+										)}
+										onClick={this._handleConjunctionClick}
+										styleName="conjunction"
+									/>
+								)}
 
-							<div styleName="criterion-row">
-								<ClayCriteriaRow
-									conjunctions={conjunctions}
-									criteriaTypes={criteriaTypes}
-									criterion={criterion}
-									editing={editing}
-									index={index}
-									onChange={this._updateCriterion}
-									operators={operators}
-									properties={properties}
-									root={root}
-								/>
+								<div styleName="criterion-row">
+									<ClayCriteriaRow
+										conjunctions={conjunctions}
+										criteriaTypes={criteriaTypes}
+										criterion={criterion}
+										editing={editing}
+										index={index}
+										onChange={this._updateCriterion}
+										operators={operators}
+										properties={properties}
+										root={root}
+									/>
 
-								<ClayButton
-									className="btn-sm btn btn-secondary"
-									iconName="plus"
-									onClick={this._handleAddCriteria(index)}
-									styleName="add"
-								/>
+									<ClayButton
+										className="btn-sm btn btn-secondary"
+										iconName="plus"
+										onClick={this._handleAddCriteria(index)}
+										styleName="add"
+									/>
+								</div>
 							</div>
-						</div>
-					);
-				})}
+						);
+					}
+				)}
 			</div>
 		);
 	}
@@ -129,9 +131,12 @@ class ClayCriteriaGroup extends React.Component {
 		};
 
 		onChange(
-			Object.assign(criteria, {
-				items: insertAtIndex(emptyItem, criteria.items, index + 1)
-			})
+			Object.assign(
+				criteria,
+				{
+					items: insertAtIndex(emptyItem, criteria.items, index + 1)
+				}
+			)
 		);
 	};
 
@@ -147,15 +152,17 @@ class ClayCriteriaGroup extends React.Component {
 			item => item.name === criteria.conjunctionName
 		);
 
-		const conjunctionSelected =
-			index === conjunctions.length - 1 ?
-				conjunctions[0].name :
-				conjunctions[index + 1].name;
+		const conjunctionSelected = index === conjunctions.length - 1 ?
+			conjunctions[0].name :
+			conjunctions[index + 1].name;
 
 		onChange(
-			Object.assign(criteria, {
-				conjunctionName: conjunctionSelected
-			})
+			Object.assign(
+				criteria,
+				{
+					conjunctionName: conjunctionSelected
+				}
+			)
 		);
 	};
 
@@ -169,13 +176,21 @@ class ClayCriteriaGroup extends React.Component {
 		const {criteria, onChange} = this.props;
 
 		onChange(
-			Object.assign(criteria, {
-				items: newCriterion ?
-					Object.assign(criteria.items, {
-						[index]: newCriterion
-					}) :
-					criteria.items.filter((fItem, fIndex) => fIndex !== index)
-			})
+			Object.assign(
+				criteria,
+				{
+					items: newCriterion ?
+						Object.assign(
+							criteria.items,
+							{
+								[index]: newCriterion
+							}
+						) :
+						criteria.items.filter(
+							(fItem, fIndex) => fIndex !== index
+						)
+				}
+			)
 		);
 	};
 }

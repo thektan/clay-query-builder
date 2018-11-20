@@ -62,17 +62,21 @@ class ClayCriteriaBuilder extends React.Component {
 	static _buildCriteriaTypes(operators) {
 		return operators.reduce(
 			(criteriaTypes, {supportedTypes}) => {
-				supportedTypes.forEach(type => {
-					if (!criteriaTypes[type]) {
-						criteriaTypes[type] = operators.filter(operator =>
-							operator.supportedTypes.includes(type)
-						);
+				supportedTypes.forEach(
+					type => {
+						if (!criteriaTypes[type]) {
+							criteriaTypes[type] = operators.filter(
+								operator =>
+									operator.supportedTypes.includes(type)
+							);
+						}
 					}
-				});
+				);
 
 				return criteriaTypes;
 			},
-			new Map());
+			new Map()
+		);
 	}
 
 	/**
@@ -83,22 +87,30 @@ class ClayCriteriaBuilder extends React.Component {
 	 */
 	_cleanCriteria(criterion) {
 		const test = criterion
-			.filter(({items}) => (items ? items.length : true))
-			.map(item =>
-				item.items ?
-					Object.assign(item, {
-						items: this._cleanCriteria(item.items)
-					}) :
-					item
+			.filter(
+				({items}) => (items ? items.length : true)
+			)
+			.map(
+				item =>
+					(item.items ?
+						Object.assign(
+							item,
+							{
+								items: this._cleanCriteria(item.items)
+							}
+						) :
+						item)
 			);
 
 		return test;
 	}
 
 	_handleToggleEdit = () => {
-		this.setState({
-			editing: !this.state.editing
-		});
+		this.setState(
+			{
+				editing: !this.state.editing
+			}
+		);
 	};
 
 	/**
@@ -125,36 +137,46 @@ const QUERY_ITEM_SHAPE = {
 
 ClayCriteriaBuilder.propTypes = {
 	conjunctions: PropTypes.arrayOf(
-		PropTypes.shape({
-			label: PropTypes.string,
-			value: PropTypes.string
-		})
-	),
-	criteria: PropTypes.shape({
-		conjunctionId: PropTypes.string,
-		items: PropTypes.arrayOf(
-			PropTypes.oneOfType([
-				PropTypes.shape(QUERY_GROUP_SHAPE),
-				PropTypes.shape(QUERY_ITEM_SHAPE)
-			])
+		PropTypes.shape(
+			{
+				label: PropTypes.string,
+				value: PropTypes.string
+			}
 		)
-	}),
+	),
+	criteria: PropTypes.shape(
+		{
+			conjunctionId: PropTypes.string,
+			items: PropTypes.arrayOf(
+				PropTypes.oneOfType(
+					[
+						PropTypes.shape(QUERY_GROUP_SHAPE),
+						PropTypes.shape(QUERY_ITEM_SHAPE)
+					]
+				)
+			)
+		}
+	),
 	maxNesting: PropTypes.number,
 	onChange: PropTypes.func,
 	operators: PropTypes.arrayOf(
-		PropTypes.shape({
-			supportedTypes: PropTypes.arrayOf(PropTypes.string),
-			value: PropTypes.string
-		})
+		PropTypes.shape(
+			{
+				supportedTypes: PropTypes.arrayOf(PropTypes.string),
+				value: PropTypes.string
+			}
+		)
 	),
 	properties: PropTypes.arrayOf(
-		PropTypes.shape({
-			entityUrl: PropTypes.string,
-			label: PropTypes.string,
-			name: PropTypes.string.isRequired,
-			options: PropTypes.array,
-			type: PropTypes.string
-		})
+		PropTypes.shape(
+			{
+				entityUrl: PropTypes.string,
+				label: PropTypes.string,
+				name: PropTypes.string.isRequired,
+				options: PropTypes.array,
+				type: PropTypes.string
+			}
+		)
 	).isRequired,
 	readOnly: PropTypes.bool,
 	spritemap: PropTypes.string

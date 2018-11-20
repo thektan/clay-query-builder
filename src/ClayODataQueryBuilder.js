@@ -68,37 +68,37 @@ const operators = [
 ];
 
 const comparatorTransformation = ({
-	queryAST,
+	lastNodeWasGroup,
 	prevConjunction,
-	lastNodeWasGroup
+	queryAST
 }) => {
 	return (prevConjunction === queryAST.type || lastNodeWasGroup) ?
 		[
 			...toCriteriaMap({
-				queryAST: queryAST.value.left,
-				prevConjunction: queryAST.type
+				prevConjunction: queryAST.type,
+				queryAST: queryAST.value.left
 			}),
 			...toCriteriaMap({
-				queryAST: queryAST.value.right,
-				prevConjunction: queryAST.type
+				prevConjunction: queryAST.type,
+				queryAST: queryAST.value.right
 			})
 		] :
 		toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
 
 const addNewGroup = (queryAST, prevConjunction) => ({
-	queryAST: {value: queryAST, type: 'BoolParenExpression'},
+	lastNodeWasGroup: false,
 	prevConjunction,
-	lastNodeWasGroup: false
+	queryAST: {type: 'BoolParenExpression', value: queryAST}
 });
 
 const skipGroup = (queryAST, prevConjunction) => ({
-	queryAST: queryAST.value,
+	lastNodeWasGroup: true,
 	prevConjunction,
-	lastNodeWasGroup: true
+	queryAST: queryAST.value
 });
 
-const groupTransformation = ({queryAST, prevConjunction, lastNodeWasGroup}) => {
+const groupTransformation = ({lastNodeWasGroup, prevConjunction, queryAST}) => {
 	const nextNodeType = getNextNonGroupNodeType(queryAST);
 
 	if (

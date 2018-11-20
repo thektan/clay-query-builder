@@ -75,8 +75,8 @@ class ClayCriteriaRow extends React.Component {
 										({label, name}) => ({
 											label,
 											value: name
-										}))
-									}
+										})
+									)}
 									selected={selectedOperator.name}
 									styleName="criterion-input operator-input"
 								/>
