@@ -8,6 +8,7 @@
 	"parser": "babel-eslint",
 	"plugins": ["babel", "react", "sort-destructure-keys"],
 	"rules": {
+		"brace-style": ["error", "stroustrup"],
 		"no-console": 0,
 		"require-jsdoc": 0,
 		"comma-dangle": 0,

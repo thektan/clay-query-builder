@@ -34,10 +34,6 @@ function insertAtIndex(item, list, index) {
  * @extends {Component}
  */
 class ClayCriteriaGroup extends React.Component {
-
-	/**
-	 * @inheritdoc
-	 */
 	constructor(props) {
 		super(props);
 

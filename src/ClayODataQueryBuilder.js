@@ -4,19 +4,31 @@ import ClayCriteriaBuilder from './ClayCriteriaBuilder';
 import {filter} from 'odata-v4-parser';
 
 const AND = 'and';
-const CONTAINS = 'contains';
-const EQ = 'eq';
-const GE = 'ge';
-const GROUP = 'group';
-const GT = 'gt';
-const LE = 'le';
-const LT = 'lt';
-const NE = 'ne';
-const OR = 'or';
 
 const BOOLEAN = 'boolean';
+
+const CONTAINS = 'contains';
+
 const DATE = 'data';
+
+const EQ = 'eq';
+
+const GE = 'ge';
+
+const GROUP = 'group';
+
+const GT = 'gt';
+
+const LE = 'le';
+
+const LT = 'lt';
+
+const NE = 'ne';
+
 const NUMBER = 'number';
+
+const OR = 'or';
+
 const STRING = 'string';
 
 const conjunctions = [
@@ -29,10 +41,6 @@ const conjunctions = [
 		name: OR
 	}
 ];
-
-const FUNCTIONAL_OPERATORS = [CONTAINS];
-const CONJUNCTIONS = [AND, OR];
-const RELATIONAL_OPERATORS = [EQ, GE, GT, LE, LT, NE];
 
 const operators = [
 	{
@@ -67,6 +75,12 @@ const operators = [
 	}
 ];
 
+const CONJUNCTIONS = [AND, OR];
+
+const FUNCTIONAL_OPERATORS = [CONTAINS];
+
+const RELATIONAL_OPERATORS = [EQ, GE, GT, LE, LT, NE];
+
 const comparatorTransformation = ({
 	lastNodeWasGroup,
 	prevConjunction,
@@ -74,14 +88,18 @@ const comparatorTransformation = ({
 }) => {
 	return (prevConjunction === queryAST.type || lastNodeWasGroup) ?
 		[
-			...toCriteriaMap({
-				prevConjunction: queryAST.type,
-				queryAST: queryAST.value.left
-			}),
-			...toCriteriaMap({
-				prevConjunction: queryAST.type,
-				queryAST: queryAST.value.right
-			})
+			...toCriteriaMap(
+				{
+					prevConjunction: queryAST.type,
+					queryAST: queryAST.value.left
+				}
+			),
+			...toCriteriaMap(
+				{
+					prevConjunction: queryAST.type,
+					queryAST: queryAST.value.right
+				}
+			)
 		] :
 		toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
@@ -101,66 +119,83 @@ const skipGroup = (queryAST, prevConjunction) => ({
 const groupTransformation = ({lastNodeWasGroup, prevConjunction, queryAST}) => {
 	const nextNodeType = getNextNonGroupNodeType(queryAST);
 
+	let returnValue;
+
 	if (
 		lastNodeWasGroup ||
 		prevConjunction === nextNodeType ||
 		isNotConjunction(nextNodeType)
 	) {
-		return toCriteriaMap(skipGroup(queryAST, prevConjunction));
+		returnValue = toCriteriaMap(skipGroup(queryAST, prevConjunction));
 	}
 	else if (queryAST.value.left) {
 		const childType = getChildNodeTypeName(queryAST);
 
-		return [
+		returnValue = [
 			{
-				conjunctionName: CONJUNCTIONS.includes(childType)
-					? childType
-					: AND,
+				conjunctionName: CONJUNCTIONS.includes(childType) ?
+					childType :
+					AND,
 				items: [
-					...toCriteriaMap({
-						lastNodeWasGroup: true,
-						prevConjunction: queryAST.type,
-						queryAST: queryAST.value.left
-					}),
-					...toCriteriaMap({
-						lastNodeWasGroup: true,
-						prevConjunction: queryAST.type,
-						queryAST: queryAST.value.right
-					})
+					...toCriteriaMap(
+						{
+							lastNodeWasGroup: true,
+							prevConjunction: queryAST.type,
+							queryAST: queryAST.value.left
+						}
+					),
+					...toCriteriaMap(
+						{
+							lastNodeWasGroup: true,
+							prevConjunction: queryAST.type,
+							queryAST: queryAST.value.right
+						}
+					)
 				]
 			}
 		];
-	} else {
+	}
+	else {
 		const childType = getChildNodeTypeName(queryAST);
 
-		return [
+		returnValue = [
 			{
-				conjunctionName: CONJUNCTIONS.includes(childType)
-					? childType
-					: AND,
+				conjunctionName: CONJUNCTIONS.includes(childType) ?
+					childType :
+					AND,
 				items: [
-					...toCriteriaMap({
-						lastNodeWasGroup: true,
-						prevConjunction,
-						queryAST: queryAST.value
-					})
+					...toCriteriaMap(
+						{
+							lastNodeWasGroup: true,
+							prevConjunction,
+							queryAST: queryAST.value
+						}
+					)
 				]
 			}
 		];
 	}
+
+	return returnValue;
 };
 
-const isNotConjunction = nodeType =>
-	!CONJUNCTIONS.includes(getTypeName(nodeType));
+function isNotConjunction(nodeType) {
+	return !CONJUNCTIONS.includes(getTypeName(nodeType));
+}
 
 const getNextNonGroupNodeType = queryAST => {
+	let returnValue;
+
 	if (queryAST.value.type === 'BoolParentExpression') {
-		return getNextNonGroupNodeType(query.value);
-	} else {
-		return queryAST.value.left
-			? queryAST.value.left.type
-			: queryAST.value.type;
+		returnValue = getNextNonGroupNodeType(queryAST.value);
 	}
+	else {
+		returnValue = queryAST.value.left ?
+			queryAST.value.left.type :
+			queryAST.value.type;
+	}
+
+	return returnValue;
 };
 
 const operatorTransformation = ({queryAST}) => {
@@ -180,11 +215,13 @@ const toCriteriaMap = ({
 }) => {
 	const oDataParserType = oDataTransformationMap[queryAST.type];
 
-	return oDataParserType.transformationFunction({
-		lastNodeWasGroup,
-		prevConjunction,
-		queryAST
-	});
+	return oDataParserType.transformationFunction(
+		{
+			lastNodeWasGroup,
+			prevConjunction,
+			queryAST
+		}
+	);
 };
 
 const getChildNodeTypeName = query =>
@@ -200,35 +237,37 @@ const translateToCriteria = query => {
 const buildQueryString = (queryItems, queryConjunction) => {
 	let queryString = '';
 
-	queryItems.forEach((item, index) => {
-		const {
-			conjunctionName,
-			items,
-			operatorName,
-			propertyName,
-			value
-		} = item;
+	queryItems.forEach(
+		(item, index) => {
+			const {
+				conjunctionName,
+				items,
+				operatorName,
+				propertyName,
+				value
+			} = item;
 
-		if (index > 0) {
-			queryString = queryString.concat(` ${queryConjunction} `);
-		}
+			if (index > 0) {
+				queryString = queryString.concat(` ${queryConjunction} `);
+			}
 
-		if (conjunctionName) {
-			queryString = queryString.concat(
-				`(${buildQueryString(items, conjunctionName)})`
-			);
-		} else {
-			if (RELATIONAL_OPERATORS.includes(operatorName)) {
+			if (conjunctionName) {
+				queryString = queryString.concat(
+					`(${buildQueryString(items, conjunctionName)})`
+				);
+			}
+			else if (RELATIONAL_OPERATORS.includes(operatorName)) {
 				queryString = queryString.concat(
 					`${propertyName} ${operatorName} '${value}'`
 				);
-			} else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
+			}
+			else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
 				queryString = queryString.concat(
 					`${operatorName} (${propertyName}, '${value}')`
 				);
 			}
 		}
-	});
+	);
 
 	return queryString;
 };
@@ -284,10 +323,12 @@ class ClayODataQueryBuilder extends React.Component {
 	}
 
 	_updateQuery = newCriteriaMap => {
-		this.setState({
-			criteriaMap: newCriteriaMap,
-			query: buildQueryString([newCriteriaMap])
-		});
+		this.setState(
+			{
+				criteriaMap: newCriteriaMap,
+				query: buildQueryString([newCriteriaMap])
+			}
+		);
 	};
 
 	render() {
