@@ -315,10 +315,12 @@ class ClayODataQueryBuilder extends React.Component {
 	constructor(props) {
 		super(props);
 
+		const {query} = props;
+
 		this.state = {
-			criteriaMap: translateToCriteria(props.query),
-			initialQuery: props.query,
-			query: props.query
+			criteriaMap: query ? translateToCriteria(query) : null,
+			initialQuery: query,
+			query: query
 		};
 	}
 
@@ -348,7 +350,7 @@ class ClayODataQueryBuilder extends React.Component {
 					readOnly={readOnly}
 				/>
 
-				<span>{buildQueryString([criteriaMap])}</span>
+				<span>{criteriaMap && buildQueryString([criteriaMap])}</span>
 			</div>
 		);
 	}

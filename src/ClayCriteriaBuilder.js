@@ -70,6 +70,21 @@ class ClayCriteriaBuilder extends React.Component {
 		return test;
 	}
 
+	_handleNewCriteria = () => {
+		const {onChange, operators, properties} = this.props;
+
+		const emptyItem = {
+			operatorName: operators[0].name,
+			propertyName: properties[0].name,
+			value: ''
+		};
+
+		onChange({
+			conjunctionId: 'and',
+			items: [emptyItem]
+		});
+	}
+
 	_handleToggleEdit = () => {
 		this.setState(
 			{
@@ -77,6 +92,16 @@ class ClayCriteriaBuilder extends React.Component {
 			}
 		);
 	};
+
+	/**
+	 * Checks if the criteria object has any items.
+	 * @return {boolean}
+	 */
+	_isCriteriaEmpty = () => {
+		const {criteria} = this.props;
+
+		return criteria ? criteria.items.length : false;
+	}
 
 	/**
 	 * Updates the query state from changes made by the group and row
@@ -93,17 +118,18 @@ class ClayCriteriaBuilder extends React.Component {
 
 		const {editing} = this.state;
 
+		console.log(criteria);
+
 		return (
 			<div styleName="criteria-builder">
 				<div styleName="toolbar">
 					<ClayButton
 						label="Edit"
 						onClick={this._handleToggleEdit}
-						styleName="edit"
 					/>
 				</div>
 
-				{criteria ? (
+				{this._isCriteriaEmpty() ? (
 					<ClayCriteriaGroup
 						conjunctions={conjunctions}
 						criteria={criteria}
@@ -117,7 +143,12 @@ class ClayCriteriaBuilder extends React.Component {
 						root
 					/>
 				) : (
-					<span>{'There is nothing'}</span>
+					<div
+						onClick={this._handleNewCriteria}
+						styleName="empty-state"
+					>
+						{'Click to start editing'}
+					</div>
 				)}
 			</div>
 		);

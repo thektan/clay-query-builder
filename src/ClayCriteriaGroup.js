@@ -49,7 +49,11 @@ class ClayCriteriaGroup extends React.Component {
 	 * @memberof ClayQueryGroup
 	 */
 	_getConjunctionLabel(conjunctionName, conjunctions) {
-		return conjunctions.find(({name}) => name === conjunctionName).label;
+		const conjunction = conjunctions.find(
+			({name}) => name === conjunctionName
+		);
+
+		return conjunction ? conjunction.label : undefined;
 	}
 
 	/**
@@ -147,7 +151,7 @@ class ClayCriteriaGroup extends React.Component {
 				className="query-group"
 				styleName={root ? 'root-criteria-group' : ' criteria-group'}
 			>
-				{criteria.items.map(
+				{criteria.items && criteria.items.map(
 					(criterion, index) => {
 						return (
 							<div key={index} styleName="criterion">

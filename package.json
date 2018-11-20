@@ -40,7 +40,6 @@
 	"jsnext:main": "src/ClayQueryBuilder.js",
 	"scripts": {
 		"build": "webpack --mode development",
-		"soy": "metalsoy --soyDeps './node_modules/clay-+(button|icon|select)/src/**/*.soy'",
 		"checkFormat": "npm run csf",
 		"csf": "csf src/**/*.js",
 		"format": "npm run csf -- -i"

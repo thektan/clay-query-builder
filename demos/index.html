@@ -16,79 +16,81 @@
 	<body>
 		<div id="app" class="sheet"></div>
 		<script type="text/javascript">
-			new metal.initialize({
-				properties: [
-					{
-						label: "job-title",
-						type: "string", // Determines which operators are available
-						name: "jobTitle" // Displayed on the sidebar
-					},
-					{
-						label: 'industry',
-						type: "string",
-						name: "industry"
-					},
-					{
-						label: 'city',
-						type: "string",
-						name: "city"
-					},
-					{
-						label: 'address',
-						type: "string",
-						name: "address"
-					},
-					{
-						label: 'first-name',
-						type: "string",
-						name: "firstName"
-					},
-					{
-						label: 'last-name',
-						type: "string",
-						name: "lastName"
-					},
-					{
-						label: 'email-address',
-						type: "string",
-						name: "emailAddress"
-					},
-					{
-						label: 'age',
-						type: "number",
-						name: "age"
-					},
-					{
-						label: 'User',
-						type: 'entity',
-						name: 'user',
-						selectionUrl:
-							'http://localhost:8080/group/control_panel/manage?p_p_id=com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_userGroupId=36707&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_mvcPath=%2Fselect_user_group_users.jsp' // Portlet Provider URL
-					},
-					{
-						label: 'Custom Property',
-						type: 'string',
-						name: 'customProp',
-						options: [
-							{
-								label: 'Custom Value 1',
-								name: 'customValue1'
-							},
-							{
-								label: 'Custom Value 2',
-								name: 'customValue2'
-							}
-						]
-					}
-				],
-				maxNesting: 6,
-				canReorder: true,
-				query: `(emailAddress eq 'test@liferay.com' and (firstName eq 'wow' and (emailAddress ne 'dfaf') or (age eq '2')) or address ne 'someone' and lastName eq 'eduardo') or jobTitle eq 'magician'`
-			},
-			"app",
-			{
-				spriteMapPath: './icons.svg'
-			});
+			new metal.initialize(
+				{
+					properties: [
+						{
+							label: 'job-title',
+							type: 'string', // Determines which operators are available
+							name: 'jobTitle' // Displayed on the sidebar
+						},
+						{
+							label: 'industry',
+							type: 'string',
+							name: 'industry'
+						},
+						{
+							label: 'city',
+							type: 'string',
+							name: 'city'
+						},
+						{
+							label: 'address',
+							type: 'string',
+							name: 'address'
+						},
+						{
+							label: 'first-name',
+							type: 'string',
+							name: 'firstName'
+						},
+						{
+							label: 'last-name',
+							type: 'string',
+							name: 'lastName'
+						},
+						{
+							label: 'email-address',
+							type: 'string',
+							name: 'emailAddress'
+						},
+						{
+							label: 'age',
+							type: 'number',
+							name: 'age'
+						},
+						{
+							label: 'User',
+							type: 'entity',
+							name: 'user',
+							selectionUrl:
+								'http://localhost:8080/group/control_panel/manage?p_p_id=com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_userGroupId=36707&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_mvcPath=%2Fselect_user_group_users.jsp' // Portlet Provider URL
+						},
+						{
+							label: 'Custom Property',
+							type: 'string',
+							name: 'customProp',
+							options: [
+								{
+									label: 'Custom Value 1',
+									name: 'customValue1'
+								},
+								{
+									label: 'Custom Value 2',
+									name: 'customValue2'
+								}
+							]
+						}
+					],
+					maxNesting: 6,
+					canReorder: true
+					// query: `(emailAddress eq 'test@liferay.com' and (firstName eq 'wow' and (emailAddress ne 'dfaf') or (age eq '2')) or address ne 'someone' and lastName eq 'eduardo') or jobTitle eq 'magician'`
+				},
+				'app',
+				{
+					spriteMapPath: './icons.svg'
+				}
+			);
 		</script>
 	</body>
 
