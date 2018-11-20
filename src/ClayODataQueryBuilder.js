@@ -184,10 +184,12 @@ class ClayODataQueryBuilder extends React.Component {
 	constructor(props) {
 		super(props);
 
+		const {query} = props;
+
 		this.state = {
-			initialQuery: props.query,
-			query: props.query,
-			criteriaMap: translateToCriteria(props.query)
+			criteriaMap: query ? translateToCriteria(query) : {},
+			initialQuery: query,
+			query
 		};
 	}
 
