@@ -21,7 +21,11 @@ module.exports = Object.assign(webpackCommonConfig, {
 			},
 			{
 				test: /\.(sass|scss)$/,
-				loader: ['style-loader', 'css-loader', 'sass-loader']
+				loader: [
+					"style-loader", 
+					"css-loader?importLoader=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]", 
+					"sass-loader"
+				]
 			}
 		]
 	},
