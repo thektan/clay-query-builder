@@ -83,11 +83,11 @@ class ClayCriteriaBuilder extends React.Component {
 		const test = criterion
 			.filter(({items}) => (items ? items.length : true))
 			.map(item =>
-				item.items
-					? Object.assign(item, {
+				item.items ?
+					Object.assign(item, {
 						items: this._cleanCriteria(item.items)
-					  })
-					: item
+						}) :
+					item
 			);
 
 		return test;
@@ -128,22 +128,6 @@ ClayCriteriaBuilder.propTypes = {
 			value: PropTypes.string
 		})
 	),
-	properties: PropTypes.arrayOf(
-		PropTypes.shape({
-			entityUrl: PropTypes.string,
-			label: PropTypes.string,
-			name: PropTypes.string.isRequired,
-			options: PropTypes.array,
-			type: PropTypes.string
-		})
-	).isRequired,
-	onChange: PropTypes.func,
-	operators: PropTypes.arrayOf(
-		PropTypes.shape({
-			supportedTypes: PropTypes.arrayOf(PropTypes.string),
-			value: PropTypes.string
-		})
-	),
 	criteria: PropTypes.shape({
 		conjunctionId: PropTypes.string,
 		items: PropTypes.arrayOf(
@@ -154,6 +138,22 @@ ClayCriteriaBuilder.propTypes = {
 		)
 	}),
 	maxNesting: PropTypes.number,
+	onChange: PropTypes.func,
+	operators: PropTypes.arrayOf(
+		PropTypes.shape({
+			supportedTypes: PropTypes.arrayOf(PropTypes.string),
+			value: PropTypes.string
+		})
+	),
+	properties: PropTypes.arrayOf(
+		PropTypes.shape({
+			entityUrl: PropTypes.string,
+			label: PropTypes.string,
+			name: PropTypes.string.isRequired,
+			options: PropTypes.array,
+			type: PropTypes.string
+		})
+	).isRequired,
 	readOnly: PropTypes.bool,
 	spritemap: PropTypes.string
 };

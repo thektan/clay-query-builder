@@ -34,6 +34,7 @@ function insertAtIndex(item, list, index) {
  * @extends {Component}
  */
 class ClayCriteriaGroup extends React.Component {
+
 	/**
 	 * @inheritdoc
 	 */
@@ -147,9 +148,9 @@ class ClayCriteriaGroup extends React.Component {
 		);
 
 		const conjunctionSelected =
-			index === conjunctions.length - 1
-				? conjunctions[0].name
-				: conjunctions[index + 1].name;
+			index === conjunctions.length - 1 ?
+				conjunctions[0].name :
+				conjunctions[index + 1].name;
 
 		onChange(
 			Object.assign(criteria, {
@@ -169,26 +170,26 @@ class ClayCriteriaGroup extends React.Component {
 
 		onChange(
 			Object.assign(criteria, {
-				items: newCriterion
-					? Object.assign(criteria.items, {
+				items: newCriterion ?
+					Object.assign(criteria.items, {
 						[index]: newCriterion
-					  })
-					: criteria.items.filter((fItem, fIndex) => fIndex !== index)
+						}) :
+					criteria.items.filter((fItem, fIndex) => fIndex !== index)
 			})
 		);
 	};
 }
 
 ClayCriteriaGroup.propTypes = {
-	criteriaTypes: PropTypes.object,
 	conjunctions: PropTypes.array,
-	editing: PropTypes.bool,
-	selectedConjunctionName: PropTypes.string,
 	criteria: PropTypes.object,
+	criteriaTypes: PropTypes.object,
+	editing: PropTypes.bool,
 	onChange: PropTypes.func,
 	operators: PropTypes.array,
-	root: PropTypes.bool,
 	properties: PropTypes.array,
+	root: PropTypes.bool,
+	selectedConjunctionName: PropTypes.string,
 	spritemap: PropTypes.string
 };
 

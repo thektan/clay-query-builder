@@ -102,7 +102,7 @@ class ClayCriteriaRow extends React.Component {
 						) : (
 							<div styleName="read-only-container">
 								<span styleName="criteria-string">
-									{`Property `}
+									{'Property '}
 									<strong styleName="property-string">
 										{`${selectedProperty.label} `}
 									</strong>
@@ -148,8 +148,8 @@ ClayCriteriaRow.propTypes = {
 	index: PropTypes.number,
 	onChange: PropTypes.func,
 	operators: PropTypes.array,
-	root: PropTypes.bool,
-	properties: PropTypes.array
+	properties: PropTypes.array,
+	root: PropTypes.bool
 };
 
 ClayCriteriaRow.defaultProps = {
