@@ -52,66 +52,6 @@ class ClayCriteriaGroup extends React.Component {
 		return conjunctions.find(({name}) => name === conjunctionName).label;
 	}
 
-	render() {
-		const {
-			conjunctions,
-			criteria,
-			criteriaTypes,
-			editing,
-			operators,
-			properties,
-			root
-		} = this.props;
-
-		return (
-			<div
-				className="query-group"
-				styleName={root ? 'root-criteria-group' : ' criteria-group'}
-			>
-				{criteria.items.map(
-					(criterion, index) => {
-						return (
-							<div key={index} styleName="criterion">
-								{index != 0 && (
-									<ClayButton
-										className="btn-sm btn btn-secondary"
-										label={this._getConjunctionLabel(
-											criteria.conjunctionName,
-											conjunctions
-										)}
-										onClick={this._handleConjunctionClick}
-										styleName="conjunction"
-									/>
-								)}
-
-								<div styleName="criterion-row">
-									<ClayCriteriaRow
-										conjunctions={conjunctions}
-										criteriaTypes={criteriaTypes}
-										criterion={criterion}
-										editing={editing}
-										index={index}
-										onChange={this._updateCriterion}
-										operators={operators}
-										properties={properties}
-										root={root}
-									/>
-
-									<ClayButton
-										className="btn-sm btn btn-secondary"
-										iconName="plus"
-										onClick={this._handleAddCriteria(index)}
-										styleName="add"
-									/>
-								</div>
-							</div>
-						);
-					}
-				)}
-			</div>
-		);
-	}
-
 	/**
 	 * Adds a new criteria row.
 	 *
@@ -189,6 +129,66 @@ class ClayCriteriaGroup extends React.Component {
 			)
 		);
 	};
+
+	render() {
+		const {
+			conjunctions,
+			criteria,
+			criteriaTypes,
+			editing,
+			operators,
+			properties,
+			root
+		} = this.props;
+
+		return (
+			<div
+				className="query-group"
+				styleName={root ? 'root-criteria-group' : ' criteria-group'}
+			>
+				{criteria.items.map(
+					(criterion, index) => {
+						return (
+							<div key={index} styleName="criterion">
+								{index != 0 && (
+									<ClayButton
+										className="btn-sm btn btn-secondary"
+										label={this._getConjunctionLabel(
+											criteria.conjunctionName,
+											conjunctions
+										)}
+										onClick={this._handleConjunctionClick}
+										styleName="conjunction"
+									/>
+								)}
+
+								<div styleName="criterion-row">
+									<ClayCriteriaRow
+										conjunctions={conjunctions}
+										criteriaTypes={criteriaTypes}
+										criterion={criterion}
+										editing={editing}
+										index={index}
+										onChange={this._updateCriterion}
+										operators={operators}
+										properties={properties}
+										root={root}
+									/>
+
+									<ClayButton
+										className="btn-sm btn btn-secondary"
+										iconName="plus"
+										onClick={this._handleAddCriteria(index)}
+										styleName="add"
+									/>
+								</div>
+							</div>
+						);
+					}
+				)}
+			</div>
+		);
+	}
 }
 
 ClayCriteriaGroup.propTypes = {

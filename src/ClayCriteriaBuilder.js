@@ -19,41 +19,6 @@ class ClayCriteriaBuilder extends React.Component {
 		};
 	}
 
-	render() {
-		const {conjunctions, criteria, operators, properties} = this.props;
-
-		const {editing} = this.state;
-
-		return (
-			<div styleName="criteria-builder">
-				<div styleName="toolbar">
-					<ClayButton
-						label="Edit"
-						onClick={this._handleToggleEdit}
-						styleName="edit"
-					/>
-				</div>
-
-				{criteria ? (
-					<ClayCriteriaGroup
-						conjunctions={conjunctions}
-						criteria={criteria}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
-							operators
-						)}
-						editing={editing}
-						onChange={this._updateCriteria}
-						operators={operators}
-						properties={properties}
-						root
-					/>
-				) : (
-					<span>{'There is nothing'}</span>
-				)}
-			</div>
-		);
-	}
-
 	/**
 	 * Builds a map of criteria types and their supported operators.
 	 *
@@ -122,6 +87,41 @@ class ClayCriteriaBuilder extends React.Component {
 	_updateCriteria = newCriteria => {
 		this.props.onChange(this._cleanCriteria([newCriteria]).pop());
 	};
+
+	render() {
+		const {conjunctions, criteria, operators, properties} = this.props;
+
+		const {editing} = this.state;
+
+		return (
+			<div styleName="criteria-builder">
+				<div styleName="toolbar">
+					<ClayButton
+						label="Edit"
+						onClick={this._handleToggleEdit}
+						styleName="edit"
+					/>
+				</div>
+
+				{criteria ? (
+					<ClayCriteriaGroup
+						conjunctions={conjunctions}
+						criteria={criteria}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+							operators
+						)}
+						editing={editing}
+						onChange={this._updateCriteria}
+						operators={operators}
+						properties={properties}
+						root
+					/>
+				) : (
+					<span>{'There is nothing'}</span>
+				)}
+			</div>
+		);
+	}
 }
 
 const QUERY_GROUP_SHAPE = {

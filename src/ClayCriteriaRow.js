@@ -6,6 +6,24 @@ import ClaySelect from './ClaySelect';
 import './css/ClayCriteriaRow.scss';
 
 class ClayCriteriaRow extends React.Component {
+	_createPlaceholderGroup(criterion) {
+		return [Object.assign({}, criterion)];
+	}
+
+	_getSelectedItem(list, idSelected) {
+		return list.find(item => item.name === idSelected);
+	}
+
+	_handleInputChange = propertyName => event => {
+		this._updateCriteria({[propertyName]: event.target.value});
+	};
+
+	_updateCriteria = newCriteria => {
+		const {criterion, index, onChange} = this.props;
+
+		onChange(index, Object.assign(criterion, newCriteria));
+	};
+
 	render() {
 		const {
 			conjunctions,
@@ -120,24 +138,6 @@ class ClayCriteriaRow extends React.Component {
 			</div>
 		);
 	}
-
-	_createPlaceholderGroup(criterion) {
-		return [Object.assign({}, criterion)];
-	}
-
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
-
-	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
-	};
-
-	_updateCriteria = newCriteria => {
-		const {criterion, index, onChange} = this.props;
-
-		onChange(index, Object.assign(criterion, newCriteria));
-	};
 }
 
 ClayCriteriaRow.propTypes = {
