@@ -33,11 +33,11 @@ class ClayCriteriaBuilder extends React.Component {
 		} = this.state;
 	
 		return (
-			<div styleName="container">
-				<button className="button btn-secondary" onClick={this._handleToggleEdit}>
-					<span>Edit</span>
-				</button>
-
+			<div styleName="criteria-builder">
+				<div styleName='toolbar'>
+					<ClayButton styleName='edit' onClick={this._handleToggleEdit} label='Edit' />
+				</div>
+			
 				{criteria ? (
 					<ClayCriteriaGroup 
 						editing={editing}
