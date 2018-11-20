@@ -18,6 +18,13 @@
 		"no-invalid-this": 0,
 		"babel/no-invalid-this": 1,
 		"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
-		"react/jsx-sort-props": 2
+		"react/jsx-sort-props": 2,
+		"sort-keys": [
+			2,
+			"asc",
+			{
+				"caseSensitive": false
+			}
+		]
 	}
 }
