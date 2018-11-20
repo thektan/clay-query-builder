@@ -58,53 +58,57 @@ class ClayCriteriaGroup extends React.Component {
 	render() {
 		const {
 			conjunctions,
-			editing,
-			properties,
-			criteriaTypes,
-			operators,
 			criteria,
+			criteriaTypes,
+			editing,
+			operators,
+			properties,
 			root
 		} = this.props;
 
 		return (
-			<div className="query-group" styleName={root ? 'root-criteria-group' : ' criteria-group'}>
-				{criteria.items.map(
-					(criterion, index) => {
-						return (
-							<div styleName="criterion" key={index}>
-								{index != 0 && (
-									<ClayButton 
-										className='btn-sm btn btn-secondary' 
-										styleName='conjunction' 
-										onClick={this._handleConjunctionClick} 
-										label={this._getConjunctionLabel(criteria.conjunctionName, conjunctions)} 
-									/>
-								)}
-								
-								<div styleName="criterion-row">
-									<ClayCriteriaRow
-										criterion={criterion}
-										editing={editing}
-										properties={properties}
-										criteriaTypes={criteriaTypes}
-										conjunctions={conjunctions}
-										index={index}
-										root={root}
-										onChange={this._updateCriterion}
-										operators={operators}
-									/>
-									
-									<ClayButton 
-										className='btn-sm btn btn-secondary' 
-										styleName='add' 
-										onClick={this._handleAddCriteria(index)} 
-										iconName='plus'
-									/>
-								</div>
+			<div
+				className="query-group"
+				styleName={root ? 'root-criteria-group' : ' criteria-group'}
+			>
+				{criteria.items.map((criterion, index) => {
+					return (
+						<div key={index} styleName="criterion">
+							{index != 0 && (
+								<ClayButton
+									className="btn-sm btn btn-secondary"
+									label={this._getConjunctionLabel(
+										criteria.conjunctionName,
+										conjunctions
+									)}
+									onClick={this._handleConjunctionClick}
+									styleName="conjunction"
+								/>
+							)}
+
+							<div styleName="criterion-row">
+								<ClayCriteriaRow
+									conjunctions={conjunctions}
+									criteriaTypes={criteriaTypes}
+									criterion={criterion}
+									editing={editing}
+									index={index}
+									onChange={this._updateCriterion}
+									operators={operators}
+									properties={properties}
+									root={root}
+								/>
+
+								<ClayButton
+									className="btn-sm btn btn-secondary"
+									iconName="plus"
+									onClick={this._handleAddCriteria(index)}
+									styleName="add"
+								/>
 							</div>
-						)
-					}
-				)}
+						</div>
+					);
+				})}
 			</div>
 		);
 	}
@@ -136,7 +140,7 @@ class ClayCriteriaGroup extends React.Component {
 	 * @private
 	 */
 	_handleConjunctionClick = () => {
-		const {conjunctions, onChange, criteria} = this.props;
+		const {conjunctions, criteria, onChange} = this.props;
 
 		const index = conjunctions.findIndex(
 			item => item.name === criteria.conjunctionName
@@ -183,12 +187,13 @@ ClayCriteriaGroup.propTypes = {
 	criteria: PropTypes.object,
 	onChange: PropTypes.func,
 	operators: PropTypes.array,
+	root: PropTypes.bool,
 	properties: PropTypes.array,
 	spritemap: PropTypes.string
 };
 
 ClayCriteriaGroup.defaultProps = {
 	root: false
-}
+};
 
 export default ClayCriteriaGroup;

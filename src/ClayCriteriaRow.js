@@ -8,12 +8,12 @@ import './css/ClayCriteriaRow.scss';
 class ClayCriteriaRow extends React.Component {
 	render() {
 		const {
+			conjunctions,
+			criteriaTypes,
 			criterion,
 			editing,
-			properties,
-			criteriaTypes,
 			operators,
-			conjunctions,
+			properties,
 			root
 		} = this.props;
 
@@ -56,9 +56,9 @@ class ClayCriteriaRow extends React.Component {
 										'propertyName'
 									)}
 									options={properties.map(
-										({name, label}) => ({
-											value: name,
-											label
+										({label, name}) => ({
+											label,
+											value: name
 										})
 									)}
 									selected={selectedProperty.name}
@@ -71,10 +71,12 @@ class ClayCriteriaRow extends React.Component {
 									onChange={this._handleInputChange(
 										'operatorName'
 									)}
-									options={operators.map(({name, label}) => ({
-										value: name,
-										label
-									}))}
+									options={operators.map(
+										({label, name}) => ({
+											label,
+											value: name
+										}))
+									}
 									selected={selectedOperator.name}
 									styleName="criterion-input operator-input"
 								/>
@@ -101,13 +103,15 @@ class ClayCriteriaRow extends React.Component {
 							<div styleName="read-only-container">
 								<span styleName="criteria-string">
 									{`Property `}
-									<strong styleName="property-string">{`${
-										selectedProperty.label
-									} `}</strong>
+									<strong styleName="property-string">
+										{`${selectedProperty.label} `}
+									</strong>
+
 									{`${selectedOperator.label} `}
-									<strong styleName="value-string">{`${
-										criterion.value
-									}.`}</strong>
+
+									<strong styleName="value-string">
+										{`${criterion.value}.`}
+									</strong>
 								</span>
 							</div>
 						)}
@@ -130,7 +134,7 @@ class ClayCriteriaRow extends React.Component {
 	};
 
 	_updateCriteria = newCriteria => {
-		const {onChange, index, criterion} = this.props;
+		const {criterion, index, onChange} = this.props;
 
 		onChange(index, Object.assign(criterion, newCriteria));
 	};
@@ -142,8 +146,8 @@ ClayCriteriaRow.propTypes = {
 	criterion: PropTypes.object,
 	editing: PropTypes.bool,
 	index: PropTypes.number,
-	operators: PropTypes.array,
 	onChange: PropTypes.func,
+	operators: PropTypes.array,
 	root: PropTypes.bool,
 	properties: PropTypes.array
 };

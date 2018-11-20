@@ -6,7 +6,7 @@
 	},
 	"extends": ["plugin:react/recommended", "liferay"],
 	"parser": "babel-eslint",
-	"plugins": ["babel", "react"],
+	"plugins": ["babel", "react", "sort-destructure-keys"],
 	"rules": {
 		"no-console": 0,
 		"require-jsdoc": 0,
@@ -18,6 +18,14 @@
 		"no-invalid-this": 0,
 		"babel/no-invalid-this": 1,
 		"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
-		"react/jsx-sort-props": 2
+		"react/jsx-sort-props": 2,
+		"sort-destructure-keys/sort-destructure-keys": 2,
+		"sort-keys": [
+			2,
+			"asc",
+			{
+				"caseSensitive": false
+			}
+		]
 	}
 }

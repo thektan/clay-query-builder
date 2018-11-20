@@ -3,7 +3,7 @@ import {PropTypes} from 'prop-types';
 
 class ClaySelect extends React.Component {
 	render() {
-		const {selected, options, className, ...otherProps} = this.props;
+		const {className, options, selected, ...otherProps} = this.props;
 
 		return (
 			<select
@@ -11,20 +11,22 @@ class ClaySelect extends React.Component {
 				{...otherProps}
 				value={selected}
 			>
-				{options.map((option, index) => (
-					<option key={index} value={option.value}>
-						{option.label}
-					</option>
-				))}
+				{options.map(
+					(option, index) => (
+						<option key={index} value={option.value}>
+							{option.label}
+						</option>
+					)
+				)}
 			</select>
 		);
 	}
 }
 
 ClaySelect.propTypes = {
-	selected: PropTypes.string,
+	onChange: PropTypes.func.isRequired,
 	options: PropTypes.array.isRequired,
-	onChange: PropTypes.func.isRequired
+	selected: PropTypes.string
 };
 
 export default ClaySelect;

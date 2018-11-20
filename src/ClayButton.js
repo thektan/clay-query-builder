@@ -5,7 +5,7 @@ import './css/ClayButton.scss';
 
 class ClayButton extends React.Component {
 	render() {
-		const {className, label, iconName, ...otherProps} = this.props;
+		const {className, iconName, label, ...otherProps} = this.props;
 
 		return (
 			<button
@@ -27,9 +27,9 @@ class ClayButton extends React.Component {
 
 ClayButton.propTypes = {
 	className: PropTypes.string,
+	iconName: PropTypes.string,
 	label: PropTypes.string,
-	type: PropTypes.string,
-	iconName: PropTypes.string
+	type: PropTypes.string
 };
 
 export default ClayButton;

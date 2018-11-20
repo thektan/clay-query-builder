@@ -20,15 +20,9 @@ class ClayCriteriaBuilder extends React.Component {
 	}
 
 	render() {
-		const {
-			properties,
-			conjunctions,
-			operators,
-			criteria,
-			spritemap
-		} = this.props;
+		const {conjunctions, criteria, operators, properties} = this.props;
 
-		const {initialCriteria, editing} = this.state;
+		const {editing} = this.state;
 
 		return (
 			<div styleName="criteria-builder">
@@ -122,12 +116,18 @@ const QUERY_GROUP_SHAPE = {
 };
 
 const QUERY_ITEM_SHAPE = {
-	propertyName: PropTypes.string,
 	operatorName: PropTypes.string,
+	propertyName: PropTypes.string,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
 ClayCriteriaBuilder.propTypes = {
+	conjunctions: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string,
+			value: PropTypes.string
+		})
+	),
 	properties: PropTypes.arrayOf(
 		PropTypes.shape({
 			entityUrl: PropTypes.string,
@@ -137,12 +137,6 @@ ClayCriteriaBuilder.propTypes = {
 			type: PropTypes.string
 		})
 	).isRequired,
-	conjunctions: PropTypes.arrayOf(
-		PropTypes.shape({
-			label: PropTypes.string,
-			value: PropTypes.string
-		})
-	),
 	onChange: PropTypes.func,
 	operators: PropTypes.arrayOf(
 		PropTypes.shape({
