@@ -1,10 +1,31 @@
-.criterion-row {
-	padding: 8px 16px;
-	display: flex;
-	border-left: 3px solid #4B9BFF;
+.criterion-container {
+	width: 100%;
 }
 
-.criterion-container {
+.criterion-input {
+	margin-right: 16px;
+}
+
+.criterion-row {
+	border-left: 3px solid #4B9BFF;
+	display: flex;
+	padding: 8px 16px;
+}
+
+.criteria-string {
+	color: #6B6C7E;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.delete-button {
+	flex-shrink: 0;
+}
+
+.edit-container {
+	display: flex;
+	margin: 0;
+	padding: 0;
 	width: 100%;
 }
 
@@ -12,40 +33,19 @@
 	background-color: transparent;
 }
 
-.delete-button {
-	flex-shrink: 0;
-}
-
-.criterion-input {
-	margin-right: 16px;
-}
-
-.edit-container {
-	padding: 0;
-	margin: 0;
-	display: flex;
-	width: 100%;
-}
-
-.read-only-container {
-	padding: 0;
-	margin: 0;
-	display: flex;
-	width: 100%;
-}
-
 .operator-input {
 	flex-shrink: 0;
 	width: 240px;
 }
 
-.criteria-string {
-	font-size: 14px;
-	font-weight: 500;
-	color: #6B6C7E;
+.property-string, .value-string {
+	color: #272833;
+	font-weight: bolder;
 }
 
-.property-string, .value-string {
-	font-weight: 700;
-	color: #272833;
+.read-only-container {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	width: 100%;
 }
