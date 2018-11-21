@@ -151,7 +151,6 @@ ClayCriteriaRow.propTypes = {
 	criteriaTypes: PropTypes.object,
 	criterion: PropTypes.object,
 	editing: PropTypes.bool,
-	index: PropTypes.number,
 	onChange: PropTypes.func,
 	operators: PropTypes.array,
 	properties: PropTypes.array,

@@ -4,11 +4,6 @@ import ClayCriteriaGroup from './ClayCriteriaGroup';
 import ClayButton from './ClayButton';
 import './css/ClayCriteriaBuilder.scss';
 
-/**
- * A component used for building a query string.
- * Combines multiple queries together. A query has a
- * structure of criteria, operator, and value.
- */
 class ClayCriteriaBuilder extends React.Component {
 	constructor(props) {
 		super(props);
@@ -19,11 +14,45 @@ class ClayCriteriaBuilder extends React.Component {
 		};
 	}
 
-	/**
-	 * Builds a map of criteria types and their supported operators.
-	 *
-	 * @returns Map of criteria types.
-	 */
+	render() {
+		const {conjunctions, criteria, operators, properties} = this.props;
+
+		const {editing} = this.state;
+
+		return (
+			<div styleName="criteria-builder">
+				<div styleName="toolbar">
+					<ClayButton
+						label="Edit"
+						onClick={this._handleToggleEdit}
+					/>
+				</div>
+
+				{this._isCriteriaEmpty() ? (
+					<ClayCriteriaGroup
+						conjunctions={conjunctions}
+						criteria={criteria}
+						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+							operators
+						)}
+						editing={editing}
+						onChange={this._updateCriteria}
+						operators={operators}
+						properties={properties}
+						root
+					/>
+				) : (
+					<div
+						onClick={this._handleNewCriteria}
+						styleName="empty-state"
+					>
+						{'Click to start editing'}
+					</div>
+				)}
+			</div>
+		);
+	}
+
 	static _buildCriteriaTypes(operators) {
 		return operators.reduce(
 			(criteriaTypes, {supportedTypes}) => {
@@ -44,12 +73,6 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	/**
-	 * Cleans up the query state by removing any groups with no items.
-	 *
-	 * @param {array} criterion The criteria to clean up.
-	 * @returns {object} The cleaned up query.
-	 */
 	_cleanCriteria(criterion) {
 		const test = criterion
 			.filter(
@@ -93,74 +116,23 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	};
 
-	/**
-	 * Checks if the criteria object has any items.
-	 * @return {boolean}
-	 */
 	_isCriteriaEmpty = () => {
 		const {criteria} = this.props;
 
 		return criteria ? criteria.items.length : false;
 	}
 
-	/**
-	 * Updates the query state from changes made by the group and row
-	 * components.
-	 *
-	 * @param {object} newCriteria
-	 */
 	_updateCriteria = newCriteria => {
 		this.props.onChange(this._cleanCriteria([newCriteria]).pop());
 	};
-
-	render() {
-		const {conjunctions, criteria, operators, properties} = this.props;
-
-		const {editing} = this.state;
-
-		console.log(criteria);
-
-		return (
-			<div styleName="criteria-builder">
-				<div styleName="toolbar">
-					<ClayButton
-						label="Edit"
-						onClick={this._handleToggleEdit}
-					/>
-				</div>
-
-				{this._isCriteriaEmpty() ? (
-					<ClayCriteriaGroup
-						conjunctions={conjunctions}
-						criteria={criteria}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
-							operators
-						)}
-						editing={editing}
-						onChange={this._updateCriteria}
-						operators={operators}
-						properties={properties}
-						root
-					/>
-				) : (
-					<div
-						onClick={this._handleNewCriteria}
-						styleName="empty-state"
-					>
-						{'Click to start editing'}
-					</div>
-				)}
-			</div>
-		);
-	}
 }
 
-const QUERY_GROUP_SHAPE = {
+const CRITERIA_GROUP_SHAPE = {
 	conjunctionId: PropTypes.string,
 	items: PropTypes.array
 };
 
-const QUERY_ITEM_SHAPE = {
+const CRITERION_SHAPE = {
 	operatorName: PropTypes.string,
 	propertyName: PropTypes.string,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
@@ -181,8 +153,8 @@ ClayCriteriaBuilder.propTypes = {
 			items: PropTypes.arrayOf(
 				PropTypes.oneOfType(
 					[
-						PropTypes.shape(QUERY_GROUP_SHAPE),
-						PropTypes.shape(QUERY_ITEM_SHAPE)
+						PropTypes.shape(CRITERIA_GROUP_SHAPE),
+						PropTypes.shape(CRITERION_SHAPE)
 					]
 				)
 			)
