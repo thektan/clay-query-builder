@@ -6,29 +6,15 @@ import ClaySelect from './ClaySelect';
 import './css/ClayCriteriaRow.scss';
 
 class ClayCriteriaRow extends React.Component {
-	_createPlaceholderGroup(criterion) {
-		return [Object.assign({}, criterion)];
+	constructor(props) {
+		super(props);
+
+		const {root, criterion} = props;
+
+		if (root && !criterion.items) {
+			this._createPlaceholderGroup(criterion)
+		}
 	}
-
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
-
-	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
-	};
-
-	_handleDelete = () => {
-		const {index, onChange} = this.props;
-
-		onChange(index);
-	}
-
-	_updateCriteria = newCriteria => {
-		const {criterion, index, onChange} = this.props;
-
-		onChange(index, Object.assign(criterion, newCriteria));
-	};
 
 	render() {
 		const {
@@ -50,10 +36,6 @@ class ClayCriteriaRow extends React.Component {
 			operators,
 			criterion.operatorName
 		);
-
-		if (root && !criterion.items) {
-			criterion.items = this._createPlaceholderGroup(criterion);
-		}
 
 		return (
 			<div styleName="criterion-container">
@@ -144,6 +126,37 @@ class ClayCriteriaRow extends React.Component {
 			</div>
 		);
 	}
+
+	_createPlaceholderGroup = criterion => {
+		const {conjunctions, onChange} = this.props;
+		
+		onChange(
+			{
+				conjunctionName: conjunctions[0].name,
+				items: [Object.assign({}, criterion)]
+			}
+		)
+	}
+
+	_getSelectedItem(list, idSelected) {
+		return list.find(item => item.name === idSelected);
+	}
+
+	_handleInputChange = propertyName => event => {
+		this._updateCriteria({[propertyName]: event.target.value});
+	};
+
+	_handleDelete = () => {
+		const {onChange} = this.props;
+
+		onChange();
+	}
+
+	_updateCriteria = newCriteria => {
+		const {criterion, onChange} = this.props;
+
+		onChange(Object.assign(criterion, newCriteria));
+	};
 }
 
 ClayCriteriaRow.propTypes = {
