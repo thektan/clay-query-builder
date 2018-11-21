@@ -102,10 +102,12 @@ class ClayCriteriaBuilder extends React.Component {
 			value: ''
 		};
 
-		onChange({
-			conjunctionId: 'and',
-			items: [emptyItem]
-		});
+		onChange(
+			{
+				conjunctionName: 'and',
+				items: [emptyItem]
+			}
+		);
 	}
 
 	_handleToggleEdit = () => {
