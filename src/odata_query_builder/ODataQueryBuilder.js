@@ -47,7 +47,7 @@ class ODataQueryBuilder extends React.Component {
 			query
 		};
 
-		this._updateQuery = this._updateQuery.bind(this);
+		this._handleQueryChange = this._handleQueryChange.bind(this);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class ODataQueryBuilder extends React.Component {
 			<div>
 				<CriteriaBuilder
 					criteria={criteria}
-					onChange={this._updateQuery}
+					onChange={this._handleQueryChange}
 					properties={properties}
 					readOnly={readOnly}
 					supportedConjunctions={SUPPORTED_CONJUNCTIONS}
@@ -79,11 +79,11 @@ class ODataQueryBuilder extends React.Component {
 
 	/**
 	 * Updates the oData query in the state to match any criteria changes.
-	 * @param {*} newCriteria
+	 * @param {object} newCriteria
 	 * @memberof ODataQueryBuilder
 	 */
 
-	_updateQuery(newCriteria) {
+	_handleQueryChange(newCriteria) {
 		this.setState(
 			{
 				criteria: newCriteria,
