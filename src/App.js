@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClayODataQueryBuilder from './ClayODataQueryBuilder';
+import ODataQueryBuilder from './odata_query_builder/ODataQueryBuilder';
 import ThemeContext from './ThemeContext';
 
 export function initialize(props, id, context) {
 	ReactDOM.render(
 		<ThemeContext.Provider value={context}>
-			<ClayODataQueryBuilder {...props} />
+			<ODataQueryBuilder {...props} />
 		</ThemeContext.Provider>,
 		document.getElementById(id)
 	);

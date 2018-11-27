@@ -1,24 +1,40 @@
-import autobind from 'autobind-decorator';
 import React from 'react';
 import PropTypes from 'prop-types';
-import CriteriaBuilder from './CriteriaBuilder';
+import CriteriaBuilder from '../criteria_builder/CriteriaBuilder';
 import {
 	buildQueryString,
 	SUPPORTED_CONJUNCTIONS,
 	SUPPORTED_OPERATORS,
-	SUPPORTED_PROPERTY_TYPE_OPERATORS,
-	translateToCriteria
+	SUPPORTED_PROPERTY_TYPES,
+	translateQueryToCriteria
 } from './util/odata-paraser';
 
+/**
+ * Higher order component for the criteria builder which handles odata parsing
+ * @class ODataQueryBuilder
+ * @extends {React.Component}
+ */
+
 class ODataQueryBuilder extends React.Component {
+
+	/**
+	 * @inheritDoc
+	 * @static
+	 * @memberof CriteriaBuilder
+	 */
+
 	static propTypes = {
 		initialQuery: PropTypes.string,
-		maxNesting: PropTypes.number,
 		operators: PropTypes.array,
 		properties: PropTypes.array,
 		query: PropTypes.string,
 		readOnly: PropTypes.bool
 	}
+
+	/**
+	 * @inheritDoc
+	 * @memberof ODataQueryBuilder
+	 */
 
 	constructor(props) {
 		super(props);
@@ -26,28 +42,34 @@ class ODataQueryBuilder extends React.Component {
 		const {query} = props;
 
 		this.state = {
-			criteria: query ? translateToCriteria(query) : null,
+			criteria: query ? translateQueryToCriteria(query) : null,
 			initialQuery: query,
 			query
 		};
+
+		this._updateQuery = this._updateQuery.bind(this);
 	}
 
+	/**
+	 * @inheritDoc
+	 * @memberof ODataQueryBuilder
+	 */
+
 	render() {
-		const {maxNesting, properties, readOnly} = this.props;
+		const {properties, readOnly} = this.props;
 
 		const {criteria} = this.state;
 
 		return (
 			<div>
-				<ClayCriteriaBuilder
-					conjunctions={SUPPORTED_CONJUNCTIONS}
+				<CriteriaBuilder
 					criteria={criteria}
-					maxNesting={maxNesting}
 					onChange={this._updateQuery}
-					operators={SUPPORTED_OPERATORS}
 					properties={properties}
-					propertyTypes={SUPPORTED_PROPERTY_TYPE_OPERATORS}
 					readOnly={readOnly}
+					supportedConjunctions={SUPPORTED_CONJUNCTIONS}
+					supportedOperators={SUPPORTED_OPERATORS}
+					supportedPropertyTypes={SUPPORTED_PROPERTY_TYPES}
 				/>
 
 				<span>{criteria && buildQueryString([criteria])}</span>
@@ -57,9 +79,10 @@ class ODataQueryBuilder extends React.Component {
 
 	/**
 	 * Updates the oData query in the state to match any criteria changes.
-	 * @memberof ClayODataQueryBuilder
+	 * @param {*} newCriteria
+	 * @memberof ODataQueryBuilder
 	 */
-	@autobind
+
 	_updateQuery(newCriteria) {
 		this.setState(
 			{

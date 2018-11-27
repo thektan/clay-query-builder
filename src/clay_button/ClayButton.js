@@ -1,7 +1,7 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import ClayIcon from './ClayIcon';
-import './css/ClayButton.scss';
+import ClayIcon from '../clay_icon/ClayIcon';
+import './ClayButton.scss';
 
 class ClayButton extends React.Component {
 	render() {

@@ -1,30 +1,33 @@
 import {filter as ODataV4ParserFilter} from 'odata-v4-parser';
 
 const CONJUNCTIONS = {
-	AND: 'and',
-	OR: 'or'
-}
+	AND: 'AND',
+	OR: 'OR'
+};
 
-const GROUP = 'group';
+const FUNCTIONAL_OPERATORS = {
+	contains: 'contains'
+};
+
+const GROUP = 'GROUP';
 
 const RELATIONAL_OPERATORS = {
-	EQ: 'eq',
-	GE: 'ge',
-	GT: 'gt',
-	LE: 'le',
-	LT: 'lt',
-	NE: 'ne'
-}
+	EQ: 'EQ',
+	GE: 'GE',
+	GT: 'GT',
+	LE: 'LE',
+	LT: 'LT',
+	NE: 'NE'
+};
 
-const TYPES = {
-	BOOLEAN: 'boolean',
-	DATE: 'date',
-	NUMBER: 'number',
-	STRING: 'string'
-}
+const OPERATORS = Object.assign(
+	{},
+	RELATIONAL_OPERATORS,
+	FUNCTIONAL_OPERATORS
+);
 
 /**
- * Maps Odata-v4-parser generated AST expression names to internally used 
+ * Maps Odata-v4-parser generated AST expression names to internally used
  * constants.
  */
 const oDataV4ParserNameMap = {
@@ -47,13 +50,13 @@ const oDataV4ParserNameMap = {
 function addNewGroup({oDataASTNode, prevConjunction}) {
 	return {
 		lastNodeWasGroup: false,
-		prevConjunction,
-		oDataASTNode: {type: 'BoolParenExpression', value: oDataASTNode}
+		oDataASTNode: {type: 'BoolParenExpression', value: oDataASTNode},
+		prevConjunction
 	};
 }
 
 /**
- * Recursively traverses the criteria object to build an oData filter query 
+ * Recursively traverses the criteria object to build an oData filter query
  * string.
  * @param {object} criteria
  * @param {string} queryConjunction
@@ -81,12 +84,12 @@ function buildQueryString(criteria, queryConjunction) {
 					`(${buildQueryString(items, conjunctionName)})`
 				);
 			}
-			else if (RELATIONAL_OPERATORS.includes(operatorName)) {
+			else if (RELATIONAL_OPERATORS[operatorName]) {
 				queryString = queryString.concat(
 					`${propertyName} ${operatorName} '${value}'`
 				);
 			}
-			else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
+			else if (FUNCTIONAL_OPERATORS[operatorName]) {
 				queryString = queryString.concat(
 					`${operatorName} (${propertyName}, '${value}')`
 				);
@@ -95,7 +98,7 @@ function buildQueryString(criteria, queryConjunction) {
 	);
 
 	return queryString;
-};
+}
 
 /**
  * Gets the internal name of a child expression from the oDataV4Parser name
@@ -103,7 +106,7 @@ function buildQueryString(criteria, queryConjunction) {
  * @returns String value of the internal name
  */
 function getChildExpressionName(oDataASTNode) {
-	return getExpressionName(oDataASTNode.value.type);
+	return getExpressionName(oDataASTNode.value);
 }
 
 /**
@@ -114,7 +117,7 @@ function getChildExpressionName(oDataASTNode) {
 function getConjunctionForGroup(oDataASTNode) {
 	const childExpressionName = getChildExpressionName(oDataASTNode);
 
-	return CONJUNCTIONS.includes(childExpressionName) ? childExpressionName : AND;
+	return CONJUNCTIONS[childExpressionName] ? childExpressionName : CONJUNCTIONS.AND;
 }
 
 /**
@@ -151,22 +154,21 @@ const getNextNonGroupExpressionName = oDataASTNode => {
  * @param {*} context
  * @returns boolean of whether a grouping has different conjunctions
  */
-function hasDifferentConjunctions(context) {
-	return prevConjunction !== oDataASTNode.type && !lastNodeWasGroup
+function hasDifferentConjunctions({lastNodeWasGroup, oDataASTNode, prevConjunction}) {
+	return prevConjunction !== oDataASTNode.type && !lastNodeWasGroup;
 }
 
 /**
- * Checks if the group is needed; It is unneccesary when there are multiple 
- * groupings in a row, when the conjunction directly outside the group is the 
+ * Checks if the group is needed; It is unneccesary when there are multiple
+ * groupings in a row, when the conjunction directly outside the group is the
  * same as the one inside or there is no conjunction within a grouping.
  * @param {*} {lastNodeWasGroup, oDataASTNode, prevConjunction}
  * @returns a boolean of whether a group is neccessary
  */
 function isRedundantGroup({lastNodeWasGroup, oDataASTNode, prevConjunction}) {
-	const nextNodeType = getNextNonGroupExpressionName(oDataASTNode);
+	const nextNodeExpressionName = getNextNonGroupExpressionName(oDataASTNode);
 
-	return lastNodeWasGroup || prevConjunction === nextNodeType ||
-		!CONJUNCTIONS.includes(getExpressionName(nextNodeType))
+	return lastNodeWasGroup || prevConjunction === nextNodeExpressionName || !CONJUNCTIONS[nextNodeExpressionName];
 }
 
 /**
@@ -177,8 +179,8 @@ function isRedundantGroup({lastNodeWasGroup, oDataASTNode, prevConjunction}) {
 function skipGroup({oDataASTNode, prevConjunction}) {
 	return {
 		lastNodeWasGroup: true,
-		prevConjunction,
-		oDataASTNode: oDataASTNode.value
+		oDataASTNode: oDataASTNode.value,
+		prevConjunction
 	};
 }
 
@@ -189,10 +191,10 @@ function skipGroup({oDataASTNode, prevConjunction}) {
  * @returns Criteria representation of the query string
  */
 function translateQueryToCriteria(queryString) {
-	const oDataAST = ODataV4ParserFilter(queryString);
+	const oDataASTNode = ODataV4ParserFilter(queryString);
 
-	return toCriteria({oDataAST})[0];
-};
+	return toCriteria({oDataASTNode})[0];
+}
 
 /**
  * Recursively transforms the AST generated by the odata-v4-parser library into
@@ -207,39 +209,39 @@ function translateQueryToCriteria(queryString) {
  */
 function toCriteria(context) {
 	const {oDataASTNode} = context;
-	
+
 	const expressionName = getExpressionName(oDataASTNode);
 
 	let criterion;
 
 	if (RELATIONAL_OPERATORS[expressionName]) {
-		criterion = transformOperatorNode(arguments);
+		criterion = transformOperatorNode(context);
 	}
 	else if (CONJUNCTIONS[expressionName]) {
-		criterion = transformConjunctionNode(arguments);
+		criterion = transformConjunctionNode(context);
 	}
 	else if (expressionName === GROUP) {
-		criterion = transformGroupNode(arguments);
+		criterion = transformGroupNode(context);
 	}
 
 	return criterion;
-};
+}
 
 /**
- * Transforms conjunction expression node into a criterion for the criteria 
+ * Transforms conjunction expression node into a criterion for the criteria
  * builder. If it comes across a grouping sharing an AND and OR conjunction, it
- * will add a new grouping so the criteria builder doesn't require a user to 
+ * will add a new grouping so the criteria builder doesn't require a user to
  * know operator precedence.
  * @param {object} context {
  * 	lastNodeWasGroup,
  * 	oDataASTNode,
  * 	prevConjunction
  * }
- * @returns an array containing the concatenated left and right values of a 
+ * @returns an array containing the concatenated left and right values of a
  * conjunction expression or a new grouping.
  */
-function transformConjunctionNode (context) {
-	const {oDataASTNode, prevConjunction} = context;
+function transformConjunctionNode(context) {
+	const {oDataASTNode} = context;
 
 	const conjunctionType = oDataASTNode.type;
 	const nextNode = oDataASTNode.value;
@@ -248,22 +250,21 @@ function transformConjunctionNode (context) {
 		toCriteria(addNewGroup(context)) :
 		[...toCriteria(
 			{
-				prevConjunction: conjunctionType,
-				oDataASTNode: nextNode.left
+				oDataASTNode: nextNode.left,
+				prevConjunction: conjunctionType
 			}
 		),
 		...toCriteria(
 			{
-				prevConjunction: conjunctionType,
-				oDataASTNode: nextNode.right
+				oDataASTNode: nextNode.right,
+				prevConjunction: conjunctionType
 			}
-		)]
-		
-};
+		)];
+}
 
 /**
- * Transforms a group expression node into a criterion for the criteria 
- * builder. If it comes across a grouping that is redundent (doesn't provide 
+ * Transforms a group expression node into a criterion for the criteria
+ * builder. If it comes across a grouping that is redundent (doesn't provide
  * readibility improvements, superfluous to order of operations), it will remove
  * it.
  * @param {object} context {
@@ -277,24 +278,24 @@ function transformGroupNode(context) {
 	const {oDataASTNode, prevConjunction} = context;
 
 	return isRedundantGroup(context) ?
-		toCriteria(skipGroup(context)) : 
+		toCriteria(skipGroup(context)) :
 		[{
 			conjunctionName: getConjunctionForGroup(oDataASTNode),
 			items: [...toCriteria(
 				{
 					lastNodeWasGroup: true,
-					prevConjunction,
-					oDataASTNode: oDataASTNode.value
+					oDataASTNode: oDataASTNode.value,
+					prevConjunction
 				}
 			)]
 		}];
-};
+}
 
 /**
- * Transform an operator expression node into a criterion for the criteria 
+ * Transform an operator expression node into a criterion for the criteria
  * builder.
  * @param {object} {oDataASTNode}
- * @returns an array containing the object representation of an operator 
+ * @returns an array containing the object representation of an operator
  * criterion
  */
 function transformOperatorNode({oDataASTNode}) {
@@ -305,57 +306,57 @@ function transformOperatorNode({oDataASTNode}) {
 			value: oDataASTNode.value.right.raw.replace(/['"]+/g, '')
 		}
 	];
-};
+}
 
 const SUPPORTED_CONJUNCTIONS = [
 	{
 		label: 'and',
-		name: AND
+		name: CONJUNCTIONS.AND
 	},
 	{
 		label: 'or',
-		name: OR
+		name: CONJUNCTIONS.OR
 	}
 ];
-
-const SUPPORTED_PROPERTY_TYPE_OPERATORS = {
-	BOOLEAN: [EQ, NE],
-	DATE: [EQ, GE, GT, LE, LT, NE],
-	NUMBER: [EQ, GE, GT, LE, LT, NE],
-	STRING: [EQ, NE]
-}
 
 const SUPPORTED_OPERATORS = [
 	{
 		label: 'equals',
-		name: EQ
+		name: OPERATORS.EQ
 	},
 	{
 		label: 'greater-than-or-equals',
-		name: GE
+		name: OPERATORS.GE
 	},
 	{
 		label: 'greater-than',
-		name: GT
+		name: OPERATORS.GT
 	},
 	{
 		label: 'less-than-or-equals',
-		name: LE
+		name: OPERATORS.LE
 	},
 	{
 		label: 'less-than',
-		name: LT
+		name: OPERATORS.LT
 	},
 	{
 		label: 'not-equals',
-		name: NE
+		name: OPERATORS.NE
 	}
 ];
+
+const SUPPORTED_PROPERTY_TYPES = {
+	BOOLEAN: [OPERATORS.EQ, OPERATORS.NE],
+	DATE: [OPERATORS.EQ, OPERATORS.GE, OPERATORS.GT, OPERATORS.LE, OPERATORS.LT, OPERATORS.NE],
+	NUMBER: [OPERATORS.EQ, OPERATORS.GE, OPERATORS.GT, OPERATORS.LE, OPERATORS.LT, OPERATORS.NE],
+	STRING: [OPERATORS.EQ, OPERATORS.NE]
+};
 
 export {
 	buildQueryString,
 	SUPPORTED_CONJUNCTIONS,
 	SUPPORTED_OPERATORS,
-	SUPPORTED_PROPERTY_TYPE_OPERATORS,
+	SUPPORTED_PROPERTY_TYPES,
 	translateQueryToCriteria
 };

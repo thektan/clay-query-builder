@@ -1,53 +1,103 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import ClayCriteriaGroup from './ClayCriteriaGroup';
-import ClayButton from './ClayButton';
-import ClaySelect from './ClaySelect';
-import './css/ClayCriteriaRow.scss';
+import ClayButton from '../clay_button/ClayButton';
+import ClaySelect from '../clay_select/ClaySelect';
+import CriteriaGroup from './CriteriaGroup';
+import './CriteriaRow.scss';
 
-class ClayCriteriaRow extends React.Component {
+class CriteriaRow extends React.Component {
+	static defaultProps = {
+		editing: true,
+		root: false
+	};
+
+	static propTypes = {
+		criterion: PropTypes.object,
+		editing: PropTypes.bool,
+		onChange: PropTypes.func,
+		properties: PropTypes.array,
+		root: PropTypes.bool,
+		supportedConjunctions: PropTypes.array,
+		supportedOperators: PropTypes.array,
+		supportedPropertyTypes: PropTypes.object
+	};
+
+	static _getSelectedItem(list, idSelected) {
+		return list.find(item => item.name === idSelected);
+	}
+
 	constructor(props) {
 		super(props);
 
-		const {root, criterion} = props;
+		const {criterion, root} = props;
 
 		if (root && !criterion.items) {
-			this._createPlaceholderGroup(criterion)
+			this._createPlaceholderGroup(criterion);
 		}
+
+		this._handleInputChange = this._handleInputChange.bind(this);
+		this._handleCriteriaChange = this._handleCriteriaChange.bind(this);
+		this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
 	}
+
+	_createPlaceholderGroup = criterion => {
+		const {onChange, supportedConjunctions} = this.props;
+
+		onChange(
+			{
+				conjunctionName: supportedConjunctions[0].name,
+				items: [Object.assign({}, criterion)]
+			}
+		);
+	}
+
+	_handleCriteriaChange = newCriteria => {
+		const {criterion, onChange} = this.props;
+
+		onChange(Object.assign(criterion, newCriteria));
+	};
+
+	_handleDeleteButtonClick() {
+		const {onChange} = this.props;
+
+		onChange();
+	}
+
+	_handleInputChange = propertyName => event => {
+		this._handleCriteriaChange({[propertyName]: event.target.value});
+	};
 
 	render() {
 		const {
-			conjunctions,
-			criteriaTypes,
 			criterion,
 			editing,
-			operators,
 			properties,
-			root
+			supportedConjunctions,
+			supportedOperators,
+			supportedPropertyTypes
 		} = this.props;
 
-		const selectedProperty = this._getSelectedItem(
+		const selectedProperty = CriteriaRow._getSelectedItem(
 			properties,
 			criterion.propertyName
 		);
 
-		const selectedOperator = this._getSelectedItem(
-			operators,
+		const selectedOperator = CriteriaRow._getSelectedItem(
+			supportedOperators,
 			criterion.operatorName
 		);
 
 		return (
 			<div styleName="criterion-container">
 				{criterion.items ? (
-					<ClayCriteriaGroup
-						conjunctions={conjunctions}
+					<CriteriaGroup
 						criteria={criterion}
-						criteriaTypes={criteriaTypes}
 						editing={editing}
-						onChange={this._updateCriteria}
-						operators={operators}
+						onChange={this._handleCriteriaChange}
 						properties={properties}
+						supportedConjunctions={supportedConjunctions}
+						supportedOperators={supportedOperators}
+						supportedPropertyTypes={supportedPropertyTypes}
 					/>
 				) : (
 					<div
@@ -77,7 +127,7 @@ class ClayCriteriaRow extends React.Component {
 									onChange={this._handleInputChange(
 										'operatorName'
 									)}
-									options={operators.map(
+									options={supportedOperators.map(
 										({label, name}) => ({
 											label,
 											value: name
@@ -101,7 +151,7 @@ class ClayCriteriaRow extends React.Component {
 									className="btn-monospaced"
 									iconName="trash"
 									key="delete"
-									onClick={this._handleDelete}
+									onClick={this._handleDeleteButtonClick}
 									styleName="delete-button"
 								/>
 							</div>
@@ -126,53 +176,6 @@ class ClayCriteriaRow extends React.Component {
 			</div>
 		);
 	}
-
-	_createPlaceholderGroup = criterion => {
-		const {conjunctions, onChange} = this.props;
-		
-		onChange(
-			{
-				conjunctionName: conjunctions[0].name,
-				items: [Object.assign({}, criterion)]
-			}
-		)
-	}
-
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
-
-	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
-	};
-
-	_handleDelete = () => {
-		const {onChange} = this.props;
-
-		onChange();
-	}
-
-	_updateCriteria = newCriteria => {
-		const {criterion, onChange} = this.props;
-
-		onChange(Object.assign(criterion, newCriteria));
-	};
 }
 
-ClayCriteriaRow.propTypes = {
-	conjunctions: PropTypes.array,
-	criteriaTypes: PropTypes.object,
-	criterion: PropTypes.object,
-	editing: PropTypes.bool,
-	onChange: PropTypes.func,
-	operators: PropTypes.array,
-	properties: PropTypes.array,
-	root: PropTypes.bool
-};
-
-ClayCriteriaRow.defaultProps = {
-	editing: true,
-	root: false
-};
-
-export default ClayCriteriaRow;
+export default CriteriaRow;
