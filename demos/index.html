@@ -21,71 +21,65 @@
 				{
 					properties: [
 						{
-							label: 'job-title',
-							type: 'string', // Determines which operators are available
-							name: 'jobTitle' // Displayed on the sidebar
+							label: 'Ancestor Organization IDs',
+							name: 'ancestorOrganizationIds',
+							type: 'string'
+						},
+						{label: 'Class PK', name: 'classPK', type: 'string'},
+						{
+							label: 'Company ID',
+							name: 'companyId',
+							type: 'string'
 						},
 						{
-							label: 'industry',
-							type: 'string',
-							name: 'industry'
+							label: 'Date Modified',
+							name: 'dateModified',
+							type: 'string'
 						},
 						{
-							label: 'city',
-							type: 'string',
-							name: 'city'
+							label: 'Email Address',
+							name: 'emailAddress',
+							type: 'string'
 						},
 						{
-							label: 'address',
-							type: 'string',
-							name: 'address'
+							label: 'First Name',
+							name: 'firstName',
+							type: 'string'
+						},
+						{label: 'Group ID', name: 'groupId', type: 'string'},
+						{label: 'Group IDs', name: 'groupIds', type: 'string'},
+						{label: 'Job Title', name: 'jobTitle', type: 'string'},
+						{label: 'Last Name', name: 'lastName', type: 'string'},
+						{
+							label: 'Organization Count',
+							name: 'organizationCount',
+							type: 'string'
 						},
 						{
-							label: 'first-name',
-							type: 'string',
-							name: 'firstName'
+							label: 'Organization IDs',
+							name: 'organizationIds',
+							type: 'string'
+						},
+						{label: 'Role IDs', name: 'roleIds', type: 'string'},
+						{
+							label: 'Scope Group ID',
+							name: 'scopeGroupId',
+							type: 'string'
 						},
 						{
-							label: 'last-name',
-							type: 'string',
-							name: 'lastName'
+							label: 'Screen Name',
+							name: 'screenName',
+							type: 'string'
 						},
+						{label: 'Team IDs', name: 'teamIds', type: 'string'},
 						{
-							label: 'email-address',
-							type: 'string',
-							name: 'emailAddress'
+							label: 'User Group IDs',
+							name: 'userGroupIds',
+							type: 'string'
 						},
-						{
-							label: 'age',
-							type: 'number',
-							name: 'age'
-						},
-						{
-							label: 'User',
-							type: 'entity',
-							name: 'user',
-							selectionUrl:
-								'http://localhost:8080/group/control_panel/manage?p_p_id=com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_userGroupId=36707&_com_liferay_user_groups_admin_web_portlet_UserGroupsAdminPortlet_mvcPath=%2Fselect_user_group_users.jsp' // Portlet Provider URL
-						},
-						{
-							label: 'Custom Property',
-							type: 'string',
-							name: 'customProp',
-							options: [
-								{
-									label: 'Custom Value 1',
-									name: 'customValue1'
-								},
-								{
-									label: 'Custom Value 2',
-									name: 'customValue2'
-								}
-							]
-						}
-					],
-					maxNesting: 6,
-					canReorder: true,
-					query: `(emailAddress eq 'test@liferay.com' and (firstName eq 'wow' and (emailAddress ne 'dfaf') or (age eq '2')) or address ne 'someone' and lastName eq 'eduardo') or jobTitle eq 'magician'`
+						{label: 'User ID', name: 'userId', type: 'string'},
+						{label: 'User Name', name: 'userName', type: 'string'}
+					]
 				},
 				{
 					spriteMapPath: './icons.svg'
