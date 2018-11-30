@@ -1,7 +1,6 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import ClayIcon from './ClayIcon';
-import './css/ClayButton.scss';
+import ClayIcon from './ClayIcon.es';
 
 class ClayButton extends React.Component {
 	render() {
@@ -16,8 +15,8 @@ class ClayButton extends React.Component {
 
 				{iconName && (
 					<ClayIcon
+						className={`${label ? 'text-icon' : 'icon'}`}
 						iconName={iconName}
-						styleName={`${label ? 'text-icon' : 'icon'}`}
 					/>
 				)}
 			</button>

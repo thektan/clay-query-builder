@@ -35,9 +35,7 @@
 	"name": "clay-query-builder",
 	"version": "1.0.0",
 	"description": "",
-	"main": "lib/ClayQueryBuilder.js",
-	"esnext:main": "src/ClayQueryBuilder.js",
-	"jsnext:main": "src/ClayQueryBuilder.js",
+	"main": "src/index.es.js",
 	"scripts": {
 		"build": "webpack --mode development",
 		"checkFormat": "npm run csf",
@@ -47,15 +45,6 @@
 	"author": "",
 	"license": "BSD",
 	"dependencies": {
-		"clay-button": "^2.3.4",
-		"clay-select": "^2.3.4",
-		"metal": "^2.16.6",
-		"metal-component": "^2.16.6",
-		"metal-drag-drop": "^3.2.1",
-		"metal-events": "^2.16.6",
-		"metal-soy": "^2.16.6",
-		"metal-state": "^2.16.6",
-		"metal-web-component": "^2.16.6",
 		"odata-v4-parser": "^0.1.29",
 		"prop-types": "^15.6.2",
 		"react": "^16.6.3",
@@ -79,14 +68,13 @@
 		"eslint-plugin-babel": "^5.3.0",
 		"eslint-plugin-react": "^7.11.1",
 		"eslint-plugin-sort-destructure-keys": "^1.1.0",
-		"metal-tools-soy": "^6.0.0",
 		"node-sass": "^4.10.0",
 		"postcss-scss": "^2.0.0",
 		"sass-loader": "^7.1.0",
 		"style-loader": "^0.23.1",
 		"webpack": "^4.23.1",
 		"webpack-cli": "^3.1.2",
-		"webpack-config-clay": "^2.3.4"
+		"webpack-config-clay": "^2.4.1"
 	},
 	"browserslist": [
 		"extends browserslist-config-clay"

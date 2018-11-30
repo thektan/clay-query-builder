@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClayCriteriaGroup from './ClayCriteriaGroup';
-import ClayButton from './ClayButton';
-import './css/ClayCriteriaBuilder.scss';
+import ClayCriteriaGroup from './ClayCriteriaGroup.es';
+import ClayButton from './ClayButton.es';
+import {Liferay} from './utils/language';
 
 class ClayCriteriaBuilder extends React.Component {
 	constructor(props) {
@@ -20,10 +20,10 @@ class ClayCriteriaBuilder extends React.Component {
 		const {editing} = this.state;
 
 		return (
-			<div styleName="criteria-builder">
-				<div styleName="toolbar">
+			<div className="criteria-builder">
+				<div className="criteria-builder-toolbar">
 					<ClayButton
-						label="Edit"
+						label={Liferay.Language.get('edit')}
 						onClick={this._handleToggleEdit}
 					/>
 				</div>
@@ -43,10 +43,10 @@ class ClayCriteriaBuilder extends React.Component {
 					/>
 				) : (
 					<div
+						className="empty-state"
 						onClick={this._handleNewCriteria}
-						styleName="empty-state"
 					>
-						{'Click to start editing'}
+						{Liferay.Language.get('click-to-start-editing')}
 					</div>
 				)}
 			</div>
@@ -110,7 +110,9 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	_handleToggleEdit = () => {
+	_handleToggleEdit = event => {
+		event.preventDefault();
+
 		this.setState(
 			{
 				editing: !this.state.editing
@@ -162,7 +164,6 @@ ClayCriteriaBuilder.propTypes = {
 			)
 		}
 	),
-	maxNesting: PropTypes.number,
 	onChange: PropTypes.func,
 	operators: PropTypes.arrayOf(
 		PropTypes.shape(

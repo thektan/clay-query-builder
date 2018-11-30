@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClayCriteriaBuilder from './ClayCriteriaBuilder';
-import {filter} from 'odata-v4-parser';
+import ClayCriteriaBuilder from './ClayCriteriaBuilder.es';
+import {Liferay} from './utils/language';
+import './libs/odata-parser.js';
 
 const AND = 'and';
 
@@ -33,43 +34,43 @@ const STRING = 'string';
 
 const conjunctions = [
 	{
-		label: 'and',
+		label: Liferay.Language.get('and'),
 		name: AND
 	},
 	{
-		label: 'or',
+		label: Liferay.Language.get('or'),
 		name: OR
 	}
 ];
 
 const operators = [
 	{
-		label: 'equals',
+		label: Liferay.Language.get('equals'),
 		name: EQ,
 		supportedTypes: [BOOLEAN, DATE, NUMBER, STRING]
 	},
 	{
-		label: 'greater-than-or-equals',
+		label: Liferay.Language.get('greater-than-or-equals'),
 		name: GE,
 		supportedTypes: [DATE, NUMBER]
 	},
 	{
-		label: 'greater-than',
+		label: Liferay.Language.get('greater-than'),
 		name: GT,
 		supportedTypes: [DATE, NUMBER]
 	},
 	{
-		label: 'less-than-or-equals',
+		label: Liferay.Language.get('less-than-or-equals'),
 		name: LE,
 		supportedTypes: [DATE, NUMBER]
 	},
 	{
-		label: 'less-than',
+		label: Liferay.Language.get('less-than'),
 		name: LT,
 		supportedTypes: [DATE, NUMBER]
 	},
 	{
-		label: 'not-equals',
+		label: Liferay.Language.get('not-equals'),
 		name: NE,
 		supportedTypes: [BOOLEAN, DATE, NUMBER, STRING]
 	}
@@ -80,6 +81,50 @@ const CONJUNCTIONS = [AND, OR];
 const FUNCTIONAL_OPERATORS = [CONTAINS];
 
 const RELATIONAL_OPERATORS = [EQ, GE, GT, LE, LT, NE];
+
+const addNewGroup = (queryAST, prevConjunction) => ({
+	lastNodeWasGroup: false,
+	prevConjunction,
+	queryAST: {type: 'BoolParenExpression', value: queryAST}
+});
+
+const buildQueryString = (queryItems, queryConjunction) => {
+	let queryString = '';
+
+	queryItems.forEach(
+		(item, index) => {
+			const {
+				conjunctionName,
+				items,
+				operatorName,
+				propertyName,
+				value
+			} = item;
+
+			if (index > 0) {
+				queryString = queryString.concat(` ${queryConjunction} `);
+			}
+
+			if (conjunctionName) {
+				queryString = queryString.concat(
+					`(${buildQueryString(items, conjunctionName)})`
+				);
+			}
+			else if (RELATIONAL_OPERATORS.includes(operatorName)) {
+				queryString = queryString.concat(
+					`${propertyName} ${operatorName} '${value}'`
+				);
+			}
+			else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
+				queryString = queryString.concat(
+					`${operatorName} (${propertyName}, '${value}')`
+				);
+			}
+		}
+	);
+
+	return queryString;
+};
 
 const comparatorTransformation = ({
 	lastNodeWasGroup,
@@ -103,18 +148,6 @@ const comparatorTransformation = ({
 		] :
 		toCriteriaMap(addNewGroup(queryAST, prevConjunction));
 };
-
-const addNewGroup = (queryAST, prevConjunction) => ({
-	lastNodeWasGroup: false,
-	prevConjunction,
-	queryAST: {type: 'BoolParenExpression', value: queryAST}
-});
-
-const skipGroup = (queryAST, prevConjunction) => ({
-	lastNodeWasGroup: true,
-	prevConjunction,
-	queryAST: queryAST.value
-});
 
 const groupTransformation = ({lastNodeWasGroup, prevConjunction, queryAST}) => {
 	const nextNodeType = getNextNonGroupNodeType(queryAST);
@@ -179,6 +212,10 @@ const groupTransformation = ({lastNodeWasGroup, prevConjunction, queryAST}) => {
 	return returnValue;
 };
 
+function isCriteriaMapGroup(criteriaMapArray) {
+	return !!criteriaMapArray[0].items;
+}
+
 function isNotConjunction(nodeType) {
 	return !CONJUNCTIONS.includes(getTypeName(nodeType));
 }
@@ -198,6 +235,11 @@ const getNextNonGroupNodeType = queryAST => {
 	return returnValue;
 };
 
+const getChildNodeTypeName = query =>
+	oDataTransformationMap[query.value.type].name;
+
+const getTypeName = type => oDataTransformationMap[type].name;
+
 const operatorTransformation = ({queryAST}) => {
 	return [
 		{
@@ -207,6 +249,12 @@ const operatorTransformation = ({queryAST}) => {
 		}
 	];
 };
+
+const skipGroup = (queryAST, prevConjunction) => ({
+	lastNodeWasGroup: true,
+	prevConjunction,
+	queryAST: queryAST.value
+});
 
 const toCriteriaMap = ({
 	lastNodeWasGroup = false,
@@ -224,53 +272,31 @@ const toCriteriaMap = ({
 	);
 };
 
-const getChildNodeTypeName = query =>
-	oDataTransformationMap[query.value.type].name;
-const getTypeName = type => oDataTransformationMap[type].name;
-
 const translateToCriteria = query => {
-	const queryAST = filter(query);
+	let returnValue;
 
-	return toCriteriaMap({queryAST})[0];
+	try {
+		const queryAST = window.oDataParser.filter(query);
+
+		const criteriaMapArray = toCriteriaMap({queryAST});
+
+		returnValue = isCriteriaMapGroup(criteriaMapArray) ?
+			criteriaMapArray[0] :
+			wrapInCriteriaMapGroup(criteriaMapArray);
+	}
+	catch (e) {
+		returnValue = null;
+	}
+
+	return returnValue;
 };
 
-const buildQueryString = (queryItems, queryConjunction) => {
-	let queryString = '';
-
-	queryItems.forEach(
-		(item, index) => {
-			const {
-				conjunctionName,
-				items,
-				operatorName,
-				propertyName,
-				value
-			} = item;
-
-			if (index > 0) {
-				queryString = queryString.concat(` ${queryConjunction} `);
-			}
-
-			if (conjunctionName) {
-				queryString = queryString.concat(
-					`(${buildQueryString(items, conjunctionName)})`
-				);
-			}
-			else if (RELATIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`${propertyName} ${operatorName} '${value}'`
-				);
-			}
-			else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`${operatorName} (${propertyName}, '${value}')`
-				);
-			}
-		}
-	);
-
-	return queryString;
-};
+const wrapInCriteriaMapGroup = criteriaMapArray => (
+	{
+		conjunctionName: AND,
+		items: criteriaMapArray
+	}
+);
 
 const oDataTransformationMap = {
 	AndExpression: {
@@ -318,30 +344,39 @@ class ClayODataQueryBuilder extends React.Component {
 		const {query} = props;
 
 		this.state = {
-			criteriaMap: query ? translateToCriteria(query) : null,
+			criteriaMap: query && query !== '()' ? translateToCriteria(query) : null,
 			initialQuery: query,
 			query
 		};
 	}
 
 	render() {
-		const {maxNesting, properties, readOnly} = this.props;
+		const {inputId, properties, readOnly} = this.props;
 
 		const {criteriaMap} = this.state;
 
 		return (
-			<div>
-				<ClayCriteriaBuilder
-					conjunctions={conjunctions}
-					criteria={criteriaMap}
-					maxNesting={maxNesting}
-					onChange={this._updateQuery}
-					operators={operators}
-					properties={properties}
-					readOnly={readOnly}
-				/>
+			<div className="clay-query-builder-root">
+				<div className="form-group">
+					<ClayCriteriaBuilder
+						conjunctions={conjunctions}
+						criteria={criteriaMap}
+						onChange={this._updateQuery}
+						operators={operators}
+						properties={properties}
+						readOnly={readOnly}
+					/>
+				</div>
 
-				<span>{criteriaMap && buildQueryString([criteriaMap])}</span>
+				<div className="form-group">
+					<textarea
+						className="field form-control"
+						id={inputId}
+						name={inputId}
+						readOnly
+						value={criteriaMap ? buildQueryString([criteriaMap]) : ''}
+					/>
+				</div>
 			</div>
 		);
 	}
@@ -358,7 +393,7 @@ class ClayODataQueryBuilder extends React.Component {
 
 ClayODataQueryBuilder.propTypes = {
 	initialQuery: PropTypes.string,
-	maxNesting: PropTypes.number,
+	inputId: PropTypes.string,
 	operators: PropTypes.array,
 	properties: PropTypes.array,
 	query: PropTypes.string,

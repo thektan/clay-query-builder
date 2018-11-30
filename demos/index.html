@@ -17,6 +17,7 @@
 		<div id="app" class="sheet"></div>
 		<script type="text/javascript">
 			new metal.initialize(
+				'app',
 				{
 					properties: [
 						{
@@ -86,7 +87,6 @@
 					canReorder: true,
 					query: `(emailAddress eq 'test@liferay.com' and (firstName eq 'wow' and (emailAddress ne 'dfaf') or (age eq '2')) or address ne 'someone' and lastName eq 'eduardo') or jobTitle eq 'magician'`
 				},
-				'app',
 				{
 					spriteMapPath: './icons.svg'
 				}

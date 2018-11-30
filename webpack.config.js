@@ -4,7 +4,7 @@ const webpackCommonConfig = require('webpack-config-clay');
 
 module.exports = Object.assign(webpackCommonConfig, {
 	entry: {
-		app: './src/App.js',
+		app: './src/index.es.js',
 		vendor: ['react', 'react-dom']
 	},
 	output: Object.assign(webpackCommonConfig.output, {
@@ -22,8 +22,8 @@ module.exports = Object.assign(webpackCommonConfig, {
 			{
 				test: /\.(sass|scss)$/,
 				loader: [
-					"style-loader", 
-					"css-loader?importLoader=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]", 
+					"style-loader",
+					"css-loader",
 					"sass-loader"
 				]
 			}

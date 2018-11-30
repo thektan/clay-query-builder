@@ -1,21 +1,18 @@
-.criterion-container {
-	width: 100%;
-}
-
 .criterion-input {
 	margin-right: 16px;
 }
 
 .criterion-row {
-	border-left: 3px solid #4B9BFF;
-	display: flex;
 	padding: 8px 16px;
+	display: flex;
+	flex: 1;
+	border-left: 3px solid #4B9BFF;
 }
 
 .criteria-string {
-	color: #6B6C7E;
 	font-size: 14px;
-	font-weight: bold;
+	font-weight: 500;
+	color: #6B6C7E;
 }
 
 .delete-button {
@@ -23,14 +20,21 @@
 }
 
 .edit-container {
-	display: flex;
-	margin: 0;
 	padding: 0;
+	margin: 0;
+	display: flex;
 	width: 100%;
 }
 
 .editing {
 	background-color: transparent;
+}
+
+.read-only-container {
+	padding: 0;
+	margin: 0;
+	display: flex;
+	width: 100%;
 }
 
 .operator-input {
@@ -39,13 +43,6 @@
 }
 
 .property-string, .value-string {
+	font-weight: 700;
 	color: #272833;
-	font-weight: bolder;
-}
-
-.read-only-container {
-	display: flex;
-	margin: 0;
-	padding: 0;
-	width: 100%;
 }
