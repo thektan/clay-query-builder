@@ -8,13 +8,13 @@ class ClayCriteriaSidebarItem extends Component {
 	render() {
 		const {
 			connectDragSource,
-			isDragging,
+			dragging,
 			label,
 			type
 		} = this.props;
 
 		return connectDragSource(
-			<li className={`criteria-sidebar-item-root ${isDragging ? 'dragging' : ''}`}>
+			<li className={`criteria-sidebar-item-root ${dragging ? 'dragging' : ''}`}>
 				<span className="inline-item">
 					<ClayIcon iconName="drag" />
 				</span>
@@ -34,20 +34,20 @@ class ClayCriteriaSidebarItem extends Component {
 		let returnValue;
 
 		switch (type) {
-			case 'boolean':
-				returnValue = 'text';
-				break;
-			case 'date':
-				returnValue = 'date';
-				break;
-			case 'number':
-				returnValue = 'number';
-				break;
-			case 'string':
-				returnValue = 'text';
-				break;
-			default:
-				returnValue = 'text';
+		case 'boolean':
+			returnValue = 'text';
+			break;
+		case 'date':
+			returnValue = 'date';
+			break;
+		case 'number':
+			returnValue = 'number';
+			break;
+		case 'string':
+			returnValue = 'text';
+			break;
+		default:
+			returnValue = 'text';
 		}
 
 		return returnValue;
@@ -56,7 +56,7 @@ class ClayCriteriaSidebarItem extends Component {
 
 const DND_PROPS = {
 	connectDragSource: PropTypes.func,
-	isDragging: PropTypes.bool
+	dragging: PropTypes.bool
 };
 
 ClayCriteriaSidebarItem.propTypes = {
@@ -77,6 +77,6 @@ export default dragSource(
 	propertySource,
 	(connect, monitor) => ({
 		connectDragSource: connect.dragSource(),
-		isDragging: monitor.isDragging()
+		dragging: monitor.isDragging()
 	})
 )(ClayCriteriaSidebarItem);

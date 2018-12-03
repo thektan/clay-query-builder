@@ -14,13 +14,14 @@ class ClayCriteriaSidebar extends Component {
 
 				<ul className="properties-list">
 					{properties.map(
-						({label, name, type}, index) =>
+						({label, name, type}, index) => (
 							<ClayCriteriaSidebarItem
 								key={index}
 								label={label}
 								name={name}
 								type={type}
 							/>
+						)
 					)}
 				</ul>
 			</div>
