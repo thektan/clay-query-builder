@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup.es';
 import ClayCriteriaSidebar from './ClayCriteriaSidebar.es';
-import ClayButton from './ClayButton.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import {Liferay} from './utils/language';
+import ClayToggle from './ClayToggle.es';
 
 class ClayCriteriaBuilder extends React.Component {
 	constructor(props) {
@@ -27,9 +27,11 @@ class ClayCriteriaBuilder extends React.Component {
 			<div className="criteria-builder-root">
 				<div className="criteria-builder-section-main">
 					<div className="criteria-builder-toolbar">
-						<ClayButton
-							label={Liferay.Language.get('edit')}
-							onClick={this._handleToggleEdit}
+						<ClayToggle
+							checked={editing}
+							iconOff="pencil"
+							iconOn="pencil"
+							onChange={this._handleToggleEdit}
 						/>
 					</div>
 
@@ -123,9 +125,7 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	_handleToggleEdit = event => {
-		event.preventDefault();
-
+	_handleToggleEdit = () => {
 		this.setState(
 			{
 				editing: !this.state.editing
