@@ -39,7 +39,7 @@
 	"scripts": {
 		"build": "webpack --mode development",
 		"checkFormat": "npm run csf",
-		"csf": "csf src/**/*.js",
+		"csf": "csf src/**/*.es.js",
 		"format": "npm run csf -- -i"
 	},
 	"author": "",
@@ -48,6 +48,8 @@
 		"odata-v4-parser": "^0.1.29",
 		"prop-types": "^15.6.2",
 		"react": "^16.6.3",
+		"react-dnd": "^7.0.0",
+		"react-dnd-html5-backend": "^7.0.0",
 		"react-dom": "^16.6.3"
 	},
 	"devDependencies": {

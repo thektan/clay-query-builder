@@ -2,6 +2,7 @@ import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaRow from './ClayCriteriaRow.es';
 import ClayButton from './ClayButton.es';
+import DropZone from './DropZone.es';
 
 function insertAtIndex(item, list, index) {
 	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
@@ -62,13 +63,10 @@ class ClayCriteriaGroup extends React.Component {
 										/>
 									)}
 
-									{editing &&
-										<ClayButton
-											className="btn btn-secondary btn-monospaced"
-											iconName="plus"
-											onClick={this._handleAddCriteria(index)}
-										/>
-									}
+									<DropZone
+										index={index}
+										onAddCriteria={this._handleAddCriteria}
+									/>
 								</div>
 							</div>
 						);
@@ -86,9 +84,7 @@ class ClayCriteriaGroup extends React.Component {
 		return conjunction ? conjunction.label : undefined;
 	}
 
-	_handleAddCriteria = index => event => {
-		event.preventDefault();
-
+	_handleAddCriteria = index => {
 		const {criteria, onChange, operators, properties} = this.props;
 
 		const emptyItem = {

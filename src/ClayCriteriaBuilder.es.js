@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ClayCriteriaGroup from './ClayCriteriaGroup.es';
+import ClayCriteriaSidebar from './ClayCriteriaSidebar.es';
 import ClayButton from './ClayButton.es';
+import {DragDropContext as dragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 import {Liferay} from './utils/language';
 
 class ClayCriteriaBuilder extends React.Component {
@@ -21,6 +25,8 @@ class ClayCriteriaBuilder extends React.Component {
 
 		return (
 			<div className="criteria-builder">
+				<ClayCriteriaSidebar properties={properties} title={Liferay.Language.get('properties')} />
+
 				<div className="criteria-builder-toolbar">
 					<ClayButton
 						label={Liferay.Language.get('edit')}
@@ -192,4 +198,4 @@ ClayCriteriaBuilder.defaultProps = {
 	readOnly: false
 };
 
-export default ClayCriteriaBuilder;
+export default dragDropContext(HTML5Backend)(ClayCriteriaBuilder);

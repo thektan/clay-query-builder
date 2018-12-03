@@ -1,0 +1,17 @@
+.criteria-sidebar-root {
+	.properties-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			align-items: center;
+			display: flex;
+			height: 40px;
+		}
+	}
+
+	.sidebar-header {
+		font-size: 1.125rem;
+	}
+}
