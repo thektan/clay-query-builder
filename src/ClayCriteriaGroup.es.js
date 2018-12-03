@@ -103,12 +103,12 @@ class ClayCriteriaGroup extends React.Component {
 		return conjunction ? conjunction.label : undefined;
 	}
 
-	_handleAddCriteria = index => {
-		const {criteria, onChange, operators, properties} = this.props;
+	_handleAddCriteria = (index, propertyName) => {
+		const {criteria, onChange, operators} = this.props;
 
 		const emptyItem = {
 			operatorName: operators[0].name,
-			propertyName: properties[0].name,
+			propertyName,
 			value: ''
 		};
 

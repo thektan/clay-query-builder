@@ -45,9 +45,9 @@ DropZone.propTypes = {
 
 const dropZoneTarget = {
 	drop(props, monitor) {
-		console.log('this was dropped', monitor.getItem());
+		const {name} = monitor.getItem();
 
-		props.onAddCriteria(props.index);
+		props.onAddCriteria(props.index, name);
 	}
 };
 
