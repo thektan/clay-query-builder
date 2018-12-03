@@ -14,14 +14,43 @@ class ClayCriteriaSidebarItem extends Component {
 		} = this.props;
 
 		return connectDragSource(
-			<li>
-				<ClayIcon iconName="drag" />
+			<li className={`criteria-sidebar-item-root ${isDragging ? 'dragging' : ''}`}>
+				<span className="inline-item">
+					<ClayIcon iconName="drag" />
+				</span>
 
-				{type} - {label}
+				<span className="criteria-sidebar-item-type sticker sticker-secondary">
+					<span className="inline-item">
+						<ClayIcon iconName={this._getIcon(type)} />
+					</span>
+				</span>
 
-				{isDragging && 'dragging'}
+				{label}
 			</li>
 		);
+	}
+
+	_getIcon(type) {
+		let returnValue;
+
+		switch (type) {
+			case 'boolean':
+				returnValue = 'text';
+				break;
+			case 'date':
+				returnValue = 'date';
+				break;
+			case 'number':
+				returnValue = 'number';
+				break;
+			case 'string':
+				returnValue = 'text';
+				break;
+			default:
+				returnValue = 'text';
+		}
+
+		return returnValue;
 	}
 }
 
