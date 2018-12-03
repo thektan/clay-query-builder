@@ -12,7 +12,7 @@ class DropZone extends Component {
 		const {
 			before,
 			connectDropTarget,
-			over
+			hover
 		} = this.props;
 
 		return (
@@ -21,7 +21,7 @@ class DropZone extends Component {
 					<div
 						className={`drop-zone-target ${before && 'drop-zone-target-before'}`}
 					>
-						{over &&
+						{hover &&
 							<div className="drop-zone-indicator" />
 						}
 					</div>
@@ -33,7 +33,7 @@ class DropZone extends Component {
 
 const DND_PROPS = {
 	connectDropTarget: PropTypes.func,
-	over: PropTypes.bool
+	hover: PropTypes.bool
 };
 
 DropZone.propTypes = {
@@ -56,6 +56,6 @@ export default dropTarget(
 	dropZoneTarget,
 	(connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
-		over: monitor.isOver()
+		hover: monitor.isOver()
 	})
 )(DropZone);
