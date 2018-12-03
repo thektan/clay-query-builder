@@ -145,7 +145,7 @@ class ClayCriteriaBuilder extends React.Component {
 }
 
 const CRITERIA_GROUP_SHAPE = {
-	conjunctionId: PropTypes.string,
+	conjunctionName: PropTypes.string,
 	items: PropTypes.array
 };
 
