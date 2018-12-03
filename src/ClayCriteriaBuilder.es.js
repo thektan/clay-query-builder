@@ -24,37 +24,44 @@ class ClayCriteriaBuilder extends React.Component {
 		const {editing} = this.state;
 
 		return (
-			<div className="criteria-builder">
-				<ClayCriteriaSidebar properties={properties} title={Liferay.Language.get('properties')} />
+			<div className="criteria-builder-root">
+				<div className="criteria-builder-section-main">
+					<div className="criteria-builder-toolbar">
+						<ClayButton
+							label={Liferay.Language.get('edit')}
+							onClick={this._handleToggleEdit}
+						/>
+					</div>
 
-				<div className="criteria-builder-toolbar">
-					<ClayButton
-						label={Liferay.Language.get('edit')}
-						onClick={this._handleToggleEdit}
-					/>
+					{this._isCriteriaEmpty() ? (
+						<ClayCriteriaGroup
+							conjunctions={conjunctions}
+							criteria={criteria}
+							criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
+								operators
+							)}
+							editing={editing}
+							onChange={this._updateCriteria}
+							operators={operators}
+							properties={properties}
+							root
+						/>
+					) : (
+						<div
+							className="empty-state"
+							onClick={this._handleNewCriteria}
+						>
+							{Liferay.Language.get('click-to-start-editing')}
+						</div>
+					)}
 				</div>
 
-				{this._isCriteriaEmpty() ? (
-					<ClayCriteriaGroup
-						conjunctions={conjunctions}
-						criteria={criteria}
-						criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
-							operators
-						)}
-						editing={editing}
-						onChange={this._updateCriteria}
-						operators={operators}
+				<div className="criteria-builder-section-sidebar">
+					<ClayCriteriaSidebar
 						properties={properties}
-						root
+						title={Liferay.Language.get('properties')}
 					/>
-				) : (
-					<div
-						className="empty-state"
-						onClick={this._handleNewCriteria}
-					>
-						{Liferay.Language.get('click-to-start-editing')}
-					</div>
-				)}
+				</div>
 			</div>
 		);
 	}

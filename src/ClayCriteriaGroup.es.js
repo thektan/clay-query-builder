@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {PropTypes} from 'prop-types';
 import ClayCriteriaRow from './ClayCriteriaRow.es';
 import ClayButton from './ClayButton.es';
@@ -24,19 +24,38 @@ class ClayCriteriaGroup extends React.Component {
 			<div
 				className={root ? 'root-criteria-group' : ' criteria-group'}
 			>
+				<DropZone
+					before
+					index={0}
+					onAddCriteria={this._handleAddCriteria}
+				/>
+
 				{criteria.items && criteria.items.map(
 					(criterion, index) => {
 						return (
 							<div className="criterion" key={index}>
 								{index != 0 && (
-									<ClayButton
-										className="btn-sm btn btn-secondary conjunction"
-										label={this._getConjunctionLabel(
-											criteria.conjunctionName,
-											conjunctions
-										)}
-										onClick={this._handleConjunctionClick}
-									/>
+									<Fragment>
+										<DropZone
+											index={index}
+											onAddCriteria={this._handleAddCriteria}
+										/>
+
+										<ClayButton
+											className="btn-sm btn btn-secondary conjunction"
+											label={this._getConjunctionLabel(
+												criteria.conjunctionName,
+												conjunctions
+											)}
+											onClick={this._handleConjunctionClick}
+										/>
+
+										<DropZone
+											before
+											index={index}
+											onAddCriteria={this._handleAddCriteria}
+										/>
+									</Fragment>
 								)}
 
 								<div className="criterion-container">
@@ -62,12 +81,12 @@ class ClayCriteriaGroup extends React.Component {
 											root={root}
 										/>
 									)}
-
-									<DropZone
-										index={index}
-										onAddCriteria={this._handleAddCriteria}
-									/>
 								</div>
+
+								<DropZone
+									index={index + 1}
+									onAddCriteria={this._handleAddCriteria}
+								/>
 							</div>
 						);
 					}
@@ -97,7 +116,7 @@ class ClayCriteriaGroup extends React.Component {
 			Object.assign(
 				criteria,
 				{
-					items: insertAtIndex(emptyItem, criteria.items, index + 1)
+					items: insertAtIndex(emptyItem, criteria.items, index)
 				}
 			)
 		);

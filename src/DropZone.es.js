@@ -4,15 +4,28 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from './utils/drag-types';
 
 class DropZone extends Component {
+	static state = {
+		before: false
+	};
+
 	render() {
 		const {
+			before,
 			connectDropTarget,
 			isOver
 		} = this.props;
 
-		return connectDropTarget(
-			<div>
-				{`DROP IT LIKE IT'S HOT`} {isOver && `IT'S OVER`}
+		return (
+			<div className="drop-zone-root">
+				{connectDropTarget(
+					<div
+						className={`drop-zone-target ${before && 'drop-zone-target-before'}`}
+					>
+						{isOver &&
+							<div className="drop-zone-indicator" />
+						}
+					</div>
+				)}
 			</div>
 		);
 	}
@@ -25,6 +38,7 @@ const DND_PROPS = {
 
 DropZone.propTypes = {
 	...DND_PROPS,
+	before: PropTypes.bool,
 	index: PropTypes.number,
 	onAddCriteria: PropTypes.func
 };
@@ -33,7 +47,7 @@ const dropZoneTarget = {
 	drop(props, monitor) {
 		console.log('this was dropped', monitor.getItem());
 
-		// props.onAddCriteria(props.index);
+		props.onAddCriteria(props.index);
 	}
 };
 

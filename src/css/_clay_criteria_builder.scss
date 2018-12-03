@@ -1,21 +1,30 @@
-.criteria-builder {
-	max-width: 1280px;
-}
-
-.criteria-builder-toolbar {
+.criteria-builder-root {
 	display: flex;
-	justify-content: flex-end;
-	margin-bottom: 16px;
-	width: 100%;
-}
+	max-width: 1280px;
 
-.empty-state {
-	background-color: #F1F2F5;
-	border: 1px solid #E7E7ED;
-	border-left: 3px solid #4B9BFF;
-	border-radius: 4px;
-	color: #6B6C7E;
-	cursor: pointer;
-	font-weight: 600;
-	padding: 16px 32px;
+	.criteria-builder-section-main {
+		flex: 1;
+	}
+
+	.criteria-builder-section-sidebar {
+		width: 380px;
+	}
+
+	.criteria-builder-toolbar {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 16px;
+		width: 100%;
+	}
+
+	.empty-state {
+		background-color: #F1F2F5;
+		border: 1px solid #E7E7ED;
+		border-left: 3px solid #4B9BFF;
+		border-radius: 4px;
+		color: #6B6C7E;
+		cursor: pointer;
+		font-weight: 600;
+		padding: 16px 32px;
+	}
 }
