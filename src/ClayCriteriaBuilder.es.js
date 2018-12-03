@@ -166,7 +166,7 @@ ClayCriteriaBuilder.propTypes = {
 	),
 	criteria: PropTypes.shape(
 		{
-			conjunctionId: PropTypes.string,
+			conjunctionName: PropTypes.string,
 			items: PropTypes.arrayOf(
 				PropTypes.oneOfType(
 					[
