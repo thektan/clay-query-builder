@@ -11,7 +11,7 @@ class ClayIcon extends React.Component {
 		return (
 			<svg
 				aria-hidden="true"
-				className={`lexicon-icon ${className}`}
+				className={`lexicon-icon lexicon-icon-${iconName} ${className ? className : ''}`}
 				viewBox="0 0 512 512"
 			>
 				<use xlinkHref={`${this.context.spriteMapPath}#${iconName}`} />
