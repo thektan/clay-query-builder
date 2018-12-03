@@ -22,7 +22,7 @@ class ClayCriteriaGroup extends React.Component {
 
 		return (
 			<div
-				className={root ? 'root-criteria-group' : ' criteria-group'}
+				className={`criteria-group-root ${root ? '' : 'criteria-group-item'}`}
 			>
 				<DropZone
 					before
@@ -33,7 +33,7 @@ class ClayCriteriaGroup extends React.Component {
 				{criteria.items && criteria.items.map(
 					(criterion, index) => {
 						return (
-							<div className="criterion" key={index}>
+							<Fragment key={index}>
 								{index != 0 && (
 									<Fragment>
 										<DropZone
@@ -58,7 +58,7 @@ class ClayCriteriaGroup extends React.Component {
 									</Fragment>
 								)}
 
-								<div className="criterion-container">
+								<div className="criterion">
 									{criterion.items ? (
 										<ClayCriteriaGroup
 											conjunctions={conjunctions}
@@ -81,13 +81,13 @@ class ClayCriteriaGroup extends React.Component {
 											root={root}
 										/>
 									)}
-								</div>
 
-								<DropZone
-									index={index + 1}
-									onAddCriteria={this._handleAddCriteria}
-								/>
-							</div>
+									<DropZone
+										index={index + 1}
+										onAddCriteria={this._handleAddCriteria}
+									/>
+								</div>
+							</Fragment>
 						);
 					}
 				)}

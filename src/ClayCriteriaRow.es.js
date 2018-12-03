@@ -2,6 +2,8 @@ import React from 'react';
 import {PropTypes} from 'prop-types';
 import ClayButton from './ClayButton.es';
 import ClaySelect from './ClaySelect.es';
+import {DropTarget as dropTarget} from 'react-dnd';
+import {DragTypes} from './utils/drag-types';
 
 class ClayCriteriaRow extends React.Component {
 	constructor(props) {
@@ -16,8 +18,10 @@ class ClayCriteriaRow extends React.Component {
 
 	render() {
 		const {
+			connectDropTarget,
 			criterion,
 			editing,
+			hover,
 			operators,
 			properties
 		} = this.props;
@@ -32,9 +36,9 @@ class ClayCriteriaRow extends React.Component {
 			criterion.operatorName
 		);
 
-		return (
+		return connectDropTarget(
 			<div
-				className={`criterion-row ${editing ? 'editing' : ''}`}
+				className={`criterion-row-root ${hover ? 'dnd-hover' : ''}`}
 			>
 				{editing ? (
 					<div className="edit-container">
@@ -138,7 +142,13 @@ class ClayCriteriaRow extends React.Component {
 	};
 }
 
+const DND_PROPS = {
+	connectDropTarget: PropTypes.func,
+	hover: PropTypes.bool
+};
+
 ClayCriteriaRow.propTypes = {
+	...DND_PROPS,
 	conjunctions: PropTypes.array,
 	criteriaTypes: PropTypes.object,
 	criterion: PropTypes.object,
@@ -154,4 +164,32 @@ ClayCriteriaRow.defaultProps = {
 	root: false
 };
 
-export default ClayCriteriaRow;
+const dropZoneTarget = {
+	drop(props, monitor) {
+		const {criterion, onChange, operators} = props;
+
+		const {name} = monitor.getItem();
+
+		const newCriterion = {
+			operatorName: operators[0].name,
+			propertyName: name,
+			value: ''
+		};
+
+		const newGroup = {
+			conjunctionName: 'and',
+			items: [criterion, newCriterion]
+		};
+
+		onChange(newGroup);
+	}
+};
+
+export default dropTarget(
+	DragTypes.PROPERTY,
+	dropZoneTarget,
+	(connect, monitor) => ({
+		connectDropTarget: connect.dropTarget(),
+		hover: monitor.isOver()
+	})
+)(ClayCriteriaRow);

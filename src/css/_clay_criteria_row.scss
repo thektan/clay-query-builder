@@ -1,48 +1,49 @@
-.criterion-input {
-	margin-right: 16px;
-}
-
-.criterion-row {
+.criterion-row-root {
+	border: 2px solid transparent;
+	border-radius: 4px;
 	padding: 8px 16px;
 	display: flex;
 	flex: 1;
-	border-left: 3px solid #4B9BFF;
-}
 
-.criteria-string {
-	font-size: 14px;
-	font-weight: 500;
-	color: #6B6C7E;
-}
+	&.dnd-hover {
+		border: 2px solid #0B5FFF;
+	}
 
-.delete-button {
-	flex-shrink: 0;
-}
+	.edit-container {
+		padding: 0;
+		margin: 0;
+		display: flex;
+		width: 100%;
 
-.edit-container {
-	padding: 0;
-	margin: 0;
-	display: flex;
-	width: 100%;
-}
+		.criterion-input {
+			margin-right: 16px;
+		}
 
-.editing {
-	background-color: transparent;
-}
+		.operator-input {
+			flex-shrink: 0;
+			width: 240px;
+		}
 
-.read-only-container {
-	padding: 0;
-	margin: 0;
-	display: flex;
-	width: 100%;
-}
+		.delete-button {
+			flex-shrink: 0;
+		}
+	}
 
-.operator-input {
-	flex-shrink: 0;
-	width: 240px;
-}
+	.read-only-container {
+		padding: 0;
+		margin: 0;
+		display: flex;
+		width: 100%;
 
-.property-string, .value-string {
-	font-weight: 700;
-	color: #272833;
+		.criteria-string {
+			font-size: 14px;
+			font-weight: 500;
+			color: #6B6C7E;
+		}
+
+		.property-string, .value-string {
+			font-weight: 700;
+			color: #272833;
+		}
+	}
 }

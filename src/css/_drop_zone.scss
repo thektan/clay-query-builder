@@ -8,14 +8,14 @@
 		position: absolute;
 		width: 100%;
 
+		.drop-zone-indicator {
+			background-color: #0B5FFF;
+			height: 2px;
+			width: 100%;
+		}
+
 		&.drop-zone-target-before {
 			top: -16px;
 		}
-	}
-
-	.drop-zone-indicator {
-		background-color: #80ACFF;
-		height: 2px;
-		width: 100%;
 	}
 }

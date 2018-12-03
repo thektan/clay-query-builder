@@ -4,10 +4,6 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from './utils/drag-types';
 
 class DropZone extends Component {
-	static state = {
-		before: false
-	};
-
 	render() {
 		const {
 			before,
@@ -19,7 +15,7 @@ class DropZone extends Component {
 			<div className="drop-zone-root">
 				{connectDropTarget(
 					<div
-						className={`drop-zone-target ${before && 'drop-zone-target-before'}`}
+						className={`drop-zone-target ${before ? 'drop-zone-target-before' : ''}`}
 					>
 						{hover &&
 							<div className="drop-zone-indicator" />
