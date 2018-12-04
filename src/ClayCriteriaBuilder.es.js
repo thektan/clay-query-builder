@@ -36,6 +36,13 @@ class ClayCriteriaBuilder extends React.Component {
 					</div>
 
 					{this._isCriteriaEmpty() ? (
+						<div
+							className="empty-state"
+							onClick={this._handleNewCriteria}
+						>
+							{Liferay.Language.get('click-to-start-editing')}
+						</div>
+					) : (
 						<ClayCriteriaGroup
 							conjunctions={conjunctions}
 							criteria={criteria}
@@ -48,13 +55,6 @@ class ClayCriteriaBuilder extends React.Component {
 							properties={properties}
 							root
 						/>
-					) : (
-						<div
-							className="empty-state"
-							onClick={this._handleNewCriteria}
-						>
-							{Liferay.Language.get('click-to-start-editing')}
-						</div>
 					)}
 				</div>
 
@@ -88,24 +88,57 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	_cleanCriteria(criterion) {
-		const test = criterion
+	/**
+	 * Cleans the criteria by performing the following:
+	 * - Remove any groups with no items.
+	 * - Flatten groups that directly contain a single group.
+	 * - Flatten groups that contain a single criterion.
+	 * @param {array} criteriaItems A list of criterion and criteria groups
+	 * to clean.
+	 */
+	_cleanCriteriaMapItems(criteriaItems, root) {
+		return criteriaItems
+			// Remove groups with no items.
 			.filter(
 				({items}) => (items ? items.length : true)
 			)
 			.map(
-				item =>
-					(item.items ?
-						Object.assign(
-							item,
-							{
-								items: this._cleanCriteria(item.items)
-							}
-						) :
-						item)
-			);
+				item => {
+					if (item.items) {
+						// If the item is a group.
+						if (item.items.length === 1) {
+							// If the group only has 1 item.
+							const soloItem = item.items[0];
 
-		return test;
+							if (soloItem.items) {
+								// Flatten group that contain a single group.
+								return (
+									{
+										conjunctionName: soloItem.conjunctionName,
+										items: this._cleanCriteriaMapItems(soloItem.items)
+									}
+								);
+							}
+							else {
+								// Flatten non-root group that contain a single criterion.
+								return root ? item : soloItem;
+							}
+						}
+						else {
+							// Recursively clean the nested groups.
+							return Object.assign(
+								item,
+								{
+									items: this._cleanCriteriaMapItems(item.items)
+								}
+							);
+						}
+					}
+					else {
+						return item;
+					}
+				}
+			);
 	}
 
 	_handleNewCriteria = () => {
@@ -136,11 +169,11 @@ class ClayCriteriaBuilder extends React.Component {
 	_isCriteriaEmpty = () => {
 		const {criteria} = this.props;
 
-		return criteria ? criteria.items.length : false;
+		return criteria ? !criteria.items.length : true;
 	}
 
 	_updateCriteria = newCriteria => {
-		this.props.onChange(this._cleanCriteria([newCriteria]).pop());
+		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
 	};
 }
 

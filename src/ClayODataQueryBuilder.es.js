@@ -91,37 +91,39 @@ const addNewGroup = (queryAST, prevConjunction) => ({
 const buildQueryString = (queryItems, queryConjunction) => {
 	let queryString = '';
 
-	queryItems.forEach(
-		(item, index) => {
-			const {
-				conjunctionName,
-				items,
-				operatorName,
-				propertyName,
-				value
-			} = item;
+	queryItems
+		.filter(Boolean)
+		.forEach(
+			(item, index) => {
+				const {
+					conjunctionName,
+					items,
+					operatorName,
+					propertyName,
+					value
+				} = item;
 
-			if (index > 0) {
-				queryString = queryString.concat(` ${queryConjunction} `);
-			}
+				if (index > 0) {
+					queryString = queryString.concat(` ${queryConjunction} `);
+				}
 
-			if (conjunctionName) {
-				queryString = queryString.concat(
-					`(${buildQueryString(items, conjunctionName)})`
-				);
+				if (conjunctionName) {
+					queryString = queryString.concat(
+						`(${buildQueryString(items, conjunctionName)})`
+					);
+				}
+				else if (RELATIONAL_OPERATORS.includes(operatorName)) {
+					queryString = queryString.concat(
+						`${propertyName} ${operatorName} '${value}'`
+					);
+				}
+				else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
+					queryString = queryString.concat(
+						`${operatorName} (${propertyName}, '${value}')`
+					);
+				}
 			}
-			else if (RELATIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`${propertyName} ${operatorName} '${value}'`
-				);
-			}
-			else if (FUNCTIONAL_OPERATORS.includes(operatorName)) {
-				queryString = queryString.concat(
-					`${operatorName} (${propertyName}, '${value}')`
-				);
-			}
-		}
-	);
+		);
 
 	return queryString;
 };
