@@ -1,4 +1,7 @@
 .criteria-group-root {
+	border-radius: 4px;
+	border: 1px #CDCED9 solid;
+	box-shadow: inset 0 0 10px 1px rgba(28, 28, 28, 0.1);
 	width: 100%;
 
 	.criterion {
@@ -11,9 +14,11 @@
 	}
 
 	&.criteria-group-item {
-		border-radius: 4px;
-		border: 1px #CDCED9 solid;
-		box-shadow: inset 0 0 10px 1px rgba(28, 28, 28, 0.1);
 		padding: 16px;
+	}
+
+	&.criteria-group-item-root {
+		border-left: 3px solid #4B9BFF;
+		padding: 8px 8px 8px 5px;
 	}
 }

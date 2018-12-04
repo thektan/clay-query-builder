@@ -35,27 +35,18 @@ class ClayCriteriaBuilder extends React.Component {
 						/>
 					</div>
 
-					{this._isCriteriaEmpty() ? (
-						<div
-							className="empty-state"
-							onClick={this._handleNewCriteria}
-						>
-							{Liferay.Language.get('click-to-start-editing')}
-						</div>
-					) : (
-						<ClayCriteriaGroup
-							conjunctions={conjunctions}
-							criteria={criteria}
-							criteriaTypes={ClayCriteriaBuilder._buildCriteriaTypes(
-								operators
-							)}
-							editing={editing}
-							onChange={this._updateCriteria}
-							operators={operators}
-							properties={properties}
-							root
-						/>
-					)}
+					<ClayCriteriaGroup
+						conjunctions={conjunctions}
+						criteria={criteria}
+						criteriaTypes={this._buildCriteriaTypes(
+							operators
+						)}
+						editing={editing}
+						onChange={this._updateCriteria}
+						operators={operators}
+						properties={properties}
+						root
+					/>
 				</div>
 
 				<div className="criteria-builder-section-sidebar">
@@ -68,7 +59,7 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	static _buildCriteriaTypes(operators) {
+	_buildCriteriaTypes(operators) {
 		return operators.reduce(
 			(criteriaTypes, {supportedTypes}) => {
 				supportedTypes.forEach(
@@ -165,12 +156,6 @@ class ClayCriteriaBuilder extends React.Component {
 			}
 		);
 	};
-
-	_isCriteriaEmpty = () => {
-		const {criteria} = this.props;
-
-		return criteria ? !criteria.items.length : true;
-	}
 
 	_updateCriteria = newCriteria => {
 		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());

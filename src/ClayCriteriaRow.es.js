@@ -6,16 +6,6 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from './utils/drag-types';
 
 class ClayCriteriaRow extends React.Component {
-	constructor(props) {
-		super(props);
-
-		const {criterion, root} = props;
-
-		if (root && !criterion.items) {
-			this._createPlaceholderGroup(criterion);
-		}
-	}
-
 	render() {
 		const {
 			connectDropTarget,
@@ -105,17 +95,6 @@ class ClayCriteriaRow extends React.Component {
 					</div>
 				)}
 			</div>
-		);
-	}
-
-	_createPlaceholderGroup = criterion => {
-		const {conjunctions, onChange} = this.props;
-
-		onChange(
-			{
-				conjunctionName: conjunctions[0].name,
-				items: [Object.assign({}, criterion)]
-			}
 		);
 	}
 

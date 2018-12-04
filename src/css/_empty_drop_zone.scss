@@ -1,0 +1,20 @@
+.empty-drop-zone-root {
+	.empty-drop-zone-target {
+		.empty-drop-zone-indicator {
+			background-color: #0B5FFF;
+			height: 2px;
+			visibility: hidden;
+			width: 100%;
+		}
+
+		&.dnd-hover {
+			.empty-drop-zone-help-message {
+				visibility: hidden;
+			}
+
+			.empty-drop-zone-indicator {
+				visibility: visible;
+			}
+		}
+	}
+}

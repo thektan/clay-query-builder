@@ -3,6 +3,7 @@ import {PropTypes} from 'prop-types';
 import ClayCriteriaRow from './ClayCriteriaRow.es';
 import ClayButton from './ClayButton.es';
 import DropZone from './DropZone.es';
+import EmptyDropZone from './EmptyDropZone.es';
 
 function insertAtIndex(item, list, index) {
 	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
@@ -22,75 +23,83 @@ class ClayCriteriaGroup extends React.Component {
 
 		return (
 			<div
-				className={`criteria-group-root ${root ? '' : 'criteria-group-item'}`}
+				className={`criteria-group-root ${root ? 'criteria-group-item-root' : 'criteria-group-item'}`}
 			>
-				<DropZone
-					before
-					index={0}
-					onAddCriteria={this._handleAddCriteria}
-				/>
+				{this._isCriteriaEmpty() ?
+					<EmptyDropZone
+						index={0}
+						onAddCriteria={this._handleAddCriteria}
+					/> :
+					<Fragment>
+						<DropZone
+							before
+							index={0}
+							onAddCriteria={this._handleAddCriteria}
+						/>
 
-				{criteria.items && criteria.items.map(
-					(criterion, index) => {
-						return (
-							<Fragment key={index}>
-								{index != 0 && (
-									<Fragment>
-										<DropZone
-											index={index}
-											onAddCriteria={this._handleAddCriteria}
-										/>
+						{criteria.items && criteria.items.map(
+							(criterion, index) => {
+								return (
+									<Fragment key={index}>
+										{index != 0 && (
+											<Fragment>
+												<DropZone
+													index={index}
+													onAddCriteria={this._handleAddCriteria}
+												/>
 
-										<ClayButton
-											className="btn-sm btn btn-secondary conjunction"
-											label={this._getConjunctionLabel(
-												criteria.conjunctionName,
-												conjunctions
+												<ClayButton
+													className="btn-sm btn btn-secondary conjunction"
+													label={this._getConjunctionLabel(
+														criteria.conjunctionName,
+														conjunctions
+													)}
+													onClick={this._handleConjunctionClick}
+												/>
+
+												<DropZone
+													before
+													index={index}
+													onAddCriteria={this._handleAddCriteria}
+												/>
+											</Fragment>
+										)}
+
+										<div className="criterion">
+											{criterion.items ? (
+												<ClayCriteriaGroup
+													conjunctions={conjunctions}
+													criteria={criterion}
+													criteriaTypes={criteriaTypes}
+													editing={editing}
+													onChange={this._updateCriteria(index, criterion)}
+													operators={operators}
+													properties={properties}
+												/>
+											) : (
+												<ClayCriteriaRow
+													conjunctions={conjunctions}
+													criteriaTypes={criteriaTypes}
+													criterion={criterion}
+													editing={editing}
+													onChange={this._updateCriterion(index)}
+													operators={operators}
+													properties={properties}
+													root={root}
+												/>
 											)}
-											onClick={this._handleConjunctionClick}
-										/>
 
-										<DropZone
-											before
-											index={index}
-											onAddCriteria={this._handleAddCriteria}
-										/>
+											<DropZone
+												index={index + 1}
+												onAddCriteria={this._handleAddCriteria}
+											/>
+										</div>
 									</Fragment>
-								)}
-
-								<div className="criterion">
-									{criterion.items ? (
-										<ClayCriteriaGroup
-											conjunctions={conjunctions}
-											criteria={criterion}
-											criteriaTypes={criteriaTypes}
-											editing={editing}
-											onChange={this._updateCriteria(index, criterion)}
-											operators={operators}
-											properties={properties}
-										/>
-									) : (
-										<ClayCriteriaRow
-											conjunctions={conjunctions}
-											criteriaTypes={criteriaTypes}
-											criterion={criterion}
-											editing={editing}
-											onChange={this._updateCriterion(index)}
-											operators={operators}
-											properties={properties}
-											root={root}
-										/>
-									)}
-
-									<DropZone
-										index={index + 1}
-										onAddCriteria={this._handleAddCriteria}
-									/>
-								</div>
-							</Fragment>
-						);
-					}
-				)}
+								);
+							}
+						)}
+					</Fragment>
+				}
 			</div>
 		);
 	}
@@ -103,23 +112,41 @@ class ClayCriteriaGroup extends React.Component {
 		return conjunction ? conjunction.label : undefined;
 	}
 
+	/**
+	 * Adds a new criterion in a group at the specified index. If the criteria
+	 * was previously empty and is being added to the root group, a new group
+	 * will be added as well.
+	 * @param {number} index The position the criterion will be inserted in.
+	 * @param {string} propertyName The property name that will be added.
+	 * @memberof ClayCriteriaGroup
+	 */
 	_handleAddCriteria = (index, propertyName) => {
-		const {criteria, onChange, operators} = this.props;
+		const {criteria, onChange, operators, root} = this.props;
 
-		const emptyItem = {
+		const newCriterion = {
 			operatorName: operators[0].name,
 			propertyName,
 			value: ''
 		};
 
-		onChange(
-			Object.assign(
-				criteria,
+		if (root && !criteria) {
+			onChange(
 				{
-					items: insertAtIndex(emptyItem, criteria.items, index)
+					conjunctionName: 'and',
+					items: [newCriterion]
 				}
-			)
-		);
+			);
+		}
+		else {
+			onChange(
+				Object.assign(
+					criteria,
+					{
+						items: insertAtIndex(newCriterion, criteria.items, index)
+					}
+				)
+			);
+		}
 	};
 
 	_handleConjunctionClick = event => {
@@ -143,6 +170,12 @@ class ClayCriteriaGroup extends React.Component {
 				}
 			)
 		);
+	};
+
+	_isCriteriaEmpty = () => {
+		const {criteria} = this.props;
+
+		return criteria ? !criteria.items.length : true;
 	};
 
 	_updateCriterion = index => newCriterion => {
@@ -181,8 +214,7 @@ ClayCriteriaGroup.propTypes = {
 	operators: PropTypes.array,
 	properties: PropTypes.array,
 	root: PropTypes.bool,
-	selectedConjunctionName: PropTypes.string,
-	spritemap: PropTypes.string
+	selectedConjunctionName: PropTypes.string
 };
 
 ClayCriteriaGroup.defaultProps = {
