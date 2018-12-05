@@ -19,7 +19,14 @@ class ClayCriteriaBuilder extends React.Component {
 	}
 
 	render() {
-		const {conjunctions, criteria, operators, properties} = this.props;
+		const {
+			criteria,
+			operators,
+			supportedConjunctions,
+			supportedOperators,
+			supportedProperties,
+			supportedPropertyTypes
+		} = this.props;
 
 		const {editing} = this.state;
 
@@ -36,22 +43,21 @@ class ClayCriteriaBuilder extends React.Component {
 					</div>
 
 					<ClayCriteriaGroup
-						conjunctions={conjunctions}
 						criteria={criteria}
-						criteriaTypes={this._buildCriteriaTypes(
-							operators
-						)}
 						editing={editing}
 						onChange={this._updateCriteria}
 						operators={operators}
-						properties={properties}
 						root
+						supportedConjunctions={supportedConjunctions}
+						supportedOperators={supportedOperators}
+						supportedProperties={supportedProperties}
+						supportedPropertyTypes={supportedPropertyTypes}
 					/>
 				</div>
 
 				<div className="criteria-builder-section-sidebar">
 					<ClayCriteriaSidebar
-						properties={properties}
+						supportedProperties={supportedProperties}
 						title={Liferay.Language.get('properties')}
 					/>
 				</div>
@@ -59,37 +65,16 @@ class ClayCriteriaBuilder extends React.Component {
 		);
 	}
 
-	_buildCriteriaTypes(operators) {
-		return operators.reduce(
-			(criteriaTypes, {supportedTypes}) => {
-				supportedTypes.forEach(
-					type => {
-						if (!criteriaTypes[type]) {
-							criteriaTypes[type] = operators.filter(
-								operator =>
-									operator.supportedTypes.includes(type)
-							);
-						}
-					}
-				);
-
-				return criteriaTypes;
-			},
-			new Map()
-		);
-	}
-
 	/**
-	 * Cleans the criteria by performing the following:
-	 * - Remove any groups with no items.
-	 * - Flatten groups that directly contain a single group.
-	 * - Flatten groups that contain a single criterion.
+	 * Cleans the criteria by performing the following in order:
+	 * 1. Remove any groups with no items.
+	 * 2. Flatten groups that directly contain a single group.
+	 * 3. Flatten groups that contain a single criterion.
 	 * @param {array} criteriaItems A list of criterion and criteria groups
 	 * to clean.
 	 */
 	_cleanCriteriaMapItems(criteriaItems, root) {
 		return criteriaItems
-			// Remove groups with no items.
 			.filter(
 				({items}) => (items ? items.length : true)
 			)
@@ -133,11 +118,11 @@ class ClayCriteriaBuilder extends React.Component {
 	}
 
 	_handleNewCriteria = () => {
-		const {onChange, operators, properties} = this.props;
+		const {onChange, supportedOperators, supportedProperties} = this.props;
 
 		const emptyItem = {
-			operatorName: operators[0].name,
-			propertyName: properties[0].name,
+			operatorName: supportedOperators[0].name,
+			propertyName: supportedProperties[0].name,
 			value: ''
 		};
 
@@ -174,14 +159,6 @@ const CRITERION_SHAPE = {
 };
 
 ClayCriteriaBuilder.propTypes = {
-	conjunctions: PropTypes.arrayOf(
-		PropTypes.shape(
-			{
-				label: PropTypes.string,
-				value: PropTypes.string
-			}
-		)
-	),
 	criteria: PropTypes.shape(
 		{
 			conjunctionName: PropTypes.string,
@@ -204,19 +181,27 @@ ClayCriteriaBuilder.propTypes = {
 			}
 		)
 	),
-	properties: PropTypes.arrayOf(
+	supportedConjunctions: PropTypes.arrayOf(
+		PropTypes.shape(
+			{
+				label: PropTypes.string,
+				name: PropTypes.string.isRequired
+			}
+		)
+	),
+	supportedOperators: PropTypes.array,
+	supportedProperties: PropTypes.arrayOf(
 		PropTypes.shape(
 			{
 				entityUrl: PropTypes.string,
 				label: PropTypes.string,
 				name: PropTypes.string.isRequired,
 				options: PropTypes.array,
-				type: PropTypes.string
+				type: PropTypes.string.isRequired
 			}
 		)
 	).isRequired,
-	readOnly: PropTypes.bool,
-	spritemap: PropTypes.string
+	supportedPropertyTypes: PropTypes.object
 };
 
 ClayCriteriaBuilder.defaultProps = {

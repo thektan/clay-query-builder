@@ -4,7 +4,7 @@ import ClayCriteriaSidebarItem from './ClayCriteriaSidebarItem.es';
 
 class ClayCriteriaSidebar extends Component {
 	render() {
-		const {properties, title} = this.props;
+		const {supportedProperties, title} = this.props;
 
 		return (
 			<div className="criteria-sidebar-root">
@@ -13,7 +13,7 @@ class ClayCriteriaSidebar extends Component {
 				</div>
 
 				<ul className="properties-list">
-					{properties.map(
+					{supportedProperties.map(
 						({label, name, type}, index) => (
 							<ClayCriteriaSidebarItem
 								key={index}
@@ -30,7 +30,7 @@ class ClayCriteriaSidebar extends Component {
 }
 
 ClayCriteriaSidebar.propTypes = {
-	properties: PropTypes.array,
+	supportedProperties: PropTypes.array,
 	title: PropTypes.string
 };
 

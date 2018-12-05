@@ -3,7 +3,7 @@ import {PropTypes} from 'prop-types';
 import ClayButton from './ClayButton.es';
 import ClaySelect from './ClaySelect.es';
 import {DropTarget as dropTarget} from 'react-dnd';
-import {DragTypes} from './utils/drag-types';
+import {DragTypes} from './utils/drag-types.es';
 
 class ClayCriteriaRow extends React.Component {
 	render() {
@@ -12,17 +12,17 @@ class ClayCriteriaRow extends React.Component {
 			criterion,
 			editing,
 			hover,
-			operators,
-			properties
+			supportedOperators,
+			supportedProperties
 		} = this.props;
 
 		const selectedProperty = this._getSelectedItem(
-			properties,
+			supportedProperties,
 			criterion.propertyName
 		);
 
 		const selectedOperator = this._getSelectedItem(
-			operators,
+			supportedOperators,
 			criterion.operatorName
 		);
 
@@ -38,7 +38,7 @@ class ClayCriteriaRow extends React.Component {
 							onChange={this._handleInputChange(
 								'propertyName'
 							)}
-							options={properties.map(
+							options={supportedProperties.map(
 								({label, name}) => ({
 									label,
 									value: name
@@ -53,7 +53,7 @@ class ClayCriteriaRow extends React.Component {
 							onChange={this._handleInputChange(
 								'operatorName'
 							)}
-							options={operators.map(
+							options={supportedOperators.map(
 								({label, name}) => ({
 									label,
 									value: name
@@ -128,29 +128,27 @@ const DND_PROPS = {
 
 ClayCriteriaRow.propTypes = {
 	...DND_PROPS,
-	conjunctions: PropTypes.array,
-	criteriaTypes: PropTypes.object,
 	criterion: PropTypes.object,
 	editing: PropTypes.bool,
 	onChange: PropTypes.func,
-	operators: PropTypes.array,
-	properties: PropTypes.array,
-	root: PropTypes.bool
+	supportedConjunctions: PropTypes.array,
+	supportedOperators: PropTypes.array,
+	supportedProperties: PropTypes.array,
+	supportedPropertyTypes: PropTypes.object
 };
 
 ClayCriteriaRow.defaultProps = {
 	editing: true,
-	root: false
 };
 
 const dropZoneTarget = {
 	drop(props, monitor) {
-		const {criterion, onChange, operators} = props;
+		const {criterion, onChange, supportedOperators} = props;
 
 		const {name} = monitor.getItem();
 
 		const newCriterion = {
-			operatorName: operators[0].name,
+			operatorName: supportedOperators[0].name,
 			propertyName: name,
 			value: ''
 		};

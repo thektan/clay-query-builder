@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ClayIcon from './ClayIcon.es';
 import {DragSource as dragSource} from 'react-dnd';
-import {DragTypes} from './utils/drag-types';
+import {DragTypes} from './utils/drag-types.es';
 
 class ClayCriteriaSidebarItem extends Component {
 	render() {
