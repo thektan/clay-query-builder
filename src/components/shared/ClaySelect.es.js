@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 
-class ClaySelect extends React.Component {
+class ClaySelect extends Component {
 	render() {
 		const {className, options, selected, ...otherProps} = this.props;
 

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ClayIcon from './ClayIcon.es';
+import ClayIcon from '../shared/ClayIcon.es';
 import {DragSource as dragSource} from 'react-dnd';
-import {DragTypes} from './utils/drag-types.es';
+import {DragTypes} from '../../utils/drag-types.es';
 
-class ClayCriteriaSidebarItem extends Component {
+class CriteriaSidebarItem extends Component {
 	render() {
 		const {
 			connectDragSource,
@@ -59,7 +59,7 @@ const DND_PROPS = {
 	dragging: PropTypes.bool
 };
 
-ClayCriteriaSidebarItem.propTypes = {
+CriteriaSidebarItem.propTypes = {
 	...DND_PROPS,
 	label: PropTypes.string,
 	name: PropTypes.string,
@@ -79,4 +79,4 @@ export default dragSource(
 		connectDragSource: connect.dragSource(),
 		dragging: monitor.isDragging()
 	})
-)(ClayCriteriaSidebarItem);
+)(CriteriaSidebarItem);

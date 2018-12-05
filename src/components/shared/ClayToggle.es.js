@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import ClayIcon from './ClayIcon.es';
 
-class ClayToggle extends React.Component {
+class ClayToggle extends Component {
 	render() {
 		const {
 			checked,

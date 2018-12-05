@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {DropTarget as dropTarget} from 'react-dnd';
-import {DragTypes} from './utils/drag-types.es';
-import {Liferay} from './utils/language';
-import ThemeContext from './ThemeContext.es';
+import {DragTypes} from '../../utils/drag-types.es';
+import ThemeContext from '../../ThemeContext.es';
+
+import {Liferay} from '../../utils/language';
 
 class EmptyDropZone extends Component {
 	static contextType = ThemeContext;

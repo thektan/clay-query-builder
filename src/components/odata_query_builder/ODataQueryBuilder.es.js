@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ClayCriteriaBuilder from './ClayCriteriaBuilder.es';
-import {Liferay} from './utils/language';
-import './libs/odata-parser.js';
-import {CONJUNCTIONS, RELATIONAL_OPERATORS} from './utils/constants.es';
-import {buildQueryString, translateQueryToCriteria} from './utils/odata.es';
+import CriteriaBuilder from '../criteria_builder/CriteriaBuilder.es';
+import {buildQueryString, translateQueryToCriteria} from '../../utils/odata.es';
+import {CONJUNCTIONS, RELATIONAL_OPERATORS} from '../../utils/constants.es';
+import '../../libs/odata-parser.js';
+
+import {Liferay} from '../../utils/language';
 
 const {AND, OR} = CONJUNCTIONS;
 const {EQ, GE, GT, LE, LT, NE} = RELATIONAL_OPERATORS;
@@ -54,7 +55,7 @@ const SUPPORTED_PROPERTY_TYPES = {
 	STRING: [EQ, NE]
 };
 
-class ClayODataQueryBuilder extends React.Component {
+class ODataQueryBuilder extends Component {
 	constructor(props) {
 		super(props);
 
@@ -77,7 +78,7 @@ class ClayODataQueryBuilder extends React.Component {
 		return (
 			<div className="clay-query-builder-root">
 				<div className="form-group">
-					<ClayCriteriaBuilder
+					<CriteriaBuilder
 						criteria={criteriaMap}
 						onChange={this._updateQuery}
 						supportedConjunctions={SUPPORTED_CONJUNCTIONS}
@@ -110,7 +111,7 @@ class ClayODataQueryBuilder extends React.Component {
 	};
 }
 
-ClayODataQueryBuilder.propTypes = {
+ODataQueryBuilder.propTypes = {
 	initialQuery: PropTypes.string,
 	inputId: PropTypes.string,
 	operators: PropTypes.array,
@@ -118,4 +119,4 @@ ClayODataQueryBuilder.propTypes = {
 	query: PropTypes.string
 };
 
-export default ClayODataQueryBuilder;
+export default ODataQueryBuilder;

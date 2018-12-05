@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import ClayToggle from '../shared/ClayToggle.es';
 import CriteriaGroup from './CriteriaGroup.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import {Liferay} from '../../utils/language';
-import ClayToggle from './ClayToggle.es';
 
-class ClayCriteriaBuilder extends React.Component {
+class CriteriaBuilder extends Component {
 	constructor(props) {
 		super(props);
 
@@ -79,13 +79,10 @@ class ClayCriteriaBuilder extends React.Component {
 			.map(
 				item => {
 					if (item.items) {
-						// If the item is a group.
 						if (item.items.length === 1) {
-							// If the group only has 1 item.
 							const soloItem = item.items[0];
 
 							if (soloItem.items) {
-								// Flatten group that contain a single group.
 								return (
 									{
 										conjunctionName: soloItem.conjunctionName,
@@ -94,12 +91,10 @@ class ClayCriteriaBuilder extends React.Component {
 								);
 							}
 							else {
-								// Flatten non-root group that contain a single criterion.
 								return root ? item : soloItem;
 							}
 						}
 						else {
-							// Recursively clean the nested groups.
 							return Object.assign(
 								item,
 								{
@@ -113,23 +108,6 @@ class ClayCriteriaBuilder extends React.Component {
 					}
 				}
 			);
-	}
-
-	_handleNewCriteria = () => {
-		const {onChange, supportedOperators, supportedProperties} = this.props;
-
-		const emptyItem = {
-			operatorName: supportedOperators[0].name,
-			propertyName: supportedProperties[0].name,
-			value: ''
-		};
-
-		onChange(
-			{
-				conjunctionName: 'and',
-				items: [emptyItem]
-			}
-		);
 	}
 
 	_handleToggleEdit = () => {
@@ -156,7 +134,7 @@ const CRITERION_SHAPE = {
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 };
 
-ClayCriteriaBuilder.propTypes = {
+CriteriaBuilder.propTypes = {
 	criteria: PropTypes.shape(
 		{
 			conjunctionName: PropTypes.string,
@@ -194,8 +172,8 @@ ClayCriteriaBuilder.propTypes = {
 	supportedPropertyTypes: PropTypes.object
 };
 
-ClayCriteriaBuilder.defaultProps = {
+CriteriaBuilder.defaultProps = {
 	readOnly: false
 };
 
-export default dragDropContext(HTML5Backend)(ClayCriteriaBuilder);
+export default dragDropContext(HTML5Backend)(CriteriaBuilder);

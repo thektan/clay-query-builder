@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ClayCriteriaSidebarItem from './ClayCriteriaSidebarItem.es';
+import CriteriaSidebarItem from './CriteriaSidebarItem.es';
 
-class ClayCriteriaSidebar extends Component {
+class CriteriaSidebar extends Component {
 	render() {
 		const {supportedProperties, title} = this.props;
 
@@ -15,7 +15,7 @@ class ClayCriteriaSidebar extends Component {
 				<ul className="properties-list">
 					{supportedProperties.map(
 						({label, name, type}, index) => (
-							<ClayCriteriaSidebarItem
+							<CriteriaSidebarItem
 								key={index}
 								label={label}
 								name={name}
@@ -29,9 +29,9 @@ class ClayCriteriaSidebar extends Component {
 	}
 }
 
-ClayCriteriaSidebar.propTypes = {
+CriteriaSidebar.propTypes = {
 	supportedProperties: PropTypes.array,
 	title: PropTypes.string
 };
 
-export default ClayCriteriaSidebar;
+export default CriteriaSidebar;

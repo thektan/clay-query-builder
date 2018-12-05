@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import ClayButton from './ClayButton.es';
-import ClaySelect from './ClaySelect.es';
+import ClayButton from '../shared/ClayButton.es';
+import ClaySelect from '../shared/ClaySelect.es';
 import {DropTarget as dropTarget} from 'react-dnd';
-import {DragTypes} from './utils/drag-types.es';
+import {DragTypes} from '../../utils/drag-types.es';
 
-class ClayCriteriaRow extends React.Component {
+class CriteriaRow extends Component {
 	render() {
 		const {
 			connectDropTarget,
@@ -126,7 +126,7 @@ const DND_PROPS = {
 	hover: PropTypes.bool
 };
 
-ClayCriteriaRow.propTypes = {
+CriteriaRow.propTypes = {
 	...DND_PROPS,
 	criterion: PropTypes.object,
 	editing: PropTypes.bool,
@@ -137,7 +137,7 @@ ClayCriteriaRow.propTypes = {
 	supportedPropertyTypes: PropTypes.object
 };
 
-ClayCriteriaRow.defaultProps = {
+CriteriaRow.defaultProps = {
 	editing: true,
 };
 
@@ -169,4 +169,4 @@ export default dropTarget(
 		connectDropTarget: connect.dropTarget(),
 		hover: monitor.isOver()
 	})
-)(ClayCriteriaRow);
+)(CriteriaRow);

@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import {PropTypes} from 'prop-types';
-import ClayCriteriaRow from './ClayCriteriaRow.es';
-import ClayButton from './ClayButton.es';
+import CriteriaRow from './CriteriaRow.es';
+import ClayButton from '../shared/ClayButton.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 
@@ -9,7 +9,7 @@ function insertAtIndex(item, list, index) {
 	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
 }
 
-class ClayCriteriaGroup extends React.Component {
+class CriteriaGroup extends Component {
 	render() {
 		const {
 			criteria,
@@ -67,7 +67,7 @@ class ClayCriteriaGroup extends React.Component {
 
 										<div className="criterion">
 											{criterion.items ? (
-												<ClayCriteriaGroup
+												<CriteriaGroup
 													criteria={criterion}
 													editing={editing}
 													onChange={this._updateCriteria(index, criterion)}
@@ -77,7 +77,7 @@ class ClayCriteriaGroup extends React.Component {
 													supportedPropertyTypes={supportedPropertyTypes}
 												/>
 											) : (
-												<ClayCriteriaRow
+												<CriteriaRow
 													criterion={criterion}
 													editing={editing}
 													onChange={this._updateCriterion(index)}
@@ -118,7 +118,7 @@ class ClayCriteriaGroup extends React.Component {
 	 * will be added as well.
 	 * @param {number} index The position the criterion will be inserted in.
 	 * @param {string} propertyName The property name that will be added.
-	 * @memberof ClayCriteriaGroup
+	 * @memberof CriteriaGroup
 	 */
 	_handleAddCriteria = (index, propertyName) => {
 		const {criteria, onChange, root, supportedOperators} = this.props;
@@ -205,7 +205,7 @@ class ClayCriteriaGroup extends React.Component {
 	};
 }
 
-ClayCriteriaGroup.propTypes = {
+CriteriaGroup.propTypes = {
 	criteria: PropTypes.object,
 	editing: PropTypes.bool,
 	onChange: PropTypes.func,
@@ -216,8 +216,8 @@ ClayCriteriaGroup.propTypes = {
 	supportedPropertyTypes: PropTypes.object
 };
 
-ClayCriteriaGroup.defaultProps = {
+CriteriaGroup.defaultProps = {
 	root: false
 };
 
-export default ClayCriteriaGroup;
+export default CriteriaGroup;

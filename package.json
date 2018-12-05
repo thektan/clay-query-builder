@@ -39,7 +39,7 @@
 	"scripts": {
 		"build": "webpack --mode development",
 		"checkFormat": "npm run csf",
-		"csf": "csf src/**/*.es.js",
+		"csf": "csf src/**/*.es.js src/**/**/*.es.js",
 		"format": "npm run csf -- -i"
 	},
 	"author": "",
