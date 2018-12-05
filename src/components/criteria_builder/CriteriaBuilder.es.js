@@ -8,7 +8,60 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import {Liferay} from '../../utils/language';
 
+const CRITERIA_GROUP_SHAPE = {
+	conjunctionName: PropTypes.string,
+	items: PropTypes.array
+};
+
+const CRITERION_SHAPE = {
+	operatorName: PropTypes.string,
+	propertyName: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+};
+
 class CriteriaBuilder extends Component {
+	static propTypes = {
+		criteria: PropTypes.shape(
+			{
+				conjunctionName: PropTypes.string,
+				items: PropTypes.arrayOf(
+					PropTypes.oneOfType(
+						[
+							PropTypes.shape(CRITERIA_GROUP_SHAPE),
+							PropTypes.shape(CRITERION_SHAPE)
+						]
+					)
+				)
+			}
+		),
+		onChange: PropTypes.func,
+		supportedConjunctions: PropTypes.arrayOf(
+			PropTypes.shape(
+				{
+					label: PropTypes.string,
+					name: PropTypes.string.isRequired
+				}
+			)
+		),
+		supportedOperators: PropTypes.array,
+		supportedProperties: PropTypes.arrayOf(
+			PropTypes.shape(
+				{
+					entityUrl: PropTypes.string,
+					label: PropTypes.string,
+					name: PropTypes.string.isRequired,
+					options: PropTypes.array,
+					type: PropTypes.string.isRequired
+				}
+			)
+		).isRequired,
+		supportedPropertyTypes: PropTypes.object
+	};
+
+	static defaultProps = {
+		readOnly: false
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -17,6 +70,64 @@ class CriteriaBuilder extends Component {
 			initialCriteria: this.props.criteria
 		};
 	}
+
+	/**
+	 * Cleans the criteria by performing the following:
+	 * 1. Remove any groups with no items.
+	 * 2. Flatten groups that directly contain a single group.
+	 * 3. Flatten groups that contain a single criterion.
+	 * @param {array} criteriaItems A list of criterion and criteria groups
+	 * to clean.
+	 */
+	_cleanCriteriaMapItems(criteriaItems, root) {
+		return criteriaItems
+			.filter(
+				({items}) => (items ? items.length : true)
+			)
+			.map(
+				item => {
+					let cleanedItem = item;
+
+					if (item.items) {
+						if (item.items.length === 1) {
+							const soloItem = item.items[0];
+
+							if (soloItem.items) {
+								cleanedItem = {
+									conjunctionName: soloItem.conjunctionName,
+									items: this._cleanCriteriaMapItems(soloItem.items)
+								};
+							}
+							else {
+								cleanedItem = root ? item : soloItem;
+							}
+						}
+						else {
+							cleanedItem = Object.assign(
+								item,
+								{
+									items: this._cleanCriteriaMapItems(item.items)
+								}
+							);
+						}
+					}
+
+					return cleanedItem;
+				}
+			);
+	}
+
+	_handleToggleEdit = () => {
+		this.setState(
+			{
+				editing: !this.state.editing
+			}
+		);
+	};
+
+	_updateCriteria = newCriteria => {
+		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
+	};
 
 	render() {
 		const {
@@ -62,118 +173,6 @@ class CriteriaBuilder extends Component {
 			</div>
 		);
 	}
-
-	/**
-	 * Cleans the criteria by performing the following:
-	 * 1. Remove any groups with no items.
-	 * 2. Flatten groups that directly contain a single group.
-	 * 3. Flatten groups that contain a single criterion.
-	 * @param {array} criteriaItems A list of criterion and criteria groups
-	 * to clean.
-	 */
-	_cleanCriteriaMapItems(criteriaItems, root) {
-		return criteriaItems
-			.filter(
-				({items}) => (items ? items.length : true)
-			)
-			.map(
-				item => {
-					if (item.items) {
-						if (item.items.length === 1) {
-							const soloItem = item.items[0];
-
-							if (soloItem.items) {
-								return (
-									{
-										conjunctionName: soloItem.conjunctionName,
-										items: this._cleanCriteriaMapItems(soloItem.items)
-									}
-								);
-							}
-							else {
-								return root ? item : soloItem;
-							}
-						}
-						else {
-							return Object.assign(
-								item,
-								{
-									items: this._cleanCriteriaMapItems(item.items)
-								}
-							);
-						}
-					}
-					else {
-						return item;
-					}
-				}
-			);
-	}
-
-	_handleToggleEdit = () => {
-		this.setState(
-			{
-				editing: !this.state.editing
-			}
-		);
-	};
-
-	_updateCriteria = newCriteria => {
-		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
-	};
 }
-
-const CRITERIA_GROUP_SHAPE = {
-	conjunctionName: PropTypes.string,
-	items: PropTypes.array
-};
-
-const CRITERION_SHAPE = {
-	operatorName: PropTypes.string,
-	propertyName: PropTypes.string,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
-};
-
-CriteriaBuilder.propTypes = {
-	criteria: PropTypes.shape(
-		{
-			conjunctionName: PropTypes.string,
-			items: PropTypes.arrayOf(
-				PropTypes.oneOfType(
-					[
-						PropTypes.shape(CRITERIA_GROUP_SHAPE),
-						PropTypes.shape(CRITERION_SHAPE)
-					]
-				)
-			)
-		}
-	),
-	onChange: PropTypes.func,
-	supportedConjunctions: PropTypes.arrayOf(
-		PropTypes.shape(
-			{
-				label: PropTypes.string,
-				name: PropTypes.string.isRequired
-			}
-		)
-	),
-	supportedOperators: PropTypes.array,
-	supportedProperties: PropTypes.arrayOf(
-		PropTypes.shape(
-			{
-				entityUrl: PropTypes.string,
-				label: PropTypes.string,
-				name: PropTypes.string.isRequired,
-				options: PropTypes.array,
-				type: PropTypes.string.isRequired
-			}
-		)
-	).isRequired,
-	supportedPropertyTypes: PropTypes.object
-};
-
-CriteriaBuilder.defaultProps = {
-	readOnly: false
-};
 
 export default dragDropContext(HTML5Backend)(CriteriaBuilder);

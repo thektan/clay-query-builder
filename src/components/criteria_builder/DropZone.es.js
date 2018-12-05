@@ -4,6 +4,14 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 
 class DropZone extends Component {
+	static propTypes = {
+		before: PropTypes.bool,
+		connectDropTarget: PropTypes.func,
+		hover: PropTypes.bool,
+		index: PropTypes.number,
+		onAddCriteria: PropTypes.func
+	};
+
 	render() {
 		const {
 			before,
@@ -26,18 +34,6 @@ class DropZone extends Component {
 		);
 	}
 }
-
-const DND_PROPS = {
-	connectDropTarget: PropTypes.func,
-	hover: PropTypes.bool
-};
-
-DropZone.propTypes = {
-	...DND_PROPS,
-	before: PropTypes.bool,
-	index: PropTypes.number,
-	onAddCriteria: PropTypes.func
-};
 
 const dropZoneTarget = {
 	drop(props, monitor) {

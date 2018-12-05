@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import CriteriaSidebarItem from './CriteriaSidebarItem.es';
 
 class CriteriaSidebar extends Component {
+	static propTypes = {
+		supportedProperties: PropTypes.array,
+		title: PropTypes.string
+	};
+
 	render() {
 		const {supportedProperties, title} = this.props;
 
@@ -28,10 +33,5 @@ class CriteriaSidebar extends Component {
 		);
 	}
 }
-
-CriteriaSidebar.propTypes = {
-	supportedProperties: PropTypes.array,
-	title: PropTypes.string
-};
 
 export default CriteriaSidebar;

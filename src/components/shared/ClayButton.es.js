@@ -1,8 +1,15 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import ClayIcon from './ClayIcon.es';
 
-class ClayButton extends React.Component {
+class ClayButton extends Component {
+	static propTypes = {
+		className: PropTypes.string,
+		iconName: PropTypes.string,
+		label: PropTypes.string,
+		type: PropTypes.string
+	};
+
 	render() {
 		const {className, iconName, label, ...otherProps} = this.props;
 
@@ -23,12 +30,5 @@ class ClayButton extends React.Component {
 		);
 	}
 }
-
-ClayButton.propTypes = {
-	className: PropTypes.string,
-	iconName: PropTypes.string,
-	label: PropTypes.string,
-	type: PropTypes.string
-};
 
 export default ClayButton;

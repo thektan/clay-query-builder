@@ -5,6 +5,11 @@ import ThemeContext from '../../ThemeContext.es';
 class ClayIcon extends Component {
 	static contextType = ThemeContext;
 
+	static propTypes = {
+		className: PropTypes.string,
+		iconName: PropTypes.string
+	};
+
 	render() {
 		const {className, iconName} = this.props;
 
@@ -19,10 +24,5 @@ class ClayIcon extends Component {
 		);
 	}
 }
-
-ClayIcon.propTypes = {
-	className: PropTypes.string,
-	iconName: PropTypes.string
-};
 
 export default ClayIcon;

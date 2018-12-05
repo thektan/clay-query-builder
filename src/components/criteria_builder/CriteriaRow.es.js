@@ -6,6 +6,44 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 
 class CriteriaRow extends Component {
+	static propTypes = {
+		connectDropTarget: PropTypes.func,
+		criterion: PropTypes.object,
+		editing: PropTypes.bool,
+		hover: PropTypes.bool,
+		onChange: PropTypes.func,
+		supportedConjunctions: PropTypes.array,
+		supportedOperators: PropTypes.array,
+		supportedProperties: PropTypes.array,
+		supportedPropertyTypes: PropTypes.object
+	};
+
+	static defaultProps = {
+		editing: true,
+	};
+
+	_getSelectedItem(list, idSelected) {
+		return list.find(item => item.name === idSelected);
+	}
+
+	_handleInputChange = propertyName => event => {
+		this._updateCriteria({[propertyName]: event.target.value});
+	};
+
+	_handleDelete = event => {
+		event.preventDefault();
+
+		const {onChange} = this.props;
+
+		onChange();
+	}
+
+	_updateCriteria = newCriteria => {
+		const {criterion, onChange} = this.props;
+
+		onChange(Object.assign(criterion, newCriteria));
+	};
+
 	render() {
 		const {
 			connectDropTarget,
@@ -97,49 +135,7 @@ class CriteriaRow extends Component {
 			</div>
 		);
 	}
-
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
-
-	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
-	};
-
-	_handleDelete = event => {
-		event.preventDefault();
-
-		const {onChange} = this.props;
-
-		onChange();
-	}
-
-	_updateCriteria = newCriteria => {
-		const {criterion, onChange} = this.props;
-
-		onChange(Object.assign(criterion, newCriteria));
-	};
 }
-
-const DND_PROPS = {
-	connectDropTarget: PropTypes.func,
-	hover: PropTypes.bool
-};
-
-CriteriaRow.propTypes = {
-	...DND_PROPS,
-	criterion: PropTypes.object,
-	editing: PropTypes.bool,
-	onChange: PropTypes.func,
-	supportedConjunctions: PropTypes.array,
-	supportedOperators: PropTypes.array,
-	supportedProperties: PropTypes.array,
-	supportedPropertyTypes: PropTypes.object
-};
-
-CriteriaRow.defaultProps = {
-	editing: true,
-};
 
 const dropZoneTarget = {
 	drop(props, monitor) {

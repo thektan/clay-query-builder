@@ -5,6 +5,37 @@ import {DragSource as dragSource} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 
 class CriteriaSidebarItem extends Component {
+	static propTypes = {
+		connectDragSource: PropTypes.func,
+		dragging: PropTypes.bool,
+		label: PropTypes.string,
+		name: PropTypes.string,
+		type: PropTypes.string
+	};
+
+	_getIcon(type) {
+		let returnValue;
+
+		switch (type) {
+		case 'boolean':
+			returnValue = 'text';
+			break;
+		case 'date':
+			returnValue = 'date';
+			break;
+		case 'number':
+			returnValue = 'number';
+			break;
+		case 'string':
+			returnValue = 'text';
+			break;
+		default:
+			returnValue = 'text';
+		}
+
+		return returnValue;
+	}
+
 	render() {
 		const {
 			connectDragSource,
@@ -29,42 +60,7 @@ class CriteriaSidebarItem extends Component {
 			</li>
 		);
 	}
-
-	_getIcon(type) {
-		let returnValue;
-
-		switch (type) {
-		case 'boolean':
-			returnValue = 'text';
-			break;
-		case 'date':
-			returnValue = 'date';
-			break;
-		case 'number':
-			returnValue = 'number';
-			break;
-		case 'string':
-			returnValue = 'text';
-			break;
-		default:
-			returnValue = 'text';
-		}
-
-		return returnValue;
-	}
 }
-
-const DND_PROPS = {
-	connectDragSource: PropTypes.func,
-	dragging: PropTypes.bool
-};
-
-CriteriaSidebarItem.propTypes = {
-	...DND_PROPS,
-	label: PropTypes.string,
-	name: PropTypes.string,
-	type: PropTypes.string
-};
 
 const propertySource = {
 	beginDrag({name}) {

@@ -10,99 +10,20 @@ function insertAtIndex(item, list, index) {
 }
 
 class CriteriaGroup extends Component {
-	render() {
-		const {
-			criteria,
-			editing,
-			root,
-			supportedConjunctions,
-			supportedOperators,
-			supportedProperties,
-			supportedPropertyTypes
-		} = this.props;
+	static propTypes = {
+		criteria: PropTypes.object,
+		editing: PropTypes.bool,
+		onChange: PropTypes.func,
+		root: PropTypes.bool,
+		supportedConjunctions: PropTypes.array,
+		supportedOperators: PropTypes.array,
+		supportedProperties: PropTypes.array,
+		supportedPropertyTypes: PropTypes.object
+	};
 
-		return (
-			<div
-				className={`criteria-group-root ${root ? 'criteria-group-item-root' : 'criteria-group-item'}`}
-			>
-				{this._isCriteriaEmpty() ?
-					<EmptyDropZone
-						index={0}
-						onAddCriteria={this._handleAddCriteria}
-					/> :
-					<Fragment>
-						<DropZone
-							before
-							index={0}
-							onAddCriteria={this._handleAddCriteria}
-						/>
-
-						{criteria.items && criteria.items.map(
-							(criterion, index) => {
-								return (
-									<Fragment key={index}>
-										{index != 0 && (
-											<Fragment>
-												<DropZone
-													index={index}
-													onAddCriteria={this._handleAddCriteria}
-												/>
-
-												<ClayButton
-													className="btn-sm btn btn-secondary conjunction"
-													label={this._getConjunctionLabel(
-														criteria.conjunctionName,
-														supportedConjunctions
-													)}
-													onClick={this._handleConjunctionClick}
-												/>
-
-												<DropZone
-													before
-													index={index}
-													onAddCriteria={this._handleAddCriteria}
-												/>
-											</Fragment>
-										)}
-
-										<div className="criterion">
-											{criterion.items ? (
-												<CriteriaGroup
-													criteria={criterion}
-													editing={editing}
-													onChange={this._updateCriteria(index, criterion)}
-													supportedConjunctions={supportedConjunctions}
-													supportedOperators={supportedOperators}
-													supportedProperties={supportedProperties}
-													supportedPropertyTypes={supportedPropertyTypes}
-												/>
-											) : (
-												<CriteriaRow
-													criterion={criterion}
-													editing={editing}
-													onChange={this._updateCriterion(index)}
-													root={root}
-													supportedConjunctions={supportedConjunctions}
-													supportedOperators={supportedOperators}
-													supportedProperties={supportedProperties}
-													supportedPropertyTypes={supportedPropertyTypes}
-												/>
-											)}
-
-											<DropZone
-												index={index + 1}
-												onAddCriteria={this._handleAddCriteria}
-											/>
-										</div>
-									</Fragment>
-								);
-							}
-						)}
-					</Fragment>
-				}
-			</div>
-		);
-	}
+	static defaultProps = {
+		root: false
+	};
 
 	_getConjunctionLabel(conjunctionName, conjunctions) {
 		const conjunction = conjunctions.find(
@@ -203,21 +124,100 @@ class CriteriaGroup extends Component {
 	_updateCriteria = (index, criterion) => newCriteria => {
 		this._updateCriterion(index)(Object.assign(criterion, newCriteria));
 	};
+
+	render() {
+		const {
+			criteria,
+			editing,
+			root,
+			supportedConjunctions,
+			supportedOperators,
+			supportedProperties,
+			supportedPropertyTypes
+		} = this.props;
+
+		return (
+			<div
+				className={`criteria-group-root ${root ? 'criteria-group-item-root' : 'criteria-group-item'}`}
+			>
+				{this._isCriteriaEmpty() ?
+					<EmptyDropZone
+						index={0}
+						onAddCriteria={this._handleAddCriteria}
+					/> :
+					<Fragment>
+						<DropZone
+							before
+							index={0}
+							onAddCriteria={this._handleAddCriteria}
+						/>
+
+						{criteria.items && criteria.items.map(
+							(criterion, index) => {
+								return (
+									<Fragment key={index}>
+										{index != 0 && (
+											<Fragment>
+												<DropZone
+													index={index}
+													onAddCriteria={this._handleAddCriteria}
+												/>
+
+												<ClayButton
+													className="btn-sm btn btn-secondary conjunction"
+													label={this._getConjunctionLabel(
+														criteria.conjunctionName,
+														supportedConjunctions
+													)}
+													onClick={this._handleConjunctionClick}
+												/>
+
+												<DropZone
+													before
+													index={index}
+													onAddCriteria={this._handleAddCriteria}
+												/>
+											</Fragment>
+										)}
+
+										<div className="criterion">
+											{criterion.items ? (
+												<CriteriaGroup
+													criteria={criterion}
+													editing={editing}
+													onChange={this._updateCriteria(index, criterion)}
+													supportedConjunctions={supportedConjunctions}
+													supportedOperators={supportedOperators}
+													supportedProperties={supportedProperties}
+													supportedPropertyTypes={supportedPropertyTypes}
+												/>
+											) : (
+												<CriteriaRow
+													criterion={criterion}
+													editing={editing}
+													onChange={this._updateCriterion(index)}
+													root={root}
+													supportedConjunctions={supportedConjunctions}
+													supportedOperators={supportedOperators}
+													supportedProperties={supportedProperties}
+													supportedPropertyTypes={supportedPropertyTypes}
+												/>
+											)}
+
+											<DropZone
+												index={index + 1}
+												onAddCriteria={this._handleAddCriteria}
+											/>
+										</div>
+									</Fragment>
+								);
+							}
+						)}
+					</Fragment>
+				}
+			</div>
+		);
+	}
 }
-
-CriteriaGroup.propTypes = {
-	criteria: PropTypes.object,
-	editing: PropTypes.bool,
-	onChange: PropTypes.func,
-	root: PropTypes.bool,
-	supportedConjunctions: PropTypes.array,
-	supportedOperators: PropTypes.array,
-	supportedProperties: PropTypes.array,
-	supportedPropertyTypes: PropTypes.object
-};
-
-CriteriaGroup.defaultProps = {
-	root: false
-};
 
 export default CriteriaGroup;

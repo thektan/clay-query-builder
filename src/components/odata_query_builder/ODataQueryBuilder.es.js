@@ -56,6 +56,14 @@ const SUPPORTED_PROPERTY_TYPES = {
 };
 
 class ODataQueryBuilder extends Component {
+	static propTypes = {
+		initialQuery: PropTypes.string,
+		inputId: PropTypes.string,
+		operators: PropTypes.array,
+		properties: PropTypes.array,
+		query: PropTypes.string
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -69,6 +77,15 @@ class ODataQueryBuilder extends Component {
 			query
 		};
 	}
+
+	_updateQuery = newCriteriaMap => {
+		this.setState(
+			{
+				criteriaMap: newCriteriaMap,
+				query: buildQueryString([newCriteriaMap])
+			}
+		);
+	};
 
 	render() {
 		const {inputId, properties} = this.props;
@@ -100,23 +117,6 @@ class ODataQueryBuilder extends Component {
 			</div>
 		);
 	}
-
-	_updateQuery = newCriteriaMap => {
-		this.setState(
-			{
-				criteriaMap: newCriteriaMap,
-				query: buildQueryString([newCriteriaMap])
-			}
-		);
-	};
 }
-
-ODataQueryBuilder.propTypes = {
-	initialQuery: PropTypes.string,
-	inputId: PropTypes.string,
-	operators: PropTypes.array,
-	properties: PropTypes.array,
-	query: PropTypes.string
-};
 
 export default ODataQueryBuilder;

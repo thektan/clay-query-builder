@@ -3,6 +3,19 @@ import {PropTypes} from 'prop-types';
 import ClayIcon from './ClayIcon.es';
 
 class ClayToggle extends Component {
+	static propTypes = {
+		checked: PropTypes.bool,
+		className: PropTypes.string,
+		iconOff: PropTypes.string,
+		iconOn: PropTypes.string,
+		label: PropTypes.string,
+		onChange: PropTypes.func
+	};
+
+	static defaultProps = {
+		label: ''
+	};
+
 	render() {
 		const {
 			checked,
@@ -45,18 +58,5 @@ class ClayToggle extends Component {
 		);
 	}
 }
-
-ClayToggle.propTypes = {
-	checked: PropTypes.bool,
-	className: PropTypes.string,
-	iconOff: PropTypes.string,
-	iconOn: PropTypes.string,
-	label: PropTypes.string,
-	onChange: PropTypes.func
-};
-
-ClayToggle.defaultProps = {
-	label: ''
-};
 
 export default ClayToggle;

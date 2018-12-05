@@ -2,6 +2,12 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 
 class ClaySelect extends Component {
+	static propTypes = {
+		onChange: PropTypes.func.isRequired,
+		options: PropTypes.array.isRequired,
+		selected: PropTypes.string
+	};
+
 	render() {
 		const {className, options, selected, ...otherProps} = this.props;
 
@@ -22,11 +28,5 @@ class ClaySelect extends Component {
 		);
 	}
 }
-
-ClaySelect.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	options: PropTypes.array.isRequired,
-	selected: PropTypes.string
-};
 
 export default ClaySelect;

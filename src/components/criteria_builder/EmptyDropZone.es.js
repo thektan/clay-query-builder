@@ -9,6 +9,13 @@ import {Liferay} from '../../utils/language';
 class EmptyDropZone extends Component {
 	static contextType = ThemeContext;
 
+	static propTypes = {
+		connectDropTarget: PropTypes.func,
+		hover: PropTypes.bool,
+		index: PropTypes.number,
+		onAddCriteria: PropTypes.func
+	};
+
 	render() {
 		const {
 			connectDropTarget,
@@ -54,17 +61,6 @@ class EmptyDropZone extends Component {
 		);
 	}
 }
-
-const DND_PROPS = {
-	connectDropTarget: PropTypes.func,
-	hover: PropTypes.bool
-};
-
-EmptyDropZone.propTypes = {
-	...DND_PROPS,
-	index: PropTypes.number,
-	onAddCriteria: PropTypes.func
-};
 
 const dropZoneTarget = {
 	drop(props, monitor) {
