@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ClayCriteriaGroup from './ClayCriteriaGroup.es';
-import ClayCriteriaSidebar from './ClayCriteriaSidebar.es';
+import CriteriaGroup from './CriteriaGroup.es';
+import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import {Liferay} from './utils/language';
+import {Liferay} from '../../utils/language';
 import ClayToggle from './ClayToggle.es';
 
 class ClayCriteriaBuilder extends React.Component {
@@ -42,7 +42,7 @@ class ClayCriteriaBuilder extends React.Component {
 						/>
 					</div>
 
-					<ClayCriteriaGroup
+					<CriteriaGroup
 						criteria={criteria}
 						editing={editing}
 						onChange={this._updateCriteria}
@@ -56,7 +56,7 @@ class ClayCriteriaBuilder extends React.Component {
 				</div>
 
 				<div className="criteria-builder-section-sidebar">
-					<ClayCriteriaSidebar
+					<CriteriaSidebar
 						supportedProperties={supportedProperties}
 						title={Liferay.Language.get('properties')}
 					/>
