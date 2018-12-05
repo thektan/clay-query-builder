@@ -21,7 +21,6 @@ class ClayCriteriaBuilder extends React.Component {
 	render() {
 		const {
 			criteria,
-			operators,
 			supportedConjunctions,
 			supportedOperators,
 			supportedProperties,
@@ -46,7 +45,6 @@ class ClayCriteriaBuilder extends React.Component {
 						criteria={criteria}
 						editing={editing}
 						onChange={this._updateCriteria}
-						operators={operators}
 						root
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}
@@ -66,7 +64,7 @@ class ClayCriteriaBuilder extends React.Component {
 	}
 
 	/**
-	 * Cleans the criteria by performing the following in order:
+	 * Cleans the criteria by performing the following:
 	 * 1. Remove any groups with no items.
 	 * 2. Flatten groups that directly contain a single group.
 	 * 3. Flatten groups that contain a single criterion.
@@ -173,14 +171,6 @@ ClayCriteriaBuilder.propTypes = {
 		}
 	),
 	onChange: PropTypes.func,
-	operators: PropTypes.arrayOf(
-		PropTypes.shape(
-			{
-				supportedTypes: PropTypes.arrayOf(PropTypes.string),
-				value: PropTypes.string
-			}
-		)
-	),
 	supportedConjunctions: PropTypes.arrayOf(
 		PropTypes.shape(
 			{

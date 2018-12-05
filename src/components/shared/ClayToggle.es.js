@@ -4,7 +4,14 @@ import ClayIcon from './ClayIcon.es';
 
 class ClayToggle extends React.Component {
 	render() {
-		const {checked, iconOff, iconOn, label, onChange, ...otherProps} = this.props;
+		const {
+			checked,
+			iconOff,
+			iconOn,
+			label,
+			onChange,
+			...otherProps
+		} = this.props;
 
 		return (
 			<label className="toggle-switch" {...otherProps}>

@@ -3,13 +3,18 @@ import PropTypes from 'prop-types';
 import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from './utils/drag-types.es';
 import {Liferay} from './utils/language';
+import ThemeContext from './ThemeContext.es';
 
 class EmptyDropZone extends Component {
+	static contextType = ThemeContext;
+
 	render() {
 		const {
 			connectDropTarget,
 			hover
 		} = this.props;
+
+		const {assetsPath} = this.context;
 
 		return (
 			<div className="empty-drop-zone-root">
@@ -20,12 +25,26 @@ class EmptyDropZone extends Component {
 						<div className="empty-drop-zone-indicator" />
 
 						<div className="empty-drop-zone-help-message">
-							<div>
-								{Liferay.Language.get('drag-and-drop-criterion-from-the-right-to-add-rules')}
+							<div className="message-item">
+								<img
+									className="message-icon"
+									src={`${assetsPath}/drag-and-drop.svg`}
+								/>
+
+								<span>
+									{Liferay.Language.get('drag-and-drop-criterion-from-the-right-to-add-rules')}
+								</span>
 							</div>
 
-							<div>
-								{Liferay.Language.get('drag-and-drop-over-an-existing-criteria-to-form-groups')}
+							<div className="message-item">
+								<img
+									className="message-icon"
+									src={`${assetsPath}/drag-over.svg`}
+								/>
+
+								<span>
+									{Liferay.Language.get('drag-and-drop-over-an-existing-criteria-to-form-groups')}
+								</span>
 							</div>
 						</div>
 					</div>

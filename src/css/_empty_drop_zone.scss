@@ -7,6 +7,26 @@
 			width: 100%;
 		}
 
+		.empty-drop-zone-help-message {
+			padding: 14px 24px 16px 24px;
+
+			.message-icon {
+				margin-right: 16px;
+			}
+
+			.message-item {
+				align-items: center;
+				color: #6B6C7E;
+				display: flex;
+				font-size: 12px;
+				font-weight: 600;
+
+				&:not(:last-child) {
+					margin-bottom: 16px;
+				}
+			}
+		}
+
 		&.dnd-hover {
 			.empty-drop-zone-help-message {
 				visibility: hidden;
