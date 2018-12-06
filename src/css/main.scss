@@ -1,9 +1,11 @@
 .clay-query-builder-root {
-	@import "_clay_button";
-	@import "_clay_criteria_builder";
-	@import "_clay_criteria_group";
-	@import "_clay_criteria_row";
-	@import "_clay_criteria_sidebar";
-	@import "_drop_zone";
-	@import "_empty_drop_zone";
+	@import "variables";
+
+	@import "clay_button";
+	@import "criteria_builder";
+	@import "criteria_group";
+	@import "criteria_row";
+	@import "criteria_sidebar";
+	@import "drop_zone";
+	@import "empty_drop_zone";
 }

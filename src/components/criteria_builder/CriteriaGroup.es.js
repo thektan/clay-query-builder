@@ -156,7 +156,7 @@ class CriteriaGroup extends Component {
 							(criterion, index) => {
 								return (
 									<Fragment key={index}>
-										{index != 0 && (
+										{index !== 0 && (
 											<Fragment>
 												<DropZone
 													index={index}

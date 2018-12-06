@@ -1,5 +1,5 @@
 .criteria-sidebar-root {
-	background-color: #F7F8F9;
+	background-color: $secondaryHover;
 
 	.properties-list {
 		list-style: none;
@@ -8,7 +8,7 @@
 
 		.criteria-sidebar-item-root {
 			align-items: center;
-			border-left: 3px solid #4B9BFF;
+			border-left: 3px solid $chartBlue;
 			display: flex;
 			font-size: 14px;
 			margin: 4px 0;
@@ -19,7 +19,7 @@
 			}
 
 			.lexicon-icon-drag {
-				color: #A7A9BC;
+				color: $mainLighten52;
 			}
 
 			&.dragging {
@@ -37,7 +37,7 @@
 	}
 
 	.sidebar-header {
-		border-bottom: 1px solid #E7E7ED;
+		border-bottom: 1px solid $mainLighten74;
 		font-size: 16px;
 		font-weight: 600;
 		padding: 16px 24px;

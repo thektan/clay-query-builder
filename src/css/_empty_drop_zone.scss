@@ -1,7 +1,7 @@
 .empty-drop-zone-root {
 	.empty-drop-zone-target {
 		.empty-drop-zone-indicator {
-			background-color: #0B5FFF;
+			background-color: $primary;
 			height: 2px;
 			visibility: hidden;
 			width: 100%;
@@ -16,7 +16,7 @@
 
 			.message-item {
 				align-items: center;
-				color: #6B6C7E;
+				color: $mainLighten28;
 				display: flex;
 				font-size: 12px;
 				font-weight: 600;

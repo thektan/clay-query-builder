@@ -60,21 +60,19 @@ class ODataQueryBuilder extends Component {
 		initialQuery: PropTypes.string,
 		inputId: PropTypes.string,
 		operators: PropTypes.array,
-		properties: PropTypes.array,
-		query: PropTypes.string
+		properties: PropTypes.array
 	};
 
 	constructor(props) {
 		super(props);
 
-		const {query} = props;
+		const {initialQuery} = props;
 
 		this.state = {
-			criteriaMap: query && query !== '()' ?
-				translateQueryToCriteria(query) :
+			criteriaMap: initialQuery && initialQuery !== '()' ?
+				translateQueryToCriteria(initialQuery) :
 				null,
-			initialQuery: query,
-			query
+			query: initialQuery
 		};
 	}
 

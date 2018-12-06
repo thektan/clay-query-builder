@@ -4,6 +4,7 @@ import ClayButton from '../shared/ClayButton.es';
 import ClaySelect from '../shared/ClaySelect.es';
 import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
+import getCN from 'classnames';
 
 class CriteriaRow extends Component {
 	static propTypes = {
@@ -22,9 +23,8 @@ class CriteriaRow extends Component {
 		editing: true,
 	};
 
-	_getSelectedItem(list, idSelected) {
-		return list.find(item => item.name === idSelected);
-	}
+	_getSelectedItem = (list, idSelected) =>
+		list.find(item => item.name === idSelected);
 
 	_handleInputChange = propertyName => event => {
 		this._updateCriteria({[propertyName]: event.target.value});
@@ -33,9 +33,7 @@ class CriteriaRow extends Component {
 	_handleDelete = event => {
 		event.preventDefault();
 
-		const {onChange} = this.props;
-
-		onChange();
+		this.props.onChange();
 	}
 
 	_updateCriteria = newCriteria => {
@@ -64,15 +62,18 @@ class CriteriaRow extends Component {
 			criterion.operatorName
 		);
 
+		const classes = getCN('criterion-row-root', {
+			'dnd-hover': hover
+		})
+
 		return connectDropTarget(
 			<div
-				className={`criterion-row-root ${hover ? 'dnd-hover' : ''}`}
+				className={classes}
 			>
 				{editing ? (
 					<div className="edit-container">
 						<ClaySelect
 							className="criterion-input form-control"
-							key="property"
 							onChange={this._handleInputChange(
 								'propertyName'
 							)}
@@ -87,7 +88,6 @@ class CriteriaRow extends Component {
 
 						<ClaySelect
 							className="criterion-input operator-input form-control"
-							key="operator"
 							onChange={this._handleInputChange(
 								'operatorName'
 							)}
@@ -103,7 +103,6 @@ class CriteriaRow extends Component {
 						<input
 							className="criterion-input form-control"
 							id="queryRowValue"
-							key="value"
 							onChange={this._handleInputChange('value')}
 							type="text"
 							value={criterion && criterion.value}
@@ -112,14 +111,14 @@ class CriteriaRow extends Component {
 						<ClayButton
 							className="btn-monospaced delete-button"
 							iconName="trash"
-							key="delete"
 							onClick={this._handleDelete}
 						/>
 					</div>
 				) : (
 					<div className="read-only-container">
 						<span className="criteria-string">
-							{'Property '}
+							{`${Liferay.Language.get('property')} `}
+
 							<strong className="property-string">
 								{`${selectedProperty && selectedProperty.label} `}
 							</strong>

@@ -6,7 +6,7 @@
 	flex: 1;
 
 	&.dnd-hover {
-		border: 2px solid #0B5FFF;
+		border: 2px solid $primary;
 	}
 
 	.edit-container {
@@ -38,12 +38,12 @@
 		.criteria-string {
 			font-size: 14px;
 			font-weight: 500;
-			color: #6B6C7E;
+			color: $mainLighten28;
 		}
 
 		.property-string, .value-string {
 			font-weight: 700;
-			color: #272833;
+			color: $main;
 		}
 	}
 }

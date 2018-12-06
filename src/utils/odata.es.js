@@ -51,12 +51,10 @@ function addNewGroup({oDataASTNode, prevConjunction}) {
  * @returns An OData query string built from the criteria object.
  */
 function buildQueryString(criteria, queryConjunction) {
-	let queryString = '';
-
-	criteria
+	return criteria
 		.filter(Boolean)
-		.forEach(
-			(criterion, index) => {
+		.reduce(
+			(queryString, criterion, index) => {
 				const {
 					conjunctionName,
 					items,
@@ -84,10 +82,11 @@ function buildQueryString(criteria, queryConjunction) {
 						`${operatorName} (${propertyName}, '${value}')`
 					);
 				}
-			}
-		);
 
-	return queryString;
+				return queryString;
+			},
+			''
+		);
 }
 
 /**
