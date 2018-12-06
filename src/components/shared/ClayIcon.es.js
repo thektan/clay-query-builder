@@ -18,7 +18,7 @@ class ClayIcon extends Component {
 			'lexicon-icon',
 			`lexicon-icon-${iconName}`,
 			{
-				className
+				[className]: className
 			}
 		);
 

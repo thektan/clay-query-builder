@@ -6,6 +6,8 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 
+import {Liferay} from '../../utils/language';
+
 class CriteriaRow extends Component {
 	static propTypes = {
 		connectDropTarget: PropTypes.func,
