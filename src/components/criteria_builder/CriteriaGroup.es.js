@@ -69,7 +69,7 @@ class CriteriaGroup extends Component {
 				)
 			);
 		}
-	};
+	}
 
 	_handleConjunctionClick = event => {
 		event.preventDefault();
@@ -92,13 +92,84 @@ class CriteriaGroup extends Component {
 				}
 			)
 		);
-	};
+	}
 
 	_isCriteriaEmpty = () => {
 		const {criteria} = this.props;
 
 		return criteria ? !criteria.items.length : true;
-	};
+	}
+
+	_renderConjunction = index => {
+		const {criteria, supportedConjunctions} = this.props;
+
+		return (
+			<Fragment>
+				<DropZone
+					index={index}
+					onAddCriteria={this._handleAddCriteria}
+				/>
+
+				<ClayButton
+					className="btn-sm btn btn-secondary conjunction"
+					label={this._getConjunctionLabel(
+						criteria.conjunctionName,
+						supportedConjunctions
+					)}
+					onClick={this._handleConjunctionClick}
+				/>
+
+				<DropZone
+					before
+					index={index}
+					onAddCriteria={this._handleAddCriteria}
+				/>
+			</Fragment>
+		);
+	}
+
+	_renderCriterion = (criterion, index) => {
+		const {
+			editing,
+			root,
+			supportedConjunctions,
+			supportedOperators,
+			supportedProperties,
+			supportedPropertyTypes
+		} = this.props;
+
+		return (
+			<div className="criterion">
+				{criterion.items ? (
+					<CriteriaGroup
+						criteria={criterion}
+						editing={editing}
+						onChange={this._updateCriteria(index, criterion)}
+						supportedConjunctions={supportedConjunctions}
+						supportedOperators={supportedOperators}
+						supportedProperties={supportedProperties}
+						supportedPropertyTypes={supportedPropertyTypes}
+					/>
+				) : (
+					<CriteriaRow
+						criterion={criterion}
+						editing={editing}
+						onChange={this._updateCriterion(index)}
+						root={root}
+						supportedConjunctions={supportedConjunctions}
+						supportedOperators={supportedOperators}
+						supportedProperties={supportedProperties}
+						supportedPropertyTypes={supportedPropertyTypes}
+					/>
+				)}
+
+				<DropZone
+					index={index + 1}
+					onAddCriteria={this._handleAddCriteria}
+				/>
+			</div>
+		);
+	}
 
 	_updateCriterion = index => newCriterion => {
 		const {criteria, onChange} = this.props;
@@ -120,21 +191,16 @@ class CriteriaGroup extends Component {
 				}
 			)
 		);
-	};
+	}
 
 	_updateCriteria = (index, criterion) => newCriteria => {
 		this._updateCriterion(index)(Object.assign(criterion, newCriteria));
-	};
+	}
 
 	render() {
 		const {
 			criteria,
-			editing,
 			root,
-			supportedConjunctions,
-			supportedOperators,
-			supportedProperties,
-			supportedPropertyTypes
 		} = this.props;
 
 		const classes = getCN(
@@ -165,59 +231,17 @@ class CriteriaGroup extends Component {
 							(criterion, index) => {
 								return (
 									<Fragment key={index}>
-										{index !== 0 && (
-											<Fragment>
-												<DropZone
-													index={index}
-													onAddCriteria={this._handleAddCriteria}
-												/>
+										{
+											index !== 0 &&
+												this._renderConjunction(index)
+										}
 
-												<ClayButton
-													className="btn-sm btn btn-secondary conjunction"
-													label={this._getConjunctionLabel(
-														criteria.conjunctionName,
-														supportedConjunctions
-													)}
-													onClick={this._handleConjunctionClick}
-												/>
-
-												<DropZone
-													before
-													index={index}
-													onAddCriteria={this._handleAddCriteria}
-												/>
-											</Fragment>
-										)}
-
-										<div className="criterion">
-											{criterion.items ? (
-												<CriteriaGroup
-													criteria={criterion}
-													editing={editing}
-													onChange={this._updateCriteria(index, criterion)}
-													supportedConjunctions={supportedConjunctions}
-													supportedOperators={supportedOperators}
-													supportedProperties={supportedProperties}
-													supportedPropertyTypes={supportedPropertyTypes}
-												/>
-											) : (
-												<CriteriaRow
-													criterion={criterion}
-													editing={editing}
-													onChange={this._updateCriterion(index)}
-													root={root}
-													supportedConjunctions={supportedConjunctions}
-													supportedOperators={supportedOperators}
-													supportedProperties={supportedProperties}
-													supportedPropertyTypes={supportedPropertyTypes}
-												/>
-											)}
-
-											<DropZone
-												index={index + 1}
-												onAddCriteria={this._handleAddCriteria}
-											/>
-										</div>
+										{
+											this._renderCriterion(
+												criterion,
+												index
+											)
+										}
 									</Fragment>
 								);
 							}
