@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import ThemeContext from '../../ThemeContext.es';
+import getCN from 'classnames';
 
 class ClayIcon extends Component {
 	static contextType = ThemeContext;
@@ -13,10 +14,18 @@ class ClayIcon extends Component {
 	render() {
 		const {className, iconName} = this.props;
 
+		const classes = getCN(
+			'lexicon-icon',
+			`lexicon-icon-${iconName}`,
+			{
+				className
+			}
+		);
+
 		return (
 			<svg
 				aria-hidden="true"
-				className={`lexicon-icon lexicon-icon-${iconName} ${className ? className : ''}`}
+				className={classes}
 				viewBox="0 0 512 512"
 			>
 				<use xlinkHref={`${this.context.spriteMapPath}#${iconName}`} />

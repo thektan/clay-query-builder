@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
+import getCN from 'classnames';
 
 class ClaySelect extends Component {
 	static propTypes = {
@@ -11,9 +12,14 @@ class ClaySelect extends Component {
 	render() {
 		const {className, options, selected, ...otherProps} = this.props;
 
+		const classes = getCN(
+			'form-control',
+			{className}
+		);
+
 		return (
 			<select
-				className={`form-control ${className}`}
+				className={classes}
 				{...otherProps}
 				value={selected}
 			>

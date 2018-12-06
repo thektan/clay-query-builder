@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ClayIcon from '../shared/ClayIcon.es';
 import {DragSource as dragSource} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
+import getCN from 'classnames';
 
 class CriteriaSidebarItem extends Component {
 	static propTypes = {
@@ -44,8 +45,13 @@ class CriteriaSidebarItem extends Component {
 			type
 		} = this.props;
 
+		const classes = getCN(
+			'criteria-sidebar-item-root',
+			{dragging}
+		);
+
 		return connectDragSource(
-			<li className={`criteria-sidebar-item-root ${dragging ? 'dragging' : ''}`}>
+			<li className={classes}>
 				<span className="inline-item">
 					<ClayIcon iconName="drag" />
 				</span>

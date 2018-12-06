@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import ThemeContext from '../../ThemeContext.es';
+import getCN from 'classnames';
 
 import {Liferay} from '../../utils/language';
 
@@ -24,11 +25,18 @@ class EmptyDropZone extends Component {
 
 		const {assetsPath} = this.context;
 
+		const targetClasses = getCN(
+			'empty-drop-zone-target',
+			{
+				'dnd-hover': hover
+			}
+		);
+
 		return (
 			<div className="empty-drop-zone-root">
 				{connectDropTarget(
 					<div
-						className={`empty-drop-zone-target ${hover ? 'dnd-hover' : ''}`}
+						className={targetClasses}
 					>
 						<div className="empty-drop-zone-indicator" />
 

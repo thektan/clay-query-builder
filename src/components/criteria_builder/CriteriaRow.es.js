@@ -62,9 +62,12 @@ class CriteriaRow extends Component {
 			criterion.operatorName
 		);
 
-		const classes = getCN('criterion-row-root', {
-			'dnd-hover': hover
-		})
+		const classes = getCN(
+			'criterion-row-root',
+			{
+				'dnd-hover': hover
+			}
+		);
 
 		return connectDropTarget(
 			<div

@@ -4,6 +4,7 @@ import CriteriaRow from './CriteriaRow.es';
 import ClayButton from '../shared/ClayButton.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
+import getCN from 'classnames';
 
 function insertAtIndex(item, list, index) {
 	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
@@ -136,9 +137,17 @@ class CriteriaGroup extends Component {
 			supportedPropertyTypes
 		} = this.props;
 
+		const classes = getCN(
+			'criteria-group-root',
+			{
+				'criteria-group-item': !root,
+				'criteria-group-item-root': root
+			}
+		);
+
 		return (
 			<div
-				className={`criteria-group-root ${root ? 'criteria-group-item-root' : 'criteria-group-item'}`}
+				className={classes}
 			>
 				{this._isCriteriaEmpty() ?
 					<EmptyDropZone
