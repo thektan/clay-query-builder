@@ -190,6 +190,7 @@ const criteriaRowSource = {
 
 			if (dropIndex < props.index) {
 				// @TODO Only add index if rows are in the same group.
+				// Maybe this can be determined by the amount of items in a group.
 
 				props.onDelete(props.index + 1);
 			}
@@ -200,14 +201,7 @@ const criteriaRowSource = {
 	}
 };
 
-export default dropTarget(
-	DragTypes.PROPERTY,
-	dropZoneTarget,
-	(connect, monitor) => ({
-		connectDropTarget: connect.dropTarget(),
-		hover: monitor.isOver()
-	})
-)(dragSource(
+const CriteriaRowWithDrag = dragSource(
 	DragTypes.CRITERIA_ROW,
 	criteriaRowSource,
 	(connect, monitor) => ({
@@ -215,4 +209,13 @@ export default dropTarget(
 		connectDragSource: connect.dragSource(),
 		dragging: monitor.isDragging()
 	})
-)(CriteriaRow));
+)(CriteriaRow);
+
+export default dropTarget(
+	DragTypes.PROPERTY,
+	dropZoneTarget,
+	(connect, monitor) => ({
+		connectDropTarget: connect.dropTarget(),
+		hover: monitor.isOver()
+	})
+)(CriteriaRowWithDrag);
