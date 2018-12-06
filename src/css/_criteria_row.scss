@@ -1,49 +1,42 @@
 .criterion-row-root {
 	border: 2px solid transparent;
 	border-radius: 4px;
-	padding: 8px 16px;
 	display: flex;
 	flex: 1;
+	padding: 8px 16px;
 
 	&.dnd-hover {
 		border: 2px solid $primary;
 	}
 
 	.edit-container {
-		padding: 0;
-		margin: 0;
+		align-items: center;
 		display: flex;
+		margin: 0;
+		padding: 0;
 		width: 100%;
 
 		.criterion-input {
+			flex: 1;
 			margin-right: 16px;
-		}
-
-		.operator-input {
-			flex-shrink: 0;
-			width: 240px;
-		}
-
-		.delete-button {
-			flex-shrink: 0;
 		}
 	}
 
 	.read-only-container {
-		padding: 0;
-		margin: 0;
 		display: flex;
+		margin: 0;
+		padding: 0;
 		width: 100%;
 
 		.criteria-string {
+			color: $mainLighten28;
 			font-size: 14px;
 			font-weight: 500;
-			color: $mainLighten28;
 		}
 
 		.property-string, .value-string {
-			font-weight: 700;
 			color: $main;
+			font-weight: 700;
 		}
 	}
 }

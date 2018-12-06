@@ -43,16 +43,23 @@ class DropZone extends Component {
 	}
 }
 
+const acceptedDragTypes = [
+	DragTypes.CRITERIA_ROW,
+	DragTypes.PROPERTY
+];
+
 const dropZoneTarget = {
 	drop(props, monitor) {
-		const {name} = monitor.getItem();
+		const {criterion} = monitor.getItem();
 
-		props.onAddCriteria(props.index, name);
+		props.onAddCriteria(props.index, criterion);
+
+		return {dropIndex: props.index};
 	}
 };
 
 export default dropTarget(
-	DragTypes.PROPERTY,
+	acceptedDragTypes,
 	dropZoneTarget,
 	(connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),

@@ -72,9 +72,9 @@ class EmptyDropZone extends Component {
 
 const dropZoneTarget = {
 	drop(props, monitor) {
-		const {name} = monitor.getItem();
+		const {criterion} = monitor.getItem();
 
-		props.onAddCriteria(props.index, name);
+		props.onAddCriteria(props.index, criterion);
 	}
 };
 

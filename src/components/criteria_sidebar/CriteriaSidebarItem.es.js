@@ -70,7 +70,11 @@ class CriteriaSidebarItem extends Component {
 
 const propertySource = {
 	beginDrag({name}) {
-		return {name};
+		return {
+			criterion: {
+				propertyName: name
+			}
+		};
 	}
 };
 

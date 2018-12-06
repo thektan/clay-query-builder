@@ -40,16 +40,20 @@ class CriteriaGroup extends Component {
 	 * was previously empty and is being added to the root group, a new group
 	 * will be added as well.
 	 * @param {number} index The position the criterion will be inserted in.
-	 * @param {string} propertyName The property name that will be added.
+	 * @param {object} criterion The criterion that will be added.
 	 * @memberof CriteriaGroup
 	 */
-	_handleAddCriteria = (index, propertyName) => {
+	_handleAddCriterion = (index, criterion) => {
 		const {criteria, onChange, root, supportedOperators} = this.props;
 
+		const {operatorName, propertyName, value} = criterion;
+
 		const newCriterion = {
-			operatorName: supportedOperators[0].name,
+			operatorName: operatorName ?
+				operatorName :
+				supportedOperators[0].name,
 			propertyName,
-			value: ''
+			value: value ? value : ''
 		};
 
 		if (root && !criteria) {
@@ -65,7 +69,11 @@ class CriteriaGroup extends Component {
 				Object.assign(
 					criteria,
 					{
-						items: insertAtIndex(newCriterion, criteria.items, index)
+						items: insertAtIndex(
+							newCriterion,
+							criteria.items,
+							index
+						)
 					}
 				)
 			);
@@ -108,7 +116,7 @@ class CriteriaGroup extends Component {
 			<Fragment>
 				<DropZone
 					index={index}
-					onAddCriteria={this._handleAddCriteria}
+					onAddCriteria={this._handleAddCriterion}
 				/>
 
 				<ClayButton
@@ -123,7 +131,7 @@ class CriteriaGroup extends Component {
 				<DropZone
 					before
 					index={index}
-					onAddCriteria={this._handleAddCriteria}
+					onAddCriteria={this._handleAddCriterion}
 				/>
 			</Fragment>
 		);
@@ -155,7 +163,9 @@ class CriteriaGroup extends Component {
 					<CriteriaRow
 						criterion={criterion}
 						editing={editing}
+						index={index}
 						onChange={this._updateCriterion(index)}
+						onDelete={this._handleCriterionDelete}
 						root={root}
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}
@@ -166,9 +176,24 @@ class CriteriaGroup extends Component {
 
 				<DropZone
 					index={index + 1}
-					onAddCriteria={this._handleAddCriteria}
+					onAddCriteria={this._handleAddCriterion}
 				/>
 			</div>
+		);
+	}
+
+	_handleCriterionDelete = index => {
+		const {criteria, onChange} = this.props;
+
+		onChange(
+			Object.assign(
+				criteria,
+				{
+					items: criteria.items.filter(
+						(fItem, fIndex) => fIndex !== index
+					)
+				}
+			)
 		);
 	}
 
@@ -219,13 +244,13 @@ class CriteriaGroup extends Component {
 				{this._isCriteriaEmpty() ?
 					<EmptyDropZone
 						index={0}
-						onAddCriteria={this._handleAddCriteria}
+						onAddCriteria={this._handleAddCriterion}
 					/> :
 					<Fragment>
 						<DropZone
 							before
 							index={0}
-							onAddCriteria={this._handleAddCriteria}
+							onAddCriteria={this._handleAddCriterion}
 						/>
 
 						{criteria.items && criteria.items.map(

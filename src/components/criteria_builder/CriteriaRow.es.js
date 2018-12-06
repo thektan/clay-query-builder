@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import ClayButton from '../shared/ClayButton.es';
+import ClayIcon from '../shared/ClayIcon.es';
 import ClaySelect from '../shared/ClaySelect.es';
 import {CONJUNCTIONS} from '../../utils/constants.es';
-import {DropTarget as dropTarget} from 'react-dnd';
+import {DragSource as dragSource, DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 
@@ -11,6 +12,8 @@ import {Liferay} from '../../utils/language';
 
 class CriteriaRow extends Component {
 	static propTypes = {
+		connectDragPreview: PropTypes.func,
+		connectDragSource: PropTypes.func,
 		connectDropTarget: PropTypes.func,
 		criterion: PropTypes.object,
 		editing: PropTypes.bool,
@@ -47,6 +50,8 @@ class CriteriaRow extends Component {
 
 	render() {
 		const {
+			connectDragPreview,
+			connectDragSource,
 			connectDropTarget,
 			criterion,
 			editing,
@@ -73,71 +78,79 @@ class CriteriaRow extends Component {
 		);
 
 		return connectDropTarget(
-			<div
-				className={classes}
-			>
-				{editing ? (
-					<div className="edit-container">
-						<ClaySelect
-							className="criterion-input form-control"
-							onChange={this._handleInputChange(
-								'propertyName'
+			connectDragPreview(
+				<div
+					className={classes}
+				>
+					{editing ? (
+						<div className="edit-container">
+							{connectDragSource(
+								<div>
+									<ClayIcon iconName="drag" />
+								</div>
 							)}
-							options={supportedProperties.map(
-								({label, name}) => ({
-									label,
-									value: name
-								})
-							)}
-							selected={selectedProperty && selectedProperty.name}
-						/>
 
-						<ClaySelect
-							className="criterion-input operator-input form-control"
-							onChange={this._handleInputChange(
-								'operatorName'
-							)}
-							options={supportedOperators.map(
-								({label, name}) => ({
-									label,
-									value: name
-								})
-							)}
-							selected={selectedOperator && selectedOperator.name}
-						/>
+							<ClaySelect
+								className="criterion-input form-control"
+								onChange={this._handleInputChange(
+									'propertyName'
+								)}
+								options={supportedProperties.map(
+									({label, name}) => ({
+										label,
+										value: name
+									})
+								)}
+								selected={selectedProperty && selectedProperty.name}
+							/>
 
-						<input
-							className="criterion-input form-control"
-							id="queryRowValue"
-							onChange={this._handleInputChange('value')}
-							type="text"
-							value={criterion && criterion.value}
-						/>
+							<ClaySelect
+								className="criterion-input operator-input form-control"
+								onChange={this._handleInputChange(
+									'operatorName'
+								)}
+								options={supportedOperators.map(
+									({label, name}) => ({
+										label,
+										value: name
+									})
+								)}
+								selected={selectedOperator && selectedOperator.name}
+							/>
 
-						<ClayButton
-							className="btn-monospaced delete-button"
-							iconName="trash"
-							onClick={this._handleDelete}
-						/>
-					</div>
-				) : (
-					<div className="read-only-container">
-						<span className="criteria-string">
-							{`${Liferay.Language.get('property')} `}
+							<input
+								className="criterion-input form-control"
+								id="queryRowValue"
+								onChange={this._handleInputChange('value')}
+								type="text"
+								value={criterion && criterion.value}
+							/>
 
-							<strong className="property-string">
-								{`${selectedProperty && selectedProperty.label} `}
-							</strong>
+							<ClayButton
+								className="btn-monospaced delete-button"
+								iconName="trash"
+								onClick={this._handleDelete}
+							/>
+						</div>
+					) : (
+						<div className="read-only-container">
+							<span className="criteria-string">
+								{`${Liferay.Language.get('property')} `}
 
-							{`${selectedOperator && selectedOperator.label} `}
+								<strong className="property-string">
+									{`${selectedProperty && selectedProperty.label} `}
+								</strong>
 
-							<strong className="value-string">
-								{`${criterion && criterion.value}.`}
-							</strong>
-						</span>
-					</div>
-				)}
-			</div>
+								{`${selectedOperator && selectedOperator.label} `}
+
+								<strong className="value-string">
+									{`${criterion && criterion.value}.`}
+								</strong>
+							</span>
+						</div>
+					)}
+				</div>
+			)
 		);
 	}
 }
@@ -146,12 +159,16 @@ const dropZoneTarget = {
 	drop(props, monitor) {
 		const {criterion, onChange, supportedOperators} = props;
 
-		const {name} = monitor.getItem();
+		const {criterion: droppedCriterion} = monitor.getItem();
+
+		const {operatorName, propertyName, value} = droppedCriterion;
 
 		const newCriterion = {
-			operatorName: supportedOperators[0].name,
-			propertyName: name,
-			value: ''
+			operatorName: operatorName ?
+				operatorName :
+				supportedOperators[0].name,
+			propertyName,
+			value: value ? value : ''
 		};
 
 		const newGroup = {
@@ -163,6 +180,26 @@ const dropZoneTarget = {
 	}
 };
 
+const criteriaRowSource = {
+	beginDrag({criterion}) {
+		return {criterion};
+	},
+	endDrag(props, monitor) {
+		if (monitor.didDrop()) {
+			const {dropIndex} = monitor.getDropResult();
+
+			if (dropIndex < props.index) {
+				// @TODO Only add index if rows are in the same group.
+
+				props.onDelete(props.index + 1);
+			}
+			else {
+				props.onDelete(props.index);
+			}
+		}
+	}
+};
+
 export default dropTarget(
 	DragTypes.PROPERTY,
 	dropZoneTarget,
@@ -170,4 +207,12 @@ export default dropTarget(
 		connectDropTarget: connect.dropTarget(),
 		hover: monitor.isOver()
 	})
-)(CriteriaRow);
+)(dragSource(
+	DragTypes.CRITERIA_ROW,
+	criteriaRowSource,
+	(connect, monitor) => ({
+		connectDragPreview: connect.dragPreview(),
+		connectDragSource: connect.dragSource(),
+		dragging: monitor.isDragging()
+	})
+)(CriteriaRow));
