@@ -232,17 +232,13 @@ class CriteriaGroup extends Component {
 							(criterion, index) => {
 								return (
 									<Fragment key={index}>
-										{
-											index !== 0 &&
-												this._renderConjunction(index)
-										}
+										{index !== 0 &&
+											this._renderConjunction(index)}
 
-										{
-											this._renderCriterion(
-												criterion,
-												index
-											)
-										}
+										{this._renderCriterion(
+											criterion,
+											index
+										)}
 									</Fragment>
 								);
 							}
