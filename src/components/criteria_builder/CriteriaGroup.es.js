@@ -66,16 +66,16 @@ class CriteriaGroup extends Component {
 		}
 		else {
 			onChange(
-				Object.assign(
-					criteria,
-					{
+				{
+					...criteria,
+					...{
 						items: insertAtIndex(
 							newCriterion,
 							criteria.items,
 							index
 						)
 					}
-				)
+				}
 			);
 		}
 	}
@@ -94,12 +94,12 @@ class CriteriaGroup extends Component {
 			supportedConjunctions[index + 1].name;
 
 		onChange(
-			Object.assign(
-				criteria,
-				{
+			{
+				...criteria,
+				...{
 					conjunctionName: conjunctionSelected
 				}
-			)
+			}
 		);
 	}
 
@@ -186,14 +186,14 @@ class CriteriaGroup extends Component {
 		const {criteria, onChange} = this.props;
 
 		onChange(
-			Object.assign(
-				criteria,
-				{
+			{
+				...criteria,
+				...{
 					items: criteria.items.filter(
 						(fItem, fIndex) => fIndex !== index
 					)
 				}
-			)
+			}
 		);
 	}
 
@@ -201,9 +201,9 @@ class CriteriaGroup extends Component {
 		const {criteria, onChange} = this.props;
 
 		onChange(
-			Object.assign(
-				criteria,
-				{
+			{
+				...criteria,
+				...{
 					items: newCriterion ?
 						Object.assign(
 							criteria.items,
@@ -215,12 +215,12 @@ class CriteriaGroup extends Component {
 							(fItem, fIndex) => fIndex !== index
 						)
 				}
-			)
+			}
 		);
 	}
 
 	_updateCriteria = (index, criterion) => newCriteria => {
-		this._updateCriterion(index)(Object.assign(criterion, newCriteria));
+		this._updateCriterion(index)({...criterion, ...newCriteria});
 	}
 
 	render() {

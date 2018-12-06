@@ -45,7 +45,7 @@ class CriteriaRow extends Component {
 	_updateCriteria = newCriteria => {
 		const {criterion, onChange} = this.props;
 
-		onChange(Object.assign(criterion, newCriteria));
+		onChange({...criterion, ...newCriteria});
 	};
 
 	render() {

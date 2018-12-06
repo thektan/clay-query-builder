@@ -103,12 +103,12 @@ class CriteriaBuilder extends Component {
 							}
 						}
 						else {
-							cleanedItem = Object.assign(
-								item,
-								{
+							cleanedItem = {
+								...item,
+								...{
 									items: this._cleanCriteriaMapItems(item.items)
 								}
-							);
+							};
 						}
 					}
 
