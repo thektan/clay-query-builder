@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {PropTypes} from 'prop-types';
 import CriteriaRow from './CriteriaRow.es';
 import ClayButton from '../shared/ClayButton.es';
+import {CONJUNCTIONS} from '../../utils/constants.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 import getCN from 'classnames';
@@ -54,7 +55,7 @@ class CriteriaGroup extends Component {
 		if (root && !criteria) {
 			onChange(
 				{
-					conjunctionName: 'and',
+					conjunctionName: CONJUNCTIONS.AND,
 					items: [newCriterion]
 				}
 			);

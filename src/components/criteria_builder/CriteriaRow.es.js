@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import ClayButton from '../shared/ClayButton.es';
 import ClaySelect from '../shared/ClaySelect.es';
+import {CONJUNCTIONS} from '../../utils/constants.es';
 import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
@@ -154,7 +155,7 @@ const dropZoneTarget = {
 		};
 
 		const newGroup = {
-			conjunctionName: 'and',
+			conjunctionName: CONJUNCTIONS.AND,
 			items: [criterion, newCriterion]
 		};
 
