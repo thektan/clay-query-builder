@@ -10,7 +10,7 @@ class DropZone extends Component {
 		connectDropTarget: PropTypes.func,
 		hover: PropTypes.bool,
 		index: PropTypes.number,
-		onAddCriteria: PropTypes.func
+		onCriterionAdd: PropTypes.func
 	};
 
 	render() {
@@ -52,7 +52,7 @@ const dropZoneTarget = {
 	drop(props, monitor) {
 		const {criterion} = monitor.getItem();
 
-		props.onAddCriteria(props.index, criterion);
+		props.onCriterionAdd(props.index, criterion);
 
 		return {dropIndex: props.index};
 	}

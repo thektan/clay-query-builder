@@ -18,7 +18,9 @@ class CriteriaRow extends Component {
 		criterion: PropTypes.object,
 		editing: PropTypes.bool,
 		hover: PropTypes.bool,
+		index: PropTypes.number,
 		onChange: PropTypes.func,
+		onDelete: PropTypes.func,
 		supportedConjunctions: PropTypes.array,
 		supportedOperators: PropTypes.array,
 		supportedProperties: PropTypes.array,
@@ -33,20 +35,25 @@ class CriteriaRow extends Component {
 		list.find(item => item.name === idSelected);
 
 	_handleInputChange = propertyName => event => {
-		this._updateCriteria({[propertyName]: event.target.value});
+		const {criterion, onChange} = this.props;
+
+		onChange(
+			{
+				...criterion,
+				[propertyName]: event.target.value
+			}
+		);
 	};
 
 	_handleDelete = event => {
-		event.preventDefault();
+		if (event) {
+			event.preventDefault();
+		}
 
-		this.props.onChange();
+		const {index, onDelete} = this.props;
+
+		onDelete(index);
 	}
-
-	_updateCriteria = newCriteria => {
-		const {criterion, onChange} = this.props;
-
-		onChange({...criterion, ...newCriteria});
-	};
 
 	render() {
 		const {
@@ -187,6 +194,8 @@ const criteriaRowSource = {
 	endDrag(props, monitor) {
 		if (monitor.didDrop()) {
 			const {dropIndex} = monitor.getDropResult();
+
+			console.log(props);
 
 			if (dropIndex < props.index) {
 				// @TODO Only add index if rows are in the same group.

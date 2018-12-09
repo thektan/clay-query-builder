@@ -76,7 +76,7 @@ class ODataQueryBuilder extends Component {
 		};
 	}
 
-	_updateQuery = newCriteriaMap => {
+	_handleChange = newCriteriaMap => {
 		this.setState(
 			{
 				criteriaMap: newCriteriaMap,
@@ -95,7 +95,7 @@ class ODataQueryBuilder extends Component {
 				<div className="form-group">
 					<CriteriaBuilder
 						criteria={criteriaMap}
-						onChange={this._updateQuery}
+						onChange={this._handleChange}
 						supportedConjunctions={SUPPORTED_CONJUNCTIONS}
 						supportedOperators={SUPPORTED_OPERATORS}
 						supportedProperties={properties}

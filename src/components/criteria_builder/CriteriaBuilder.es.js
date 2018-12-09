@@ -77,6 +77,7 @@ class CriteriaBuilder extends Component {
 	 * 2. Flatten groups that directly contain a single group.
 	 * 3. Flatten groups that contain a single criterion.
 	 * @param {array} criteriaItems A list of criterion and criteria groups
+	 * @param {boolean} root True if the criteriaItems are from the root group.
 	 * to clean.
 	 */
 	_cleanCriteriaMapItems(criteriaItems, root) {
@@ -125,7 +126,7 @@ class CriteriaBuilder extends Component {
 		);
 	};
 
-	_updateCriteria = newCriteria => {
+	_handleCriteriaChange = newCriteria => {
 		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
 	};
 
@@ -155,7 +156,7 @@ class CriteriaBuilder extends Component {
 					<CriteriaGroup
 						criteria={criteria}
 						editing={editing}
-						onChange={this._updateCriteria}
+						onChange={this._handleCriteriaChange}
 						root
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}

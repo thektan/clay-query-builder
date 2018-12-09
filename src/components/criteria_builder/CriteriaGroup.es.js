@@ -6,10 +6,7 @@ import {CONJUNCTIONS} from '../../utils/constants.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 import getCN from 'classnames';
-
-function insertAtIndex(item, list, index) {
-	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
-}
+import {insertAtIndex, replaceAtIndex} from '../../utils/utils.es';
 
 class CriteriaGroup extends Component {
 	static propTypes = {
@@ -35,6 +32,29 @@ class CriteriaGroup extends Component {
 		return conjunction ? conjunction.label : undefined;
 	}
 
+	_handleConjunctionClick = event => {
+		event.preventDefault();
+
+		const {criteria, onChange, supportedConjunctions} = this.props;
+
+		const index = supportedConjunctions.findIndex(
+			item => item.name === criteria.conjunctionName
+		);
+
+		const conjunctionSelected = index === supportedConjunctions.length - 1 ?
+			supportedConjunctions[0].name :
+			supportedConjunctions[index + 1].name;
+
+		onChange(
+			{
+				...criteria,
+				...{
+					conjunctionName: conjunctionSelected
+				}
+			}
+		);
+	}
+
 	/**
 	 * Adds a new criterion in a group at the specified index. If the criteria
 	 * was previously empty and is being added to the root group, a new group
@@ -43,7 +63,7 @@ class CriteriaGroup extends Component {
 	 * @param {object} criterion The criterion that will be added.
 	 * @memberof CriteriaGroup
 	 */
-	_handleAddCriterion = (index, criterion) => {
+	_handleCriterionAdd = (index, criterion) => {
 		const {criteria, onChange, root, supportedOperators} = this.props;
 
 		const {operatorName, propertyName, value} = criterion;
@@ -80,24 +100,29 @@ class CriteriaGroup extends Component {
 		}
 	}
 
-	_handleConjunctionClick = event => {
-		event.preventDefault();
-
-		const {criteria, onChange, supportedConjunctions} = this.props;
-
-		const index = supportedConjunctions.findIndex(
-			item => item.name === criteria.conjunctionName
-		);
-
-		const conjunctionSelected = index === supportedConjunctions.length - 1 ?
-			supportedConjunctions[0].name :
-			supportedConjunctions[index + 1].name;
+	_handleCriterionChange = index => newCriterion => {
+		const {criteria, onChange} = this.props;
 
 		onChange(
 			{
 				...criteria,
 				...{
-					conjunctionName: conjunctionSelected
+					items: replaceAtIndex(newCriterion, criteria.items, index)
+				}
+			}
+		);
+	}
+
+	_handleCriterionDelete = index => {
+		const {criteria, onChange} = this.props;
+
+		onChange(
+			{
+				...criteria,
+				...{
+					items: criteria.items.filter(
+						(fItem, fIndex) => fIndex !== index
+					)
 				}
 			}
 		);
@@ -116,7 +141,7 @@ class CriteriaGroup extends Component {
 			<Fragment>
 				<DropZone
 					index={index}
-					onAddCriteria={this._handleAddCriterion}
+					onCriterionAdd={this._handleCriterionAdd}
 				/>
 
 				<ClayButton
@@ -131,7 +156,7 @@ class CriteriaGroup extends Component {
 				<DropZone
 					before
 					index={index}
-					onAddCriteria={this._handleAddCriterion}
+					onCriterionAdd={this._handleCriterionAdd}
 				/>
 			</Fragment>
 		);
@@ -153,7 +178,7 @@ class CriteriaGroup extends Component {
 					<CriteriaGroup
 						criteria={criterion}
 						editing={editing}
-						onChange={this._updateCriteria(index, criterion)}
+						onChange={this._handleCriterionChange(index)}
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}
 						supportedProperties={supportedProperties}
@@ -164,7 +189,7 @@ class CriteriaGroup extends Component {
 						criterion={criterion}
 						editing={editing}
 						index={index}
-						onChange={this._updateCriterion(index)}
+						onChange={this._handleCriterionChange(index)}
 						onDelete={this._handleCriterionDelete}
 						root={root}
 						supportedConjunctions={supportedConjunctions}
@@ -176,51 +201,10 @@ class CriteriaGroup extends Component {
 
 				<DropZone
 					index={index + 1}
-					onAddCriteria={this._handleAddCriterion}
+					onCriterionAdd={this._handleCriterionAdd}
 				/>
 			</div>
 		);
-	}
-
-	_handleCriterionDelete = index => {
-		const {criteria, onChange} = this.props;
-
-		onChange(
-			{
-				...criteria,
-				...{
-					items: criteria.items.filter(
-						(fItem, fIndex) => fIndex !== index
-					)
-				}
-			}
-		);
-	}
-
-	_updateCriterion = index => newCriterion => {
-		const {criteria, onChange} = this.props;
-
-		onChange(
-			{
-				...criteria,
-				...{
-					items: newCriterion ?
-						Object.assign(
-							criteria.items,
-							{
-								[index]: newCriterion
-							}
-						) :
-						criteria.items.filter(
-							(fItem, fIndex) => fIndex !== index
-						)
-				}
-			}
-		);
-	}
-
-	_updateCriteria = (index, criterion) => newCriteria => {
-		this._updateCriterion(index)({...criterion, ...newCriteria});
 	}
 
 	render() {
@@ -244,13 +228,13 @@ class CriteriaGroup extends Component {
 				{this._isCriteriaEmpty() ?
 					<EmptyDropZone
 						index={0}
-						onAddCriteria={this._handleAddCriterion}
+						onCriterionAdd={this._handleCriterionAdd}
 					/> :
 					<Fragment>
 						<DropZone
 							before
 							index={0}
-							onAddCriteria={this._handleAddCriterion}
+							onCriterionAdd={this._handleCriterionAdd}
 						/>
 
 						{criteria.items && criteria.items.map(
