@@ -28,7 +28,7 @@ class ClayIcon extends Component {
 				className={classes}
 				viewBox="0 0 512 512"
 			>
-				<use xlinkHref={`${this.context.spriteMapPath}#${iconName}`} />
+				<use xlinkHref={`${this.context.spritemap}#${iconName}`} />
 			</svg>
 		);
 	}
