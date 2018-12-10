@@ -2,7 +2,10 @@ import React, {Component, Fragment} from 'react';
 import {PropTypes} from 'prop-types';
 import CriteriaRow from './CriteriaRow.es';
 import ClayButton from '../shared/ClayButton.es';
+import ClayIcon from '../shared/ClayIcon.es';
 import {CONJUNCTIONS} from '../../utils/constants.es';
+import {DragSource as dragSource} from 'react-dnd';
+import {DragTypes} from '../../utils/drag-types.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 import getCN from 'classnames';
@@ -10,11 +13,16 @@ import {generateGroupId, insertAtIndex, replaceAtIndex} from '../../utils/utils.
 
 class CriteriaGroup extends Component {
 	static propTypes = {
+		connectDragPreview: PropTypes.func,
+		connectDragSource: PropTypes.func,
 		criteria: PropTypes.object,
+		dragging: PropTypes.bool,
 		editing: PropTypes.bool,
 		groupId: PropTypes.string,
+		index: PropTypes.number,
 		onChange: PropTypes.func,
 		onMove: PropTypes.func,
+		parentGroupId: PropTypes.string,
 		root: PropTypes.bool,
 		supportedConjunctions: PropTypes.array,
 		supportedOperators: PropTypes.array,
@@ -196,15 +204,27 @@ class CriteriaGroup extends Component {
 			}
 		);
 
+		const CriteriaGroupWithDrag = dragSource(
+			DragTypes.CRITERIA_GROUP,
+			criteriaGroupSource,
+			(connect, monitor) => ({
+				connectDragPreview: connect.dragPreview(),
+				connectDragSource: connect.dragSource(),
+				dragging: monitor.isDragging()
+			})
+		)(CriteriaGroup);
+
 		return (
 			<div className={classes}>
 				{criterion.items ? (
-					<CriteriaGroup
+					<CriteriaGroupWithDrag
 						criteria={criterion}
 						editing={editing}
 						groupId={criterion.groupId}
+						index={index}
 						onChange={this._handleCriterionChange(index)}
 						onMove={onMove}
+						parentGroupId={groupId}
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}
 						supportedProperties={supportedProperties}
@@ -239,7 +259,10 @@ class CriteriaGroup extends Component {
 
 	render() {
 		const {
+			connectDragPreview,
+			connectDragSource,
 			criteria,
+			dragging,
 			groupId,
 			onMove,
 			root,
@@ -249,11 +272,12 @@ class CriteriaGroup extends Component {
 			'criteria-group-root',
 			{
 				'criteria-group-item': !root,
-				'criteria-group-item-root': root
+				'criteria-group-item-root': root,
+				'dnd-drag': dragging
 			}
 		);
 
-		return (
+		return connectDragPreview(
 			<div
 				className={classes}
 			>
@@ -270,6 +294,12 @@ class CriteriaGroup extends Component {
 							onCriterionAdd={this._handleCriterionAdd}
 							onMove={onMove}
 						/>
+
+						{!root && connectDragSource(
+							<div className="criteria-group-drag-icon drag-icon">
+								<ClayIcon iconName="drag" />
+							</div>
+						)}
 
 						{criteria.items && criteria.items.map(
 							(criterion, index) => {
@@ -293,4 +323,22 @@ class CriteriaGroup extends Component {
 	}
 }
 
-export default CriteriaGroup;
+const criteriaGroupSource = {
+	beginDrag({criteria, index, parentGroupId}) {
+		return {
+			criterion: criteria,
+			groupId: parentGroupId,
+			index
+		};
+	}
+};
+
+export default dragSource(
+	DragTypes.CRITERIA_GROUP,
+	criteriaGroupSource,
+	(connect, monitor) => ({
+		connectDragPreview: connect.dragPreview(),
+		connectDragSource: connect.dragSource(),
+		dragging: monitor.isDragging()
+	})
+)(CriteriaGroup);

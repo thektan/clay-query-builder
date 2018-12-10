@@ -5,10 +5,6 @@
 	flex: 1;
 	padding: 8px 0;
 
-	&.dnd-hover {
-		border: 2px solid $primary;
-	}
-
 	.criteria-string {
 		color: $mainLighten28;
 		font-weight: 600;
@@ -20,16 +16,7 @@
 	}
 
 	.drag-icon {
-		color: $mainLighten52;
 		margin-right: 8px;
-
-		&:active {
-			cursor: grabbing;
-		}
-
-		&:hover {
-			cursor: grab;
-		}
 	}
 
 	.edit-container {
@@ -50,5 +37,13 @@
 		margin: 0;
 		padding: 0;
 		width: 100%;
+	}
+
+	&.dnd-drag {
+		opacity: 0.4;
+	}
+
+	&.dnd-hover {
+		border: 2px solid $primary;
 	}
 }

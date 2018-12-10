@@ -18,6 +18,7 @@ class CriteriaRow extends Component {
 		connectDragSource: PropTypes.func,
 		connectDropTarget: PropTypes.func,
 		criterion: PropTypes.object,
+		dragging: PropTypes.bool,
 		editing: PropTypes.bool,
 		groupId: PropTypes.string,
 		hover: PropTypes.bool,
@@ -66,6 +67,7 @@ class CriteriaRow extends Component {
 			connectDragSource,
 			connectDropTarget,
 			criterion,
+			dragging,
 			editing,
 			hover,
 			supportedOperators,
@@ -85,6 +87,7 @@ class CriteriaRow extends Component {
 		const classes = getCN(
 			'criterion-row-root',
 			{
+				'dnd-drag': dragging,
 				'dnd-hover': hover && canDrop
 			}
 		);
@@ -107,7 +110,7 @@ class CriteriaRow extends Component {
 									// Liferay.Language.get('x-with-property-x'),
 									'{0} with property {1}',
 									[
-										'User',
+										<span key="model-name">{'User'}</span>,
 										<b key="property">
 											{selectedProperty && selectedProperty.label}
 										</b>
@@ -180,6 +183,10 @@ const dropZoneTarget = {
 	canDrop(props, monitor) {
 		const {groupId: destGroupId, index: destIndex} = props;
 		const {groupId: startGroupId, index: startIndex} = monitor.getItem();
+
+		if (monitor.getItemType() === DragTypes.CRITERIA_GROUP) {
+			// Don't allow criteria groups to be dropped within the same group.
+		}
 
 		return destGroupId !== startGroupId || destIndex !== startIndex;
 	},

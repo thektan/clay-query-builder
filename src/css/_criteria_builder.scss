@@ -17,6 +17,18 @@
 		width: 100%;
 	}
 
+	.drag-icon {
+		color: $mainLighten52;
+
+		&:active {
+			cursor: grabbing;
+		}
+
+		&:hover {
+			cursor: grab;
+		}
+	}
+
 	.empty-state {
 		background-color: $lightBackground;
 		border: 1px solid $mainLighten74;

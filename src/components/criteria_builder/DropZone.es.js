@@ -7,6 +7,7 @@ import getCN from 'classnames';
 class DropZone extends Component {
 	static propTypes = {
 		before: PropTypes.bool,
+		canDrop: PropTypes.bool,
 		connectDropTarget: PropTypes.func,
 		groupId: PropTypes.string,
 		hover: PropTypes.bool,
@@ -18,6 +19,7 @@ class DropZone extends Component {
 	render() {
 		const {
 			before,
+			canDrop,
 			connectDropTarget,
 			hover
 		} = this.props;
@@ -35,7 +37,7 @@ class DropZone extends Component {
 					<div
 						className={targetClasses}
 					>
-						{hover &&
+						{canDrop && hover &&
 							<div className="drop-zone-indicator" />
 						}
 					</div>
@@ -46,11 +48,23 @@ class DropZone extends Component {
 }
 
 const acceptedDragTypes = [
+	DragTypes.CRITERIA_GROUP,
 	DragTypes.CRITERIA_ROW,
 	DragTypes.PROPERTY
 ];
 
 const dropZoneTarget = {
+	canDrop(props, monitor) {
+		let droppable = true;
+
+		const {criterion} = monitor.getItem();
+
+		if (monitor.getItemType() === DragTypes.CRITERIA_GROUP && criterion.groupId === props.groupId) {
+			droppable = false;
+		}
+
+		return droppable;
+	},
 	drop(props, monitor) {
 		const {
 			groupId: destGroupId,
@@ -70,7 +84,7 @@ const dropZoneTarget = {
 		if (itemType === DragTypes.PROPERTY) {
 			onCriterionAdd(destIndex, criterion);
 		}
-		else if (itemType === DragTypes.CRITERIA_ROW) {
+		else if (itemType === DragTypes.CRITERIA_ROW || itemType === DragTypes.CRITERIA_GROUP) {
 			onMove(startGroupId, startIndex, destGroupId, destIndex, criterion);
 		}
 	}
@@ -80,6 +94,7 @@ export default dropTarget(
 	acceptedDragTypes,
 	dropZoneTarget,
 	(connect, monitor) => ({
+		canDrop: monitor.canDrop(),
 		connectDropTarget: connect.dropTarget(),
 		hover: monitor.isOver()
 	})

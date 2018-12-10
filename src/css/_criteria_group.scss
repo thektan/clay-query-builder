@@ -32,11 +32,24 @@
 	}
 
 	&.criteria-group-item {
-		padding: 8px;
+		padding: 8px 8px 8px 16px;
+
+		.criteria-group-drag-icon {
+			align-items: center;
+			display: flex;
+			height: 100%;
+			left: 4px;
+			position: absolute;
+			top: 0;
+		}
 	}
 
 	&.criteria-group-item-root {
 		border-left: 3px solid $chartBlue;
 		padding: 8px;
+	}
+
+	&.dnd-drag {
+		opacity: 0.4;
 	}
 }
