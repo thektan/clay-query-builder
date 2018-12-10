@@ -203,6 +203,7 @@ class CriteriaGroup extends Component {
 						index={index}
 						onChange={this._handleCriterionChange(index)}
 						onDelete={this._handleCriterionDelete}
+						onMove={onMove}
 						root={root}
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}

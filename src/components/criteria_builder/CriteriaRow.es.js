@@ -13,6 +13,7 @@ import {Liferay} from '../../utils/language';
 
 class CriteriaRow extends Component {
 	static propTypes = {
+		canDrop: PropTypes.bool,
 		connectDragPreview: PropTypes.func,
 		connectDragSource: PropTypes.func,
 		connectDropTarget: PropTypes.func,
@@ -23,6 +24,7 @@ class CriteriaRow extends Component {
 		index: PropTypes.number,
 		onChange: PropTypes.func,
 		onDelete: PropTypes.func,
+		onMove: PropTypes.func,
 		supportedConjunctions: PropTypes.array,
 		supportedOperators: PropTypes.array,
 		supportedProperties: PropTypes.array,
@@ -59,6 +61,7 @@ class CriteriaRow extends Component {
 
 	render() {
 		const {
+			canDrop,
 			connectDragPreview,
 			connectDragSource,
 			connectDropTarget,
@@ -82,7 +85,7 @@ class CriteriaRow extends Component {
 		const classes = getCN(
 			'criterion-row-root',
 			{
-				'dnd-hover': hover
+				'dnd-hover': hover && canDrop
 			}
 		);
 
@@ -164,11 +167,33 @@ class CriteriaRow extends Component {
 	}
 }
 
-const dropZoneTarget = {
-	drop(props, monitor) {
-		const {criterion, onChange, supportedOperators} = props;
+const acceptedDragTypes = [
+	DragTypes.CRITERIA_ROW,
+	DragTypes.PROPERTY
+];
 
-		const {criterion: droppedCriterion} = monitor.getItem();
+const dropZoneTarget = {
+	canDrop(props, monitor) {
+		const {groupId: destGroupId, index: destIndex} = props;
+		const {groupId: startGroupId, index: startIndex} = monitor.getItem();
+
+		return destGroupId !== startGroupId || destIndex !== startIndex;
+	},
+	drop(props, monitor) {
+		const {
+			criterion,
+			groupId: destGroupId,
+			index: destIndex,
+			onChange,
+			onMove,
+			supportedOperators
+		} = props;
+
+		const {
+			criterion: droppedCriterion,
+			groupId: startGroupId,
+			index: startIndex
+		} = monitor.getItem();
 
 		const {operatorName, propertyName, value} = droppedCriterion;
 
@@ -186,7 +211,21 @@ const dropZoneTarget = {
 			items: [criterion, newCriterion]
 		};
 
-		onChange(newGroup);
+		const itemType = monitor.getItemType();
+
+		if (itemType === DragTypes.PROPERTY) {
+			onChange(newGroup);
+		}
+		else if (itemType === DragTypes.CRITERIA_ROW) {
+			onMove(
+				startGroupId,
+				startIndex,
+				destGroupId,
+				destIndex,
+				newGroup,
+				true
+			);
+		}
 	}
 };
 
@@ -207,9 +246,10 @@ const CriteriaRowWithDrag = dragSource(
 )(CriteriaRow);
 
 export default dropTarget(
-	DragTypes.PROPERTY,
+	acceptedDragTypes,
 	dropZoneTarget,
 	(connect, monitor) => ({
+		canDrop: monitor.canDrop(),
 		connectDropTarget: connect.dropTarget(),
 		hover: monitor.isOver()
 	})

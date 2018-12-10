@@ -5,7 +5,7 @@ import CriteriaGroup from './CriteriaGroup.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import {insertAtIndex, removeAtIndex} from '../../utils/utils.es';
+import {insertAtIndex, removeAtIndex, replaceAtIndex} from '../../utils/utils.es';
 
 import {Liferay} from '../../utils/language';
 
@@ -134,7 +134,8 @@ class CriteriaBuilder extends Component {
 		startIndex,
 		destGroupId,
 		destIndex,
-		criterion
+		criterion,
+		replace
 	) => {
 		const newCriteria = this._searchAndUpdateCriteria(
 			this.props.criteria,
@@ -142,7 +143,8 @@ class CriteriaBuilder extends Component {
 			startIndex,
 			destGroupId,
 			destIndex,
-			criterion
+			criterion,
+			replace
 		);
 
 		this._handleCriteriaChange(newCriteria);
@@ -159,41 +161,53 @@ class CriteriaBuilder extends Component {
 	}
 
 	/**
-	 * Searches through the criteria object and adds and removes the criterion
-	 * at their respective specified index.
-	 * Used for moving a criterion between groups.
+	 * Searches through the criteria object and adds or replaces and removes
+	 * the criterion at their respective specified index. insertAtIndex must
+	 * come before removeAtIndex since the startIndex is incremented by 1
+	 * when the destination index comes before the start index in the same
+	 * group. The startIndex is not incremented if a replace is occurring.
+	 * This is used for moving a criterion between groups.
 	 * @param {object} criteria The criteria object to update.
-	 * @param {string} removeGroupId Group ID of the item to remove.
-	 * @param {number} removeIndex Index in the group to remove.
-	 * @param {string} addGroupId Group ID of the item to add.
-	 * @param {number} addIndex Index in the group where the criterion will
+	 * @param {string} startGroupId Group ID of the item to remove.
+	 * @param {number} startIndex Index in the group to remove.
+	 * @param {string} destGroupId Group ID of the item to add.
+	 * @param {number} destIndex Index in the group where the criterion will
 	 * be added.
 	 * @param {object} addCriterion The criterion that is being moved.
+	 * @param {boolean} replace True if the destIndex should replace rather than
+	 * insert.
 	 */
 	_searchAndUpdateCriteria = (
 		criteria,
-		removeGroupId,
-		removeIndex,
-		addGroupId,
-		addIndex,
-		addCriterion
+		startGroupId,
+		startIndex,
+		destGroupId,
+		destIndex,
+		addCriterion,
+		replace
 	) => {
 		let updatedCriteriaItems = criteria.items;
 
-		if (criteria.groupId === addGroupId) {
-			updatedCriteriaItems = insertAtIndex(
-				addCriterion,
-				updatedCriteriaItems,
-				addIndex
-			);
+		if (criteria.groupId === destGroupId) {
+			updatedCriteriaItems = replace ?
+				replaceAtIndex(
+					addCriterion,
+					updatedCriteriaItems,
+					destIndex
+				) :
+				insertAtIndex(
+					addCriterion,
+					updatedCriteriaItems,
+					destIndex
+				);
 		}
 
-		if (criteria.groupId === removeGroupId) {
+		if (criteria.groupId === startGroupId) {
 			updatedCriteriaItems = removeAtIndex(
 				updatedCriteriaItems,
-				addGroupId === removeGroupId && addIndex < removeIndex ?
-					removeIndex + 1 :
-					removeIndex
+				destGroupId === startGroupId && destIndex < startIndex && !replace ?
+					startIndex + 1 :
+					startIndex
 			);
 		}
 
@@ -203,11 +217,12 @@ class CriteriaBuilder extends Component {
 				item => this._isGroupItem(item) ?
 					this._searchAndUpdateCriteria(
 						item,
-						removeGroupId,
-						removeIndex,
-						addGroupId,
-						addIndex,
-						addCriterion
+						startGroupId,
+						startIndex,
+						destGroupId,
+						destIndex,
+						addCriterion,
+						replace
 					) :
 					item
 			)

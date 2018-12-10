@@ -53,17 +53,17 @@ const acceptedDragTypes = [
 const dropZoneTarget = {
 	drop(props, monitor) {
 		const {
-			criterion,
-			groupId: startGroupId,
-			index: startIndex
-		} = monitor.getItem();
-
-		const {
 			groupId: destGroupId,
 			index: destIndex,
 			onCriterionAdd,
 			onMove
 		} = props;
+
+		const {
+			criterion,
+			groupId: startGroupId,
+			index: startIndex
+		} = monitor.getItem();
 
 		const itemType = monitor.getItemType();
 
