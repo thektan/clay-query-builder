@@ -36,6 +36,26 @@ class CriteriaRow extends Component {
 		editing: true,
 	};
 
+	_getReadableCriteriaString(propertyLabel, operatorLabel, value) {
+		return sub(
+			// Liferay.Language.get('x-with-property-x-x-x'),
+			'{0} with property {1} {2} {3}',
+			[
+				<span key="model-name">{'User'}</span>,
+				<b key="property">
+					{propertyLabel}
+				</b>,
+				<span key="operator">
+					{operatorLabel}
+				</span>,
+				<b key="value">
+					{value}
+				</b>
+			],
+			false
+		);
+	}
+
 	_getSelectedItem = (list, idSelected) =>
 		list.find(item => item.name === idSelected);
 
@@ -84,6 +104,10 @@ class CriteriaRow extends Component {
 			criterion.operatorName
 		);
 
+		const propertyLabel = selectedProperty ? selectedProperty.label : '';
+		const operatorLabel = selectedOperator ? selectedOperator.label : '';
+		const value = criterion ? criterion.value : '';
+
 		const classes = getCN(
 			'criterion-row-root',
 			{
@@ -112,7 +136,7 @@ class CriteriaRow extends Component {
 									[
 										<span key="model-name">{'User'}</span>,
 										<b key="property">
-											{selectedProperty && selectedProperty.label}
+											{propertyLabel}
 										</b>
 									],
 									false
@@ -138,7 +162,7 @@ class CriteriaRow extends Component {
 								id="queryRowValue"
 								onChange={this._handleInputChange('value')}
 								type="text"
-								value={criterion && criterion.value}
+								value={value}
 							/>
 
 							<ClayButton
@@ -150,20 +174,10 @@ class CriteriaRow extends Component {
 					) : (
 						<div className="read-only-container">
 							<span className="criteria-string">
-								{sub(
-									// Liferay.Language.get('x-with-property-x-x-x'),
-									'{0} with property {1} {2} {3}',
-									[
-										'User',
-										<b key="property">
-											{selectedProperty && selectedProperty.label}
-										</b>,
-										selectedOperator && selectedOperator.label,
-										<b key="value">
-											{criterion && criterion.value}
-										</b>
-									],
-									false
+								{this._getReadableCriteriaString(
+									propertyLabel,
+									operatorLabel,
+									value
 								)}
 							</span>
 						</div>
@@ -183,10 +197,6 @@ const dropZoneTarget = {
 	canDrop(props, monitor) {
 		const {groupId: destGroupId, index: destIndex} = props;
 		const {groupId: startGroupId, index: startIndex} = monitor.getItem();
-
-		if (monitor.getItemType() === DragTypes.CRITERIA_GROUP) {
-			// Don't allow criteria groups to be dropped within the same group.
-		}
 
 		return destGroupId !== startGroupId || destIndex !== startIndex;
 	},
