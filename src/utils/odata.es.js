@@ -4,6 +4,7 @@ import {
 	GROUP,
 	RELATIONAL_OPERATORS
 } from './constants.es';
+import {generateGroupId} from './utils.es';
 import '../libs/odata-parser.js';
 
 const OPERATORS = {
@@ -298,6 +299,7 @@ function transformGroupNode(context) {
 		toCriteria(skipGroup(context)) :
 		[{
 			conjunctionName: getConjunctionForGroup(oDataASTNode),
+			groupId: generateGroupId(),
 			items: [...toCriteria(
 				{
 					lastNodeWasGroup: true,
@@ -332,6 +334,7 @@ function transformOperatorNode({oDataASTNode}) {
 function wrapInCriteriaGroup(criteriaArray) {
 	return {
 		conjunctionName: CONJUNCTIONS.AND,
+		groupId: generateGroupId(),
 		items: criteriaArray
 	};
 }

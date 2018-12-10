@@ -10,6 +10,7 @@ import {Liferay} from '../../utils/language';
 
 const CRITERIA_GROUP_SHAPE = {
 	conjunctionName: PropTypes.string,
+	groupId: PropTypes.string,
 	items: PropTypes.array
 };
 
@@ -24,6 +25,7 @@ class CriteriaBuilder extends Component {
 		criteria: PropTypes.shape(
 			{
 				conjunctionName: PropTypes.string,
+				groupId: PropTypes.string,
 				items: PropTypes.arrayOf(
 					PropTypes.oneOfType(
 						[
@@ -96,6 +98,7 @@ class CriteriaBuilder extends Component {
 							if (soloItem.items) {
 								cleanedItem = {
 									conjunctionName: soloItem.conjunctionName,
+									groupId: soloItem.groupId,
 									items: this._cleanCriteriaMapItems(soloItem.items)
 								};
 							}

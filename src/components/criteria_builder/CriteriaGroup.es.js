@@ -6,7 +6,7 @@ import {CONJUNCTIONS} from '../../utils/constants.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 import getCN from 'classnames';
-import {insertAtIndex, replaceAtIndex} from '../../utils/utils.es';
+import {generateGroupId, insertAtIndex, replaceAtIndex} from '../../utils/utils.es';
 
 class CriteriaGroup extends Component {
 	static propTypes = {
@@ -80,6 +80,7 @@ class CriteriaGroup extends Component {
 			onChange(
 				{
 					conjunctionName: CONJUNCTIONS.AND,
+					groupId: generateGroupId(),
 					items: [newCriterion]
 				}
 			);
@@ -236,6 +237,8 @@ class CriteriaGroup extends Component {
 							index={0}
 							onCriterionAdd={this._handleCriterionAdd}
 						/>
+
+						{criteria.groupId}
 
 						{criteria.items && criteria.items.map(
 							(criterion, index) => {

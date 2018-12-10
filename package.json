@@ -46,6 +46,7 @@
 	"license": "BSD",
 	"dependencies": {
 		"classnames": "^2.2.6",
+		"lodash.uniqueid": "^4.0.1",
 		"odata-v4-parser": "^0.1.29",
 		"prop-types": "^15.6.2",
 		"react": "^16.6.3",

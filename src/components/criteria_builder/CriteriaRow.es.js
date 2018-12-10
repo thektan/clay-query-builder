@@ -7,6 +7,7 @@ import {CONJUNCTIONS} from '../../utils/constants.es';
 import {DragSource as dragSource, DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
+import {generateGroupId} from '../../utils/utils.es';
 
 import {Liferay} from '../../utils/language';
 
@@ -180,6 +181,7 @@ const dropZoneTarget = {
 
 		const newGroup = {
 			conjunctionName: CONJUNCTIONS.AND,
+			groupId: generateGroupId(),
 			items: [criterion, newCriterion]
 		};
 
