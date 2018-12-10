@@ -197,8 +197,6 @@ const criteriaRowSource = {
 		if (monitor.didDrop()) {
 			const {dropIndex} = monitor.getDropResult();
 
-			console.log(props);
-
 			if (dropIndex < props.index) {
 				// @TODO Only add index if rows are in the same group.
 				// Maybe this can be determined by the amount of items in a group.
