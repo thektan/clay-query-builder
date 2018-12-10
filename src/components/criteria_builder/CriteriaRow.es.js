@@ -102,17 +102,19 @@ class CriteriaRow extends Component {
 								</div>
 							)}
 
-							{sub(
-								// Liferay.Language.get('x-with-property-x'),
-								'{0} with property {1}',
-								[
-									'User',
-									<b key="property">
-										{selectedProperty && selectedProperty.label}
-									</b>
-								],
-								false
-							)}
+							<span className="criteria-string">
+								{sub(
+									// Liferay.Language.get('x-with-property-x'),
+									'{0} with property {1}',
+									[
+										'User',
+										<b key="property">
+											{selectedProperty && selectedProperty.label}
+										</b>
+									],
+									false
+								)}
+							</span>
 
 							<ClaySelect
 								className="criterion-input operator-input form-control"
