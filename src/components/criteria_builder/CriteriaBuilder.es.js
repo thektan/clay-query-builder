@@ -163,6 +163,11 @@ class CriteriaBuilder extends Component {
 	 * at their respective specified index.
 	 * Used for moving a criterion between groups.
 	 * @param {object} criteria The criteria object to update.
+	 * @param {string} removeGroupId Group ID of the item to remove.
+	 * @param {number} removeIndex Index in the group to remove.
+	 * @param {string} addGroupId Group ID of the item to add.
+	 * @param {number} addIndex Index in the group where the criterion will
+	 * be added.
 	 * @param {object} addCriterion The criterion that is being moved.
 	 */
 	_searchAndUpdateCriteria = (
