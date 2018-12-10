@@ -3,10 +3,23 @@
 	border-radius: 4px;
 	display: flex;
 	flex: 1;
-	padding: 8px 16px;
+	padding: 8px 0;
 
 	&.dnd-hover {
 		border: 2px solid $primary;
+	}
+
+	.drag-icon {
+		color: $mainLighten52;
+		margin-right: 8px;
+
+		&:active {
+			cursor: grabbing;
+		}
+
+		&:hover {
+			cursor: grab;
+		}
 	}
 
 	.edit-container {
@@ -30,11 +43,10 @@
 
 		.criteria-string {
 			color: $mainLighten28;
-			font-size: 14px;
 			font-weight: 500;
 		}
 
-		.property-string, .value-string {
+		b {
 			color: $main;
 			font-weight: 700;
 		}

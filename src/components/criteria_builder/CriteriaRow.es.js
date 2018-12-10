@@ -7,7 +7,7 @@ import {CONJUNCTIONS} from '../../utils/constants.es';
 import {DragSource as dragSource, DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
-import {generateGroupId} from '../../utils/utils.es';
+import {generateGroupId, sub} from '../../utils/utils.es';
 
 import {Liferay} from '../../utils/language';
 
@@ -97,24 +97,22 @@ class CriteriaRow extends Component {
 					{editing ? (
 						<div className="edit-container">
 							{connectDragSource(
-								<div>
+								<div className="drag-icon">
 									<ClayIcon iconName="drag" />
 								</div>
 							)}
 
-							<ClaySelect
-								className="criterion-input form-control"
-								onChange={this._handleInputChange(
-									'propertyName'
-								)}
-								options={supportedProperties.map(
-									({label, name}) => ({
-										label,
-										value: name
-									})
-								)}
-								selected={selectedProperty && selectedProperty.name}
-							/>
+							{sub(
+								// Liferay.Language.get('x-with-property-x'),
+								'{0} with property {1}',
+								[
+									'User',
+									<b key="property">
+										{selectedProperty && selectedProperty.label}
+									</b>
+								],
+								false
+							)}
 
 							<ClaySelect
 								className="criterion-input operator-input form-control"
@@ -147,17 +145,21 @@ class CriteriaRow extends Component {
 					) : (
 						<div className="read-only-container">
 							<span className="criteria-string">
-								{`${Liferay.Language.get('property')} `}
-
-								<strong className="property-string">
-									{`${selectedProperty && selectedProperty.label} `}
-								</strong>
-
-								{`${selectedOperator && selectedOperator.label} `}
-
-								<strong className="value-string">
-									{`${criterion && criterion.value}.`}
-								</strong>
+								{sub(
+									// Liferay.Language.get('x-with-property-x-x-x'),
+									'{0} with property {1} {2} {3}',
+									[
+										'User',
+										<b key="property">
+											{selectedProperty && selectedProperty.label}
+										</b>,
+										selectedOperator && selectedOperator.label,
+										<b key="value">
+											{criterion && criterion.value}
+										</b>
+									],
+									false
+								)}
 							</span>
 						</div>
 					)}

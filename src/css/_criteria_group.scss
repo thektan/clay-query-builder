@@ -8,17 +8,35 @@
 		position: relative;
 	}
 
-	.conjunction {
-		margin: 16px 0;
+	.conjunction-button {
+		margin: 16px 0 16px 32px;
 		text-transform: uppercase;
 	}
 
+	.conjunction-label {
+		color: $mainLighten28;
+		font-size: 14px;
+		font-weight: 600;
+		margin-left: 16px;
+		text-transform: uppercase;
+
+		&:after {
+			content: '-';
+			margin-left: 4px;
+		}
+
+		&:before {
+			content: '-';
+			margin-right: 4px;
+		}
+	}
+
 	&.criteria-group-item {
-		padding: 16px;
+		padding: 8px;
 	}
 
 	&.criteria-group-item-root {
 		border-left: 3px solid $chartBlue;
-		padding: 8px 8px 8px 5px;
+		padding: 8px;
 	}
 }

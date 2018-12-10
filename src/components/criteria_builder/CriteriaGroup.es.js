@@ -138,7 +138,7 @@ class CriteriaGroup extends Component {
 	}
 
 	_renderConjunction = index => {
-		const {criteria, groupId, onMove, supportedConjunctions} = this.props;
+		const {criteria, editing, groupId, onMove, supportedConjunctions} = this.props;
 
 		return (
 			<Fragment>
@@ -149,14 +149,22 @@ class CriteriaGroup extends Component {
 					onMove={onMove}
 				/>
 
-				<ClayButton
-					className="btn-sm btn btn-secondary conjunction"
-					label={this._getConjunctionLabel(
-						criteria.conjunctionName,
-						supportedConjunctions
-					)}
-					onClick={this._handleConjunctionClick}
-				/>
+				{editing ?
+					<ClayButton
+						className="btn-sm conjunction-button"
+						label={this._getConjunctionLabel(
+							criteria.conjunctionName,
+							supportedConjunctions
+						)}
+						onClick={this._handleConjunctionClick}
+					/> :
+					<div className="conjunction-label">
+						{this._getConjunctionLabel(
+							criteria.conjunctionName,
+							supportedConjunctions
+						)}
+					</div>
+				}
 
 				<DropZone
 					before
@@ -181,8 +189,15 @@ class CriteriaGroup extends Component {
 			supportedPropertyTypes
 		} = this.props;
 
+		const classes = getCN(
+			'criterion',
+			{
+				'criterion-group': criterion.items
+			}
+		);
+
 		return (
-			<div className="criterion">
+			<div className={classes}>
 				{criterion.items ? (
 					<CriteriaGroup
 						criteria={criterion}
