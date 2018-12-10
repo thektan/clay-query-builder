@@ -10,6 +10,12 @@ export function insertAtIndex(item, list, index) {
 	return [...list.slice(0, index), item, ...list.slice(index, list.length)];
 }
 
+export function removeAtIndex(list, index) {
+	return list.filter(
+		(fItem, fIndex) => fIndex !== index
+	);
+}
+
 export function replaceAtIndex(item, list, index) {
 	return Object.assign(
 		list,

@@ -18,6 +18,7 @@ class CriteriaRow extends Component {
 		connectDropTarget: PropTypes.func,
 		criterion: PropTypes.object,
 		editing: PropTypes.bool,
+		groupId: PropTypes.string,
 		hover: PropTypes.bool,
 		index: PropTypes.number,
 		onChange: PropTypes.func,
@@ -190,23 +191,8 @@ const dropZoneTarget = {
 };
 
 const criteriaRowSource = {
-	beginDrag({criterion}) {
-		return {criterion};
-	},
-	endDrag(props, monitor) {
-		if (monitor.didDrop()) {
-			const {dropIndex} = monitor.getDropResult();
-
-			if (dropIndex < props.index) {
-				// @TODO Only add index if rows are in the same group.
-				// Maybe this can be determined by the amount of items in a group.
-
-				props.onDelete(props.index + 1);
-			}
-			else {
-				props.onDelete(props.index);
-			}
-		}
+	beginDrag({criterion, groupId, index}) {
+		return {criterion, groupId, index};
 	}
 };
 

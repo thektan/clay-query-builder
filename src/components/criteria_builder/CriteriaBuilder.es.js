@@ -5,6 +5,7 @@ import CriteriaGroup from './CriteriaGroup.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import {insertAtIndex, removeAtIndex} from '../../utils/utils.es';
 
 import {Liferay} from '../../utils/language';
 
@@ -64,14 +65,9 @@ class CriteriaBuilder extends Component {
 		readOnly: false
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			editing: false,
-			initialCriteria: this.props.criteria
-		};
-	}
+	state = {
+		editing: false
+	};
 
 	/**
 	 * Cleans the criteria by performing the following:
@@ -133,6 +129,94 @@ class CriteriaBuilder extends Component {
 		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
 	};
 
+	_handleCriterionMove = (
+		startGroupId,
+		startIndex,
+		destGroupId,
+		destIndex,
+		criterion
+	) => {
+		const newCriteria = this._searchAndUpdateCriteria(
+			this.props.criteria,
+			startGroupId,
+			startIndex,
+			destGroupId,
+			destIndex,
+			criterion
+		);
+
+		this._handleCriteriaChange(newCriteria);
+	}
+
+	/**
+	 * Checks if an item is a group item by checking if it contains an items
+	 * property with at least 1 item.
+	 * @param {object} item The criteria item to check.
+	 * @returns True if the item is a group.
+	 */
+	_isGroupItem(item) {
+		return item.items && item.items.length;
+	}
+
+	/**
+	 * Searches through the criteria object and adds and removes the criterion
+	 * at their respective specified index.
+	 * Used for moving a criterion between groups.
+	 * @param {object} criteria The criteria object to update.
+	 * @param {object} addCriterion The criterion that is being moved.
+	 */
+	_searchAndUpdateCriteria = (
+		criteria,
+		removeGroupId,
+		removeIndex,
+		addGroupId,
+		addIndex,
+		addCriterion
+	) => {
+		let updatedCriteriaItems = criteria.items;
+
+		if (criteria.groupId === addGroupId) {
+			updatedCriteriaItems = insertAtIndex(
+				addCriterion,
+				updatedCriteriaItems,
+				addIndex
+			);
+		}
+
+		if (criteria.groupId === removeGroupId) {
+			updatedCriteriaItems = removeAtIndex(
+				updatedCriteriaItems,
+				addGroupId === removeGroupId && addIndex < removeIndex ?
+					removeIndex + 1 :
+					removeIndex
+			);
+		}
+
+		updatedCriteriaItems = updatedCriteriaItems.map(
+			item => {
+				let updatedItem = item;
+
+				if (this._isGroupItem(item)) {
+					updatedItem = this._searchAndUpdateCriteria(
+						item,
+						removeGroupId,
+						removeIndex,
+						addGroupId,
+						addIndex,
+						addCriterion
+					);
+				}
+
+				return updatedItem;
+			}
+		);
+
+		return {
+			...criteria,
+			items: updatedCriteriaItems
+		};
+	}
+
 	render() {
 		const {
 			criteria,
@@ -159,7 +243,9 @@ class CriteriaBuilder extends Component {
 					<CriteriaGroup
 						criteria={criteria}
 						editing={editing}
+						groupId={criteria && criteria.groupId}
 						onChange={this._handleCriteriaChange}
+						onMove={this._handleCriterionMove}
 						root
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}

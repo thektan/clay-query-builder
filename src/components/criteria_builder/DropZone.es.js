@@ -8,9 +8,11 @@ class DropZone extends Component {
 	static propTypes = {
 		before: PropTypes.bool,
 		connectDropTarget: PropTypes.func,
+		groupId: PropTypes.string,
 		hover: PropTypes.bool,
 		index: PropTypes.number,
-		onCriterionAdd: PropTypes.func
+		onCriterionAdd: PropTypes.func,
+		onMove: PropTypes.func
 	};
 
 	render() {
@@ -50,11 +52,27 @@ const acceptedDragTypes = [
 
 const dropZoneTarget = {
 	drop(props, monitor) {
-		const {criterion} = monitor.getItem();
+		const {
+			criterion,
+			groupId: startGroupId,
+			index: startIndex
+		} = monitor.getItem();
 
-		props.onCriterionAdd(props.index, criterion);
+		const {
+			groupId: destGroupId,
+			index: destIndex,
+			onCriterionAdd,
+			onMove
+		} = props;
 
-		return {dropIndex: props.index};
+		const itemType = monitor.getItemType();
+
+		if (itemType === DragTypes.PROPERTY) {
+			onCriterionAdd(destIndex, criterion);
+		}
+		else if (itemType === DragTypes.CRITERIA_ROW) {
+			onMove(startGroupId, startIndex, destGroupId, destIndex, criterion);
+		}
 	}
 };
 

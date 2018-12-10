@@ -12,7 +12,9 @@ class CriteriaGroup extends Component {
 	static propTypes = {
 		criteria: PropTypes.object,
 		editing: PropTypes.bool,
+		groupId: PropTypes.string,
 		onChange: PropTypes.func,
+		onMove: PropTypes.func,
 		root: PropTypes.bool,
 		supportedConjunctions: PropTypes.array,
 		supportedOperators: PropTypes.array,
@@ -136,13 +138,15 @@ class CriteriaGroup extends Component {
 	}
 
 	_renderConjunction = index => {
-		const {criteria, supportedConjunctions} = this.props;
+		const {criteria, groupId, onMove, supportedConjunctions} = this.props;
 
 		return (
 			<Fragment>
 				<DropZone
+					groupId={groupId}
 					index={index}
 					onCriterionAdd={this._handleCriterionAdd}
+					onMove={onMove}
 				/>
 
 				<ClayButton
@@ -156,8 +160,10 @@ class CriteriaGroup extends Component {
 
 				<DropZone
 					before
+					groupId={groupId}
 					index={index}
 					onCriterionAdd={this._handleCriterionAdd}
+					onMove={onMove}
 				/>
 			</Fragment>
 		);
@@ -166,6 +172,8 @@ class CriteriaGroup extends Component {
 	_renderCriterion = (criterion, index) => {
 		const {
 			editing,
+			groupId,
+			onMove,
 			root,
 			supportedConjunctions,
 			supportedOperators,
@@ -179,7 +187,9 @@ class CriteriaGroup extends Component {
 					<CriteriaGroup
 						criteria={criterion}
 						editing={editing}
+						groupId={criterion.groupId}
 						onChange={this._handleCriterionChange(index)}
+						onMove={onMove}
 						supportedConjunctions={supportedConjunctions}
 						supportedOperators={supportedOperators}
 						supportedProperties={supportedProperties}
@@ -189,6 +199,7 @@ class CriteriaGroup extends Component {
 					<CriteriaRow
 						criterion={criterion}
 						editing={editing}
+						groupId={groupId}
 						index={index}
 						onChange={this._handleCriterionChange(index)}
 						onDelete={this._handleCriterionDelete}
@@ -201,8 +212,10 @@ class CriteriaGroup extends Component {
 				)}
 
 				<DropZone
+					groupId={groupId}
 					index={index + 1}
 					onCriterionAdd={this._handleCriterionAdd}
+					onMove={onMove}
 				/>
 			</div>
 		);
@@ -211,6 +224,8 @@ class CriteriaGroup extends Component {
 	render() {
 		const {
 			criteria,
+			groupId,
+			onMove,
 			root,
 		} = this.props;
 
@@ -234,8 +249,10 @@ class CriteriaGroup extends Component {
 					<Fragment>
 						<DropZone
 							before
+							groupId={groupId}
 							index={0}
 							onCriterionAdd={this._handleCriterionAdd}
+							onMove={onMove}
 						/>
 
 						{criteria.groupId}
