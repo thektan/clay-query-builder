@@ -192,28 +192,20 @@ class CriteriaBuilder extends Component {
 			);
 		}
 
-		updatedCriteriaItems = updatedCriteriaItems.map(
-			item => {
-				let updatedItem = item;
-
-				if (this._isGroupItem(item)) {
-					updatedItem = this._searchAndUpdateCriteria(
+		return {
+			...criteria,
+			items: updatedCriteriaItems.map(
+				item => this._isGroupItem(item) ?
+					this._searchAndUpdateCriteria(
 						item,
 						removeGroupId,
 						removeIndex,
 						addGroupId,
 						addIndex,
 						addCriterion
-					);
-				}
-
-				return updatedItem;
-			}
-		);
-
-		return {
-			...criteria,
-			items: updatedCriteriaItems
+					) :
+					item
+			)
 		};
 	}
 

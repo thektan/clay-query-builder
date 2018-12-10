@@ -255,8 +255,6 @@ class CriteriaGroup extends Component {
 							onMove={onMove}
 						/>
 
-						{criteria.groupId}
-
 						{criteria.items && criteria.items.map(
 							(criterion, index) => {
 								return (
