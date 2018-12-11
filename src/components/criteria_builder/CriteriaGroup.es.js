@@ -9,7 +9,12 @@ import {DragTypes} from '../../utils/drag-types.es';
 import DropZone from './DropZone.es';
 import EmptyDropZone from './EmptyDropZone.es';
 import getCN from 'classnames';
-import {generateGroupId, insertAtIndex, replaceAtIndex} from '../../utils/utils.es';
+import {
+	generateGroupId,
+	getChildGroupIds,
+	insertAtIndex,
+	replaceAtIndex
+} from '../../utils/utils.es';
 
 class CriteriaGroup extends Component {
 	static propTypes = {
@@ -330,7 +335,10 @@ class CriteriaGroup extends Component {
 
 const criteriaGroupSource = {
 	beginDrag({criteria, index, parentGroupId}) {
+		const childGroupIds = getChildGroupIds(criteria);
+
 		return {
+			childGroupIds,
 			criterion: criteria,
 			groupId: parentGroupId,
 			index

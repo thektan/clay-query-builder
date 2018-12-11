@@ -13,6 +13,30 @@ export function generateGroupId() {
 }
 
 /**
+ * Gets a list of group ids from a criteria object.
+ * Used for disallowing groups to be moved into its own deeper nested groups.
+ * Example of returned value: ['group_02', 'group_03']
+ * @param {Object} criteria The criteria object to search through.
+ * @returns {Array}
+ */
+export function getChildGroupIds(criteria) {
+	let childGroupIds = [];
+
+	if (criteria.items && criteria.items.length) {
+		childGroupIds = criteria.items.reduce(
+			(groupIdList, item) => {
+				return item.groupId ?
+					[...groupIdList, item.groupId, ...getChildGroupIds(item)] :
+					groupIdList;
+			},
+			[]
+		);
+	}
+
+	return childGroupIds;
+}
+
+/**
  * Inserts an item into a list at the specified index.
  * @param {*} item The item that will be inserted.
  * @param {Array} list The list where the item will be inserted into.

@@ -55,11 +55,30 @@ const acceptedDragTypes = [
 
 const dropZoneTarget = {
 	canDrop(props, monitor) {
+		const {
+			groupId: destGroupId,
+			index: destIndex
+		} = props;
+
+		const {
+			childGroupIds = [],
+			criterion,
+			groupId: startGroupId,
+			index: startIndex
+		} = monitor.getItem();
+
+		const disallowedGroupIds = [criterion.groupId, ...childGroupIds];
+
+		const sameOrNestedGroup =
+			monitor.getItemType() === DragTypes.CRITERIA_GROUP &&
+			disallowedGroupIds.includes(destGroupId);
+
+		const sameIndexInSameGroup = startGroupId === destGroupId &&
+			(startIndex === destIndex || startIndex === destIndex - 1);
+
 		let droppable = true;
 
-		const {criterion} = monitor.getItem();
-
-		if (monitor.getItemType() === DragTypes.CRITERIA_GROUP && criterion.groupId === props.groupId) {
+		if (sameOrNestedGroup || sameIndexInSameGroup) {
 			droppable = false;
 		}
 
