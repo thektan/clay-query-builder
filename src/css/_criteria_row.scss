@@ -5,7 +5,7 @@
 	flex: 1;
 	padding: 8px 0;
 
-	.criteria-string {
+	.criterion-string {
 		color: $mainLighten28;
 		font-weight: 600;
 
@@ -28,7 +28,11 @@
 
 		.criterion-input {
 			flex: 1;
-			margin-right: 16px;
+			margin-right: 8px;
+		}
+
+		.criterion-string {
+			margin-right: 8px;
 		}
 	}
 

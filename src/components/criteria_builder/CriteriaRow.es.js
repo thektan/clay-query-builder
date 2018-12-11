@@ -129,7 +129,7 @@ class CriteriaRow extends Component {
 								</div>
 							)}
 
-							<span className="criteria-string">
+							<span className="criterion-string">
 								{sub(
 									// Liferay.Language.get('x-with-property-x'),
 									'{0} with property {1}',
@@ -166,14 +166,16 @@ class CriteriaRow extends Component {
 							/>
 
 							<ClayButton
-								className="btn-monospaced delete-button"
+								borderless
+								className="delete-button"
 								iconName="trash"
+								monospaced
 								onClick={this._handleDelete}
 							/>
 						</div>
 					) : (
 						<div className="read-only-container">
-							<span className="criteria-string">
+							<span className="criterion-string">
 								{this._getReadableCriteriaString(
 									propertyLabel,
 									operatorLabel,
