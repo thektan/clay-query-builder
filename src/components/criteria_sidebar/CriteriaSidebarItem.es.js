@@ -56,7 +56,7 @@ class CriteriaSidebarItem extends Component {
 					<ClayIcon iconName="drag" />
 				</span>
 
-				<span className="criteria-sidebar-item-type sticker sticker-secondary">
+				<span className="criteria-sidebar-item-type sticker sticker-light">
 					<span className="inline-item">
 						<ClayIcon iconName={this._getIcon(type)} />
 					</span>
