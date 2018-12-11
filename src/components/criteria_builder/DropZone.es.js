@@ -4,6 +4,8 @@ import {DropTarget as dropTarget} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 
+const {CRITERIA_GROUP, CRITERIA_ROW, PROPERTY} = DragTypes;
+
 class DropZone extends Component {
 	static propTypes = {
 		before: PropTypes.bool,
@@ -48,9 +50,9 @@ class DropZone extends Component {
 }
 
 const acceptedDragTypes = [
-	DragTypes.CRITERIA_GROUP,
-	DragTypes.CRITERIA_ROW,
-	DragTypes.PROPERTY
+	CRITERIA_GROUP,
+	CRITERIA_ROW,
+	PROPERTY
 ];
 
 const dropZoneTarget = {
@@ -69,7 +71,7 @@ const dropZoneTarget = {
 
 		const disallowedGroupIds = [criterion.groupId, ...childGroupIds];
 
-		const sameOrNestedGroup = monitor.getItemType() === DragTypes.CRITERIA_GROUP &&
+		const sameOrNestedGroup = monitor.getItemType() === CRITERIA_GROUP &&
 			disallowedGroupIds.includes(destGroupId);
 
 		const sameIndexInSameGroup = startGroupId === destGroupId &&
@@ -99,10 +101,10 @@ const dropZoneTarget = {
 
 		const itemType = monitor.getItemType();
 
-		if (itemType === DragTypes.PROPERTY) {
+		if (itemType === PROPERTY) {
 			onCriterionAdd(destIndex, criterion);
 		}
-		else if (itemType === DragTypes.CRITERIA_ROW || itemType === DragTypes.CRITERIA_GROUP) {
+		else if (itemType === CRITERIA_ROW || itemType === CRITERIA_GROUP) {
 			onMove(startGroupId, startIndex, destGroupId, destIndex, criterion);
 		}
 	}
