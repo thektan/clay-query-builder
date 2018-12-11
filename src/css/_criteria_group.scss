@@ -9,7 +9,7 @@
 	}
 
 	.conjunction-button {
-		margin: 16px 0 16px 24px;
+		margin: 8px 0 8px 24px;
 		text-transform: uppercase;
 	}
 
@@ -17,18 +17,31 @@
 		color: $mainLighten28;
 		font-size: 14px;
 		font-weight: 600;
-		margin-left: 16px;
+		margin: 8px;
 		text-transform: uppercase;
 
-		&:after {
+		&:after, &:before  {
+			color: $mainLighten52;
 			content: '-';
+		}
+
+		&:after {
 			margin-left: 4px;
 		}
 
 		&:before {
-			content: '-';
 			margin-right: 4px;
 		}
+	}
+
+	.conjunction-label + .drop-zone-root + .criterion-group,
+	.criterion-group + .drop-zone-root + .conjunction-label,
+	.criterion-group + .drop-zone-root + .conjunction-button {
+		margin-top: 16px;
+	}
+
+	.conjunction-button + .drop-zone-root + .criterion-group {
+		margin-top: 8px;
 	}
 
 	&.criteria-group-item {
@@ -47,6 +60,10 @@
 	&.criteria-group-item-root {
 		border-left: 3px solid $chartBlue;
 		padding: 8px;
+
+		.read-only-container .criterion-string {
+			margin-left: 8px;
+		}
 	}
 
 	&.dnd-drag {

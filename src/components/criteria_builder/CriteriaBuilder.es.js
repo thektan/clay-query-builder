@@ -4,6 +4,7 @@ import ClayToggle from '../shared/ClayToggle.es';
 import CriteriaGroup from './CriteriaGroup.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
+import getCN from 'classnames';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {insertAtIndex, removeAtIndex, replaceAtIndex, sub} from '../../utils/utils.es';
 
@@ -242,8 +243,15 @@ class CriteriaBuilder extends Component {
 
 		const {editing} = this.state;
 
+		const classes = getCN(
+			'criteria-builder-root',
+			{
+				'read-only': !editing
+			}
+		);
+
 		return (
-			<div className="criteria-builder-root">
+			<div className={classes}>
 				<div className="criteria-builder-section-main">
 					<div className="criteria-builder-toolbar">
 						<ClayToggle
