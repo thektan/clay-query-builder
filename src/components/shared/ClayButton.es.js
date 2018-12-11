@@ -19,7 +19,8 @@ class ClayButton extends Component {
 				'warning',
 				'danger',
 				'dark',
-				'light'
+				'light',
+				'unstyled'
 			]
 		),
 		type: PropTypes.string
@@ -28,7 +29,8 @@ class ClayButton extends Component {
 	static defaultProps = {
 		borderless: false,
 		monospaced: false,
-		style: 'secondary'
+		style: 'secondary',
+		type: 'button'
 	};
 
 	render() {

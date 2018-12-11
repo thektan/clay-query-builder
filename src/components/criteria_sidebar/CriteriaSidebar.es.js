@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import CriteriaSidebarSearchBar from './CriteriaSidebarSearchBar.es';
 import CriteriaSidebarItem from './CriteriaSidebarItem.es';
+
+import {Liferay} from '../../utils/language';
 
 class CriteriaSidebar extends Component {
 	static propTypes = {
@@ -8,8 +11,32 @@ class CriteriaSidebar extends Component {
 		title: PropTypes.string
 	};
 
+	state = {
+		searchValue: ''
+	};
+
+	_handleOnSearchChange = value => {
+		this.setState({searchValue: value});
+	}
+
+	_filterProperties = searchValue => {
+		return this.props.supportedProperties.filter(
+			property => {
+				const propertyLabel = property.label.toLowerCase();
+
+				return propertyLabel.includes(searchValue.toLowerCase());
+			}
+		);
+	}
+
 	render() {
 		const {supportedProperties, title} = this.props;
+
+		const {searchValue} = this.state;
+
+		const filteredProperties = searchValue ?
+			this._filterProperties(searchValue) :
+			supportedProperties;
 
 		return (
 			<div className="criteria-sidebar-root">
@@ -17,17 +44,29 @@ class CriteriaSidebar extends Component {
 					{title}
 				</div>
 
+				<div className="sidebar-search">
+					<CriteriaSidebarSearchBar
+						onChange={this._handleOnSearchChange}
+						searchValue={searchValue}
+					/>
+				</div>
+
 				<ul className="properties-list">
-					{supportedProperties.map(
-						({label, name, type}, index) => (
-							<CriteriaSidebarItem
-								key={index}
-								label={label}
-								name={name}
-								type={type}
-							/>
-						)
-					)}
+					{filteredProperties.length ?
+						filteredProperties.map(
+							({label, name, type}, index) => (
+								<CriteriaSidebarItem
+									key={index}
+									label={label}
+									name={name}
+									type={type}
+								/>
+							)
+						) :
+						<li className="empty-message">
+							{Liferay.Language.get('no-results')}
+						</li>
+					}
 				</ul>
 			</div>
 		);
