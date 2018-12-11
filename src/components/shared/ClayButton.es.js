@@ -10,16 +10,18 @@ class ClayButton extends Component {
 		iconName: PropTypes.string,
 		label: PropTypes.string,
 		monospaced: PropTypes.bool,
-		style: PropTypes.oneOf([
-			'primary',
-			'secondary',
-			'info',
-			'success',
-			'warning',
-			'danger',
-			'dark',
-			'light'
-		]),
+		style: PropTypes.oneOf(
+			[
+				'primary',
+				'secondary',
+				'info',
+				'success',
+				'warning',
+				'danger',
+				'dark',
+				'light'
+			]
+		),
 		type: PropTypes.string
 	};
 

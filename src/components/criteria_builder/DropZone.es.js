@@ -69,8 +69,7 @@ const dropZoneTarget = {
 
 		const disallowedGroupIds = [criterion.groupId, ...childGroupIds];
 
-		const sameOrNestedGroup =
-			monitor.getItemType() === DragTypes.CRITERIA_GROUP &&
+		const sameOrNestedGroup = monitor.getItemType() === DragTypes.CRITERIA_GROUP &&
 			disallowedGroupIds.includes(destGroupId);
 
 		const sameIndexInSameGroup = startGroupId === destGroupId &&
