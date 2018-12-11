@@ -23,6 +23,7 @@ class CriteriaRow extends Component {
 		groupId: PropTypes.string,
 		hover: PropTypes.bool,
 		index: PropTypes.number,
+		modelLabel: PropTypes.string,
 		onChange: PropTypes.func,
 		onDelete: PropTypes.func,
 		onMove: PropTypes.func,
@@ -41,7 +42,9 @@ class CriteriaRow extends Component {
 			// Liferay.Language.get('x-with-property-x-x-x'),
 			'{0} with property {1} {2} {3}',
 			[
-				<span key="model-name">{'User'}</span>,
+				<span key="model-name">
+					{this.props.modelLabel}
+				</span>,
 				<b key="property">
 					{propertyLabel}
 				</b>,
@@ -90,6 +93,7 @@ class CriteriaRow extends Component {
 			dragging,
 			editing,
 			hover,
+			modelLabel,
 			supportedOperators,
 			supportedProperties
 		} = this.props;
@@ -134,7 +138,9 @@ class CriteriaRow extends Component {
 									// Liferay.Language.get('x-with-property-x'),
 									'{0} with property {1}',
 									[
-										<span key="model-name">{'User'}</span>,
+										<span key="model-name">
+											{modelLabel}
+										</span>,
 										<b key="property">
 											{propertyLabel}
 										</b>

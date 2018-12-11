@@ -25,6 +25,7 @@ class CriteriaGroup extends Component {
 		editing: PropTypes.bool,
 		groupId: PropTypes.string,
 		index: PropTypes.number,
+		modelLabel: PropTypes.string,
 		onChange: PropTypes.func,
 		onMove: PropTypes.func,
 		parentGroupId: PropTypes.string,
@@ -208,6 +209,7 @@ class CriteriaGroup extends Component {
 		const {
 			editing,
 			groupId,
+			modelLabel,
 			onMove,
 			root,
 			supportedConjunctions,
@@ -231,6 +233,7 @@ class CriteriaGroup extends Component {
 						editing={editing}
 						groupId={criterion.groupId}
 						index={index}
+						modelLabel={modelLabel}
 						onChange={this._handleCriterionChange(index)}
 						onMove={onMove}
 						parentGroupId={groupId}
@@ -245,6 +248,7 @@ class CriteriaGroup extends Component {
 						editing={editing}
 						groupId={groupId}
 						index={index}
+						modelLabel={modelLabel}
 						onChange={this._handleCriterionChange(index)}
 						onDelete={this._handleCriterionDelete}
 						onMove={onMove}

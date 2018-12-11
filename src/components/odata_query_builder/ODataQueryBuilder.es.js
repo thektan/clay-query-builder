@@ -59,6 +59,7 @@ class ODataQueryBuilder extends Component {
 	static propTypes = {
 		initialQuery: PropTypes.string,
 		inputId: PropTypes.string,
+		modelLabel: PropTypes.string,
 		operators: PropTypes.array,
 		properties: PropTypes.array
 	};
@@ -86,7 +87,7 @@ class ODataQueryBuilder extends Component {
 	};
 
 	render() {
-		const {inputId, properties} = this.props;
+		const {inputId, modelLabel, properties} = this.props;
 
 		const {criteriaMap} = this.state;
 
@@ -95,6 +96,7 @@ class ODataQueryBuilder extends Component {
 				<div className="form-group">
 					<CriteriaBuilder
 						criteria={criteriaMap}
+						modelLabel={modelLabel}
 						onChange={this._handleChange}
 						supportedConjunctions={SUPPORTED_CONJUNCTIONS}
 						supportedOperators={SUPPORTED_OPERATORS}

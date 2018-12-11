@@ -5,7 +5,7 @@ import CriteriaGroup from './CriteriaGroup.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
 import {DragDropContext as dragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import {insertAtIndex, removeAtIndex, replaceAtIndex} from '../../utils/utils.es';
+import {insertAtIndex, removeAtIndex, replaceAtIndex, sub} from '../../utils/utils.es';
 
 import {Liferay} from '../../utils/language';
 
@@ -37,6 +37,7 @@ class CriteriaBuilder extends Component {
 				)
 			}
 		),
+		modelLabel: PropTypes.string,
 		onChange: PropTypes.func,
 		supportedConjunctions: PropTypes.arrayOf(
 			PropTypes.shape(
@@ -232,6 +233,7 @@ class CriteriaBuilder extends Component {
 	render() {
 		const {
 			criteria,
+			modelLabel,
 			supportedConjunctions,
 			supportedOperators,
 			supportedProperties,
@@ -256,6 +258,7 @@ class CriteriaBuilder extends Component {
 						criteria={criteria}
 						editing={editing}
 						groupId={criteria && criteria.groupId}
+						modelLabel={modelLabel}
 						onChange={this._handleCriteriaChange}
 						onMove={this._handleCriterionMove}
 						root
@@ -269,7 +272,11 @@ class CriteriaBuilder extends Component {
 				<div className="criteria-builder-section-sidebar">
 					<CriteriaSidebar
 						supportedProperties={supportedProperties}
-						title={Liferay.Language.get('properties')}
+						title={sub(
+							// Liferay.Language.get('x-properties'),
+							'{0} Properties',
+							[modelLabel]
+						)}
 					/>
 				</div>
 			</div>

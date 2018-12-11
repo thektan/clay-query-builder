@@ -19,6 +19,7 @@
 			new metal.initialize(
 				'app',
 				{
+					modelLabel: 'User',
 					properties: [
 						{
 							label: 'Ancestor Organization IDs',
@@ -83,7 +84,7 @@
 					initialQuery: `(classPK eq 'a' and dateModified eq 'b' and emailAddress eq 'c')`
 				},
 				{
-					assetsPath: '',
+					assetsPath: '.',
 					spritemap: './icons.svg'
 				}
 			);
