@@ -34,6 +34,20 @@ class CriteriaGroup extends Component {
 		root: false
 	};
 
+	constructor(props) {
+		super(props);
+
+		this.NestedCriteriaGroupWithDrag = dragSource(
+			DragTypes.CRITERIA_GROUP,
+			criteriaGroupSource,
+			(connect, monitor) => ({
+				connectDragPreview: connect.dragPreview(),
+				connectDragSource: connect.dragSource(),
+				dragging: monitor.isDragging()
+			})
+		)(CriteriaGroup);
+	}
+
 	_getConjunctionLabel(conjunctionName, conjunctions) {
 		const conjunction = conjunctions.find(
 			({name}) => name === conjunctionName
@@ -204,20 +218,10 @@ class CriteriaGroup extends Component {
 			}
 		);
 
-		const CriteriaGroupWithDrag = dragSource(
-			DragTypes.CRITERIA_GROUP,
-			criteriaGroupSource,
-			(connect, monitor) => ({
-				connectDragPreview: connect.dragPreview(),
-				connectDragSource: connect.dragSource(),
-				dragging: monitor.isDragging()
-			})
-		)(CriteriaGroup);
-
 		return (
 			<div className={classes}>
 				{criterion.items ? (
-					<CriteriaGroupWithDrag
+					<this.NestedCriteriaGroupWithDrag
 						criteria={criterion}
 						editing={editing}
 						groupId={criterion.groupId}
