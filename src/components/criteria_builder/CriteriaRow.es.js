@@ -94,18 +94,18 @@ class CriteriaRow extends Component {
 			supportedProperties
 		} = this.props;
 
-		const selectedProperty = this._getSelectedItem(
-			supportedProperties,
-			criterion.propertyName
-		);
-
 		const selectedOperator = this._getSelectedItem(
 			supportedOperators,
 			criterion.operatorName
 		);
 
-		const propertyLabel = selectedProperty ? selectedProperty.label : '';
+		const selectedProperty = this._getSelectedItem(
+			supportedProperties,
+			criterion.propertyName
+		);
+
 		const operatorLabel = selectedOperator ? selectedOperator.label : '';
+		const propertyLabel = selectedProperty ? selectedProperty.label : '';
 		const value = criterion ? criterion.value : '';
 
 		const classes = getCN(
