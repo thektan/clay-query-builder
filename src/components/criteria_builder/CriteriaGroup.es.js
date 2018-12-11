@@ -267,6 +267,7 @@ class CriteriaGroup extends Component {
 			connectDragSource,
 			criteria,
 			dragging,
+			editing,
 			groupId,
 			onMove,
 			root,
@@ -299,7 +300,7 @@ class CriteriaGroup extends Component {
 							onMove={onMove}
 						/>
 
-						{!root && connectDragSource(
+						{editing && !root && connectDragSource(
 							<div className="criteria-group-drag-icon drag-icon">
 								<ClayIcon iconName="drag" />
 							</div>
