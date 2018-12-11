@@ -1,9 +1,11 @@
 .criteria-builder-root {
 	display: flex;
+	height: 800px;
 	max-width: 1280px;
 
 	.criteria-builder-section-main {
 		flex: 1;
+		padding-right: 16px;
 	}
 
 	.criteria-builder-section-sidebar {

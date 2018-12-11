@@ -64,7 +64,7 @@ class CriteriaSidebar extends Component {
 							)
 						) :
 						<li className="empty-message">
-							{Liferay.Language.get('no-results')}
+							{Liferay.Language.get('no-results-found')}
 						</li>
 					}
 				</ul>

@@ -1,10 +1,15 @@
 .criteria-sidebar-root {
 	background-color: $white;
 	border: 1px solid $mainLighten74;
+	display: flex;
+	flex-flow: column;
+	height: 100%;
 
 	.properties-list {
 		list-style: none;
+		height: 100%;
 		margin: 0;
+		overflow: auto;
 		padding: 0;
 
 		.criteria-sidebar-item-root {
@@ -34,6 +39,14 @@
 			&:hover {
 				cursor: grab;
 			}
+		}
+
+		.empty-message {
+			align-items: center;
+			display: flex;
+			font-weight: 600;
+			height: 100%;
+			justify-content: center;
 		}
 	}
 
