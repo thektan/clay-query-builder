@@ -9,8 +9,6 @@ import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 import {generateGroupId, sub} from '../../utils/utils.es';
 
-import {Liferay} from '../../utils/language';
-
 class CriteriaRow extends Component {
 	static propTypes = {
 		canDrop: PropTypes.bool,
@@ -95,7 +93,8 @@ class CriteriaRow extends Component {
 			hover,
 			modelLabel,
 			supportedOperators,
-			supportedProperties
+			supportedProperties,
+			supportedPropertyTypes
 		} = this.props;
 
 		const selectedOperator = this._getSelectedItem(
@@ -111,6 +110,13 @@ class CriteriaRow extends Component {
 		const operatorLabel = selectedOperator ? selectedOperator.label : '';
 		const propertyLabel = selectedProperty ? selectedProperty.label : '';
 		const value = criterion ? criterion.value : '';
+
+		const propertyType = selectedProperty ? selectedProperty.type : '';
+
+		const filteredSupportedOperators = supportedOperators.filter(
+			operator =>
+				supportedPropertyTypes[propertyType].includes(operator.name)
+		);
 
 		const classes = getCN(
 			'criterion-row-root',
@@ -154,7 +160,7 @@ class CriteriaRow extends Component {
 								onChange={this._handleInputChange(
 									'operatorName'
 								)}
-								options={supportedOperators.map(
+								options={filteredSupportedOperators.map(
 									({label, name}) => ({
 										label,
 										value: name
