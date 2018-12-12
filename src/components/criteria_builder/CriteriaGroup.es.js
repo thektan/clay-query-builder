@@ -249,6 +249,7 @@ class CriteriaGroup extends Component {
 						groupId={groupId}
 						index={index}
 						modelLabel={modelLabel}
+						onAdd={this._handleCriterionAdd}
 						onChange={this._handleCriterionChange(index)}
 						onDelete={this._handleCriterionDelete}
 						onMove={onMove}

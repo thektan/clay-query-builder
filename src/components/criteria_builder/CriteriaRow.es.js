@@ -22,6 +22,7 @@ class CriteriaRow extends Component {
 		hover: PropTypes.bool,
 		index: PropTypes.number,
 		modelLabel: PropTypes.string,
+		onAdd: PropTypes.func,
 		onChange: PropTypes.func,
 		onDelete: PropTypes.func,
 		onMove: PropTypes.func,
@@ -72,13 +73,19 @@ class CriteriaRow extends Component {
 	};
 
 	_handleDelete = event => {
-		if (event) {
-			event.preventDefault();
-		}
+		event.preventDefault();
 
 		const {index, onDelete} = this.props;
 
 		onDelete(index);
+	}
+
+	_handleDuplicate = event => {
+		event.preventDefault();
+
+		const {criterion, index, onAdd} = this.props;
+
+		onAdd(index + 1, criterion);
 	}
 
 	render() {
@@ -179,7 +186,14 @@ class CriteriaRow extends Component {
 
 							<ClayButton
 								borderless
-								className="delete-button"
+								className="duplicate-button"
+								iconName="paste"
+								monospaced
+								onClick={this._handleDuplicate}
+							/>
+
+							<ClayButton
+								borderless
 								iconName="trash"
 								monospaced
 								onClick={this._handleDelete}
