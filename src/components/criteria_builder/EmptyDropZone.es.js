@@ -7,6 +7,19 @@ import getCN from 'classnames';
 
 import {Liferay} from '../../utils/language';
 
+/**
+ * Implements the behavior of what will occur when an item is dropped.
+ * Adds the criterion dropped.
+ * This method must be called `drop`.
+ * @param {Object} props Component's current props.
+ * @param {DropTargetMonitor} monitor
+ */
+function drop(props, monitor) {
+	const {criterion} = monitor.getItem();
+
+	props.onCriterionAdd(props.index, criterion);
+}
+
 class EmptyDropZone extends Component {
 	static contextType = ThemeContext;
 
@@ -70,17 +83,11 @@ class EmptyDropZone extends Component {
 	}
 }
 
-const dropZoneTarget = {
-	drop(props, monitor) {
-		const {criterion} = monitor.getItem();
-
-		props.onCriterionAdd(props.index, criterion);
-	}
-};
-
 export default dropTarget(
 	DragTypes.PROPERTY,
-	dropZoneTarget,
+	{
+		drop
+	},
 	(connect, monitor) => ({
 		connectDropTarget: connect.dropTarget(),
 		hover: monitor.isOver()

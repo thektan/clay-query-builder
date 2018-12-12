@@ -5,6 +5,20 @@ import {DragSource as dragSource} from 'react-dnd';
 import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 
+/**
+ * Passes the required values to the drop target.
+ * This method must be called `beginDrag`.
+ * @param {Object} props Component's current props
+ * @returns {Object} The props to be passed to the drop target.
+ */
+function beginDrag({name}) {
+	return {
+		criterion: {
+			propertyName: name
+		}
+	};
+}
+
 class CriteriaSidebarItem extends Component {
 	static propTypes = {
 		connectDragSource: PropTypes.func,
@@ -68,19 +82,11 @@ class CriteriaSidebarItem extends Component {
 	}
 }
 
-const propertySource = {
-	beginDrag({name}) {
-		return {
-			criterion: {
-				propertyName: name
-			}
-		};
-	}
-};
-
 export default dragSource(
 	DragTypes.PROPERTY,
-	propertySource,
+	{
+		beginDrag
+	},
 	(connect, monitor) => ({
 		connectDragSource: connect.dragSource(),
 		dragging: monitor.isDragging()

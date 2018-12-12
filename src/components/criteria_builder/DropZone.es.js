@@ -6,6 +6,83 @@ import getCN from 'classnames';
 
 const {CRITERIA_GROUP, CRITERIA_ROW, PROPERTY} = DragTypes;
 
+const acceptedDragTypes = [
+	CRITERIA_GROUP,
+	CRITERIA_ROW,
+	PROPERTY
+];
+
+/**
+ * Prevents groups from dropping within itself and all items from dropping into
+ * a position that would not change its' current position.
+ * This method must be called `canDrop`.
+ * @param {Object} props Component's current props.
+ * @param {DropTargetMonitor} monitor
+ * @returns {boolean} True if the target should accept the item.
+ */
+function canDrop(props, monitor) {
+	const {
+		groupId: destGroupId,
+		index: destIndex
+	} = props;
+
+	const {
+		childGroupIds = [],
+		criterion,
+		groupId: startGroupId,
+		index: startIndex
+	} = monitor.getItem();
+
+	const disallowedGroupIds = [criterion.groupId, ...childGroupIds];
+
+	const sameOrNestedGroup = monitor.getItemType() === CRITERIA_GROUP &&
+		disallowedGroupIds.includes(destGroupId);
+
+	const sameIndexInSameGroup = startGroupId === destGroupId &&
+		(startIndex === destIndex || startIndex === destIndex - 1);
+
+	let droppable = true;
+
+	if (sameOrNestedGroup || sameIndexInSameGroup) {
+		droppable = false;
+	}
+
+	return droppable;
+}
+
+/**
+ * Implements the behavior of what will occur when an item is dropped.
+ * For properties dropped from the sidebar, a new criterion will be added.
+ * For rows and groups being dropped, they will be moved to the dropped
+ * position.
+ * This method must be called `drop`.
+ * @param {Object} props Component's current props.
+ * @param {DropTargetMonitor} monitor
+ */
+function drop(props, monitor) {
+	const {
+		groupId: destGroupId,
+		index: destIndex,
+		onCriterionAdd,
+		onMove
+	} = props;
+
+	const {
+		criterion,
+		groupId: startGroupId,
+		index: startIndex
+	} = monitor.getItem();
+
+	const itemType = monitor.getItemType();
+
+	if (itemType === PROPERTY) {
+		onCriterionAdd(destIndex, criterion);
+	}
+	else if (itemType === CRITERIA_ROW || itemType === CRITERIA_GROUP) {
+		onMove(startGroupId, startIndex, destGroupId, destIndex, criterion);
+	}
+}
+
 class DropZone extends Component {
 	static propTypes = {
 		before: PropTypes.bool,
@@ -49,70 +126,12 @@ class DropZone extends Component {
 	}
 }
 
-const acceptedDragTypes = [
-	CRITERIA_GROUP,
-	CRITERIA_ROW,
-	PROPERTY
-];
-
-const dropZoneTarget = {
-	canDrop(props, monitor) {
-		const {
-			groupId: destGroupId,
-			index: destIndex
-		} = props;
-
-		const {
-			childGroupIds = [],
-			criterion,
-			groupId: startGroupId,
-			index: startIndex
-		} = monitor.getItem();
-
-		const disallowedGroupIds = [criterion.groupId, ...childGroupIds];
-
-		const sameOrNestedGroup = monitor.getItemType() === CRITERIA_GROUP &&
-			disallowedGroupIds.includes(destGroupId);
-
-		const sameIndexInSameGroup = startGroupId === destGroupId &&
-			(startIndex === destIndex || startIndex === destIndex - 1);
-
-		let droppable = true;
-
-		if (sameOrNestedGroup || sameIndexInSameGroup) {
-			droppable = false;
-		}
-
-		return droppable;
-	},
-	drop(props, monitor) {
-		const {
-			groupId: destGroupId,
-			index: destIndex,
-			onCriterionAdd,
-			onMove
-		} = props;
-
-		const {
-			criterion,
-			groupId: startGroupId,
-			index: startIndex
-		} = monitor.getItem();
-
-		const itemType = monitor.getItemType();
-
-		if (itemType === PROPERTY) {
-			onCriterionAdd(destIndex, criterion);
-		}
-		else if (itemType === CRITERIA_ROW || itemType === CRITERIA_GROUP) {
-			onMove(startGroupId, startIndex, destGroupId, destIndex, criterion);
-		}
-	}
-};
-
 export default dropTarget(
 	acceptedDragTypes,
-	dropZoneTarget,
+	{
+		canDrop,
+		drop
+	},
 	(connect, monitor) => ({
 		canDrop: monitor.canDrop(),
 		connectDropTarget: connect.dropTarget(),

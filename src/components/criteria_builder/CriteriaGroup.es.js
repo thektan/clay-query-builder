@@ -16,6 +16,41 @@ import {
 	replaceAtIndex
 } from '../../utils/utils.es';
 
+/**
+ * Passes the required values to the drop target.
+ * This method must be called `beginDrag`.
+ * @param {Object} props Component's current props
+ * @returns {Object} The props to be passed to the drop target.
+ */
+function beginDrag({criteria, index, parentGroupId}) {
+	const childGroupIds = getChildGroupIds(criteria);
+
+	return {
+		childGroupIds,
+		criterion: criteria,
+		groupId: parentGroupId,
+		index
+	};
+}
+
+/**
+ * A function that decorates the passed in component with the drag source HOC.
+ * This was separated out since this function needed to be called again for the
+ * nested groups.
+ * @param {React.Component} component The component to decorate.
+ */
+const withDragSource = dragSource(
+	DragTypes.CRITERIA_GROUP,
+	{
+		beginDrag
+	},
+	(connect, monitor) => ({
+		connectDragPreview: connect.dragPreview(),
+		connectDragSource: connect.dragSource(),
+		dragging: monitor.isDragging()
+	})
+);
+
 class CriteriaGroup extends Component {
 	static propTypes = {
 		connectDragPreview: PropTypes.func,
@@ -43,15 +78,7 @@ class CriteriaGroup extends Component {
 	constructor(props) {
 		super(props);
 
-		this.NestedCriteriaGroupWithDrag = dragSource(
-			DragTypes.CRITERIA_GROUP,
-			criteriaGroupSource,
-			(connect, monitor) => ({
-				connectDragPreview: connect.dragPreview(),
-				connectDragSource: connect.dragSource(),
-				dragging: monitor.isDragging()
-			})
-		)(CriteriaGroup);
+		this.NestedCriteriaGroupWithDrag = withDragSource(CriteriaGroup);
 	}
 
 	_getConjunctionLabel(conjunctionName, conjunctions) {
@@ -338,25 +365,4 @@ class CriteriaGroup extends Component {
 	}
 }
 
-const criteriaGroupSource = {
-	beginDrag({criteria, index, parentGroupId}) {
-		const childGroupIds = getChildGroupIds(criteria);
-
-		return {
-			childGroupIds,
-			criterion: criteria,
-			groupId: parentGroupId,
-			index
-		};
-	}
-};
-
-export default dragSource(
-	DragTypes.CRITERIA_GROUP,
-	criteriaGroupSource,
-	(connect, monitor) => ({
-		connectDragPreview: connect.dragPreview(),
-		connectDragSource: connect.dragSource(),
-		dragging: monitor.isDragging()
-	})
-)(CriteriaGroup);
+export default withDragSource(CriteriaGroup);

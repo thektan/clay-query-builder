@@ -9,6 +9,91 @@ import {DragTypes} from '../../utils/drag-types.es';
 import getCN from 'classnames';
 import {generateGroupId, sub} from '../../utils/utils.es';
 
+const acceptedDragTypes = [
+	DragTypes.CRITERIA_ROW,
+	DragTypes.PROPERTY
+];
+
+/**
+ * Prevents rows from dropping onto itself.
+ * This method must be called `canDrop`.
+ * @param {Object} props Component's current props.
+ * @param {DropTargetMonitor} monitor
+ * @returns {boolean} True if the target should accept the item.
+ */
+function canDrop(props, monitor) {
+	const {groupId: destGroupId, index: destIndex} = props;
+	const {groupId: startGroupId, index: startIndex} = monitor.getItem();
+
+	return destGroupId !== startGroupId || destIndex !== startIndex;
+}
+
+/**
+ * Implements the behavior of what will occur when an item is dropped.
+ * Items dropped on top of rows will create a new grouping.
+ * This method must be called `drop`.
+ * @param {Object} props Component's current props.
+ * @param {DropTargetMonitor} monitor
+ */
+function drop(props, monitor) {
+	const {
+		criterion,
+		groupId: destGroupId,
+		index: destIndex,
+		onChange,
+		onMove,
+		supportedOperators
+	} = props;
+
+	const {
+		criterion: droppedCriterion,
+		groupId: startGroupId,
+		index: startIndex
+	} = monitor.getItem();
+
+	const {operatorName, propertyName, value} = droppedCriterion;
+
+	const newCriterion = {
+		operatorName: operatorName ?
+			operatorName :
+			supportedOperators[0].name,
+		propertyName,
+		value: value ? value : ''
+	};
+
+	const newGroup = {
+		conjunctionName: CONJUNCTIONS.AND,
+		groupId: generateGroupId(),
+		items: [criterion, newCriterion]
+	};
+
+	const itemType = monitor.getItemType();
+
+	if (itemType === DragTypes.PROPERTY) {
+		onChange(newGroup);
+	}
+	else if (itemType === DragTypes.CRITERIA_ROW) {
+		onMove(
+			startGroupId,
+			startIndex,
+			destGroupId,
+			destIndex,
+			newGroup,
+			true
+		);
+	}
+}
+
+/**
+ * Passes the required values to the drop target.
+ * This method must be called `beginDrag`.
+ * @param {Object} props Component's current props
+ * @returns {Object} The props to be passed to the drop target.
+ */
+function beginDrag({criterion, groupId, index}) {
+	return {criterion, groupId, index};
+}
+
 class CriteriaRow extends Component {
 	static propTypes = {
 		canDrop: PropTypes.bool,
@@ -61,17 +146,6 @@ class CriteriaRow extends Component {
 	_getSelectedItem = (list, idSelected) =>
 		list.find(item => item.name === idSelected);
 
-	_handleInputChange = propertyName => event => {
-		const {criterion, onChange} = this.props;
-
-		onChange(
-			{
-				...criterion,
-				[propertyName]: event.target.value
-			}
-		);
-	};
-
 	_handleDelete = event => {
 		event.preventDefault();
 
@@ -87,6 +161,17 @@ class CriteriaRow extends Component {
 
 		onAdd(index + 1, criterion);
 	}
+
+	_handleInputChange = propertyName => event => {
+		const {criterion, onChange} = this.props;
+
+		onChange(
+			{
+				...criterion,
+				[propertyName]: event.target.value
+			}
+		);
+	};
 
 	render() {
 		const {
@@ -217,77 +302,11 @@ class CriteriaRow extends Component {
 	}
 }
 
-const acceptedDragTypes = [
-	DragTypes.CRITERIA_ROW,
-	DragTypes.PROPERTY
-];
-
-const dropZoneTarget = {
-	canDrop(props, monitor) {
-		const {groupId: destGroupId, index: destIndex} = props;
-		const {groupId: startGroupId, index: startIndex} = monitor.getItem();
-
-		return destGroupId !== startGroupId || destIndex !== startIndex;
-	},
-	drop(props, monitor) {
-		const {
-			criterion,
-			groupId: destGroupId,
-			index: destIndex,
-			onChange,
-			onMove,
-			supportedOperators
-		} = props;
-
-		const {
-			criterion: droppedCriterion,
-			groupId: startGroupId,
-			index: startIndex
-		} = monitor.getItem();
-
-		const {operatorName, propertyName, value} = droppedCriterion;
-
-		const newCriterion = {
-			operatorName: operatorName ?
-				operatorName :
-				supportedOperators[0].name,
-			propertyName,
-			value: value ? value : ''
-		};
-
-		const newGroup = {
-			conjunctionName: CONJUNCTIONS.AND,
-			groupId: generateGroupId(),
-			items: [criterion, newCriterion]
-		};
-
-		const itemType = monitor.getItemType();
-
-		if (itemType === DragTypes.PROPERTY) {
-			onChange(newGroup);
-		}
-		else if (itemType === DragTypes.CRITERIA_ROW) {
-			onMove(
-				startGroupId,
-				startIndex,
-				destGroupId,
-				destIndex,
-				newGroup,
-				true
-			);
-		}
-	}
-};
-
-const criteriaRowSource = {
-	beginDrag({criterion, groupId, index}) {
-		return {criterion, groupId, index};
-	}
-};
-
 const CriteriaRowWithDrag = dragSource(
 	DragTypes.CRITERIA_ROW,
-	criteriaRowSource,
+	{
+		beginDrag
+	},
 	(connect, monitor) => ({
 		connectDragPreview: connect.dragPreview(),
 		connectDragSource: connect.dragSource(),
@@ -297,7 +316,10 @@ const CriteriaRowWithDrag = dragSource(
 
 export default dropTarget(
 	acceptedDragTypes,
-	dropZoneTarget,
+	{
+		canDrop,
+		drop
+	},
 	(connect, monitor) => ({
 		canDrop: monitor.canDrop(),
 		connectDropTarget: connect.dropTarget(),

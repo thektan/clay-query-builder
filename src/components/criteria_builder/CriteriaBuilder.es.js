@@ -119,6 +119,9 @@ class CriteriaBuilder extends Component {
 			);
 	}
 
+	/**
+	 * Switches the edit state between true and false.
+	 */
 	_handleToggleEdit = () => {
 		this.setState(
 			{
@@ -127,10 +130,26 @@ class CriteriaBuilder extends Component {
 		);
 	};
 
+	/**
+	 * Cleans and updates the criteria with the newer criteria.
+	 * @param {Object} newCriteria The criteria with the most recent changes.
+	 */
 	_handleCriteriaChange = newCriteria => {
 		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
 	};
 
+	/**
+	 * Moves the criterion to the specified index by removing and adding, and
+	 * updates the criteria.
+	 * @param {string} startGroupId Group ID of the item to remove.
+	 * @param {number} startIndex Index in the group to remove.
+	 * @param {string} destGroupId Group ID of the item to add.
+	 * @param {number} destIndex Index in the group where the criterion will
+	 * be added.
+	 * @param {object} criterion The criterion that is being moved.
+	 * @param {boolean} replace True if the destIndex should replace rather than
+	 * insert.
+	 */
 	_handleCriterionMove = (
 		startGroupId,
 		startIndex,
