@@ -307,7 +307,7 @@ class CriteriaGroup extends Component {
 			editing,
 			groupId,
 			onMove,
-			root,
+			root
 		} = this.props;
 
 		const classes = getCN(

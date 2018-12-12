@@ -83,7 +83,9 @@ class CriteriaBuilder extends Component {
 	_cleanCriteriaMapItems(criteriaItems, root) {
 		return criteriaItems
 			.filter(
-				({items}) => (items ? items.length : true)
+				({items}) => {
+					return items ? items.length : true;
+				}
 			)
 			.map(
 				item => {
@@ -235,17 +237,19 @@ class CriteriaBuilder extends Component {
 		return {
 			...criteria,
 			items: updatedCriteriaItems.map(
-				item => this._isGroupItem(item) ?
-					this._searchAndUpdateCriteria(
-						item,
-						startGroupId,
-						startIndex,
-						destGroupId,
-						destIndex,
-						addCriterion,
-						replace
-					) :
-					item
+				item => {
+					return this._isGroupItem(item) ?
+						this._searchAndUpdateCriteria(
+							item,
+							startGroupId,
+							startIndex,
+							destGroupId,
+							destIndex,
+							addCriterion,
+							replace
+						) :
+						item;
+				}
 			)
 		};
 	}

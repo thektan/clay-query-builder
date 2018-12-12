@@ -118,7 +118,7 @@ class CriteriaRow extends Component {
 	};
 
 	static defaultProps = {
-		editing: true,
+		editing: true
 	};
 
 	_getReadableCriteriaString(modelLabel, propertyLabel, operatorLabel, value) {
