@@ -36,13 +36,13 @@ class CriteriaRow extends Component {
 		editing: true,
 	};
 
-	_getReadableCriteriaString(propertyLabel, operatorLabel, value) {
+	_getReadableCriteriaString(modelLabel, propertyLabel, operatorLabel, value) {
 		return sub(
 			// Liferay.Language.get('x-with-property-x-x-x'),
 			'{0} with property {1} {2} {3}',
 			[
 				<span key="model-name">
-					{this.props.modelLabel}
+					{modelLabel}
 				</span>,
 				<b key="property">
 					{propertyLabel}
@@ -203,6 +203,7 @@ class CriteriaRow extends Component {
 						<div className="read-only-container">
 							<span className="criterion-string">
 								{this._getReadableCriteriaString(
+									modelLabel,
 									propertyLabel,
 									operatorLabel,
 									value
