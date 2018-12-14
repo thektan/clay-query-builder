@@ -22,8 +22,8 @@ const acceptedDragTypes = [
  */
 function canDrop(props, monitor) {
 	const {
+		dropIndex: destIndex,
 		groupId: destGroupId,
-		index: destIndex
 	} = props;
 
 	const {
@@ -41,13 +41,7 @@ function canDrop(props, monitor) {
 	const sameIndexInSameGroup = startGroupId === destGroupId &&
 		(startIndex === destIndex || startIndex === destIndex - 1);
 
-	let droppable = true;
-
-	if (sameOrNestedGroup || sameIndexInSameGroup) {
-		droppable = false;
-	}
-
-	return droppable;
+	return !(sameOrNestedGroup || sameIndexInSameGroup);
 }
 
 /**
@@ -61,8 +55,8 @@ function canDrop(props, monitor) {
  */
 function drop(props, monitor) {
 	const {
+		dropIndex: destIndex,
 		groupId: destGroupId,
-		index: destIndex,
 		onCriterionAdd,
 		onMove
 	} = props;
@@ -88,11 +82,11 @@ class DropZone extends Component {
 		before: PropTypes.bool,
 		canDrop: PropTypes.bool,
 		connectDropTarget: PropTypes.func,
-		groupId: PropTypes.string,
+		dropIndex: PropTypes.number.isRequired,
+		groupId: PropTypes.string.isRequired,
 		hover: PropTypes.bool,
-		index: PropTypes.number,
-		onCriterionAdd: PropTypes.func,
-		onMove: PropTypes.func
+		onCriterionAdd: PropTypes.func.isRequired,
+		onMove: PropTypes.func.isRequired
 	};
 
 	render() {

@@ -17,7 +17,7 @@ import {Liferay} from '../../utils/language';
 function drop(props, monitor) {
 	const {criterion} = monitor.getItem();
 
-	props.onCriterionAdd(props.index, criterion);
+	props.onCriterionAdd(0, criterion);
 }
 
 class EmptyDropZone extends Component {
@@ -26,7 +26,6 @@ class EmptyDropZone extends Component {
 	static propTypes = {
 		connectDropTarget: PropTypes.func,
 		hover: PropTypes.bool,
-		index: PropTypes.number,
 		onCriterionAdd: PropTypes.func
 	};
 

@@ -11,6 +11,11 @@ class CriteriaSidebar extends Component {
 		title: PropTypes.string
 	};
 
+	static defaultProps = {
+		supportedProperties: [],
+		title: Liferay.Language.get('properties')
+	}
+
 	state = {
 		searchValue: ''
 	};
@@ -64,7 +69,7 @@ class CriteriaSidebar extends Component {
 							)
 						) :
 						<li className="empty-message">
-							{Liferay.Language.get('no-results-found')}
+							{Liferay.Language.get('no-results-were-found')}
 						</li>
 					}
 				</ul>

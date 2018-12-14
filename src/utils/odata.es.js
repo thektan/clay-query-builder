@@ -34,7 +34,7 @@ const oDataV4ParserNameMap = {
  * Wraps a node in a grouping node.
  * @param {object} oDataASTNode
  * @param {string} prevConjunction
- * @returns Object representing the grouping
+ * @returns {object} Object representing the grouping
  */
 function addNewGroup({oDataASTNode, prevConjunction}) {
 	return {
@@ -49,7 +49,7 @@ function addNewGroup({oDataASTNode, prevConjunction}) {
  * string.
  * @param {object} criteria
  * @param {string} queryConjunction
- * @returns An OData query string built from the criteria object.
+ * @returns {string} An OData query string built from the criteria object.
  */
 function buildQueryString(criteria, queryConjunction) {
 	return criteria
@@ -93,7 +93,7 @@ function buildQueryString(criteria, queryConjunction) {
 /**
  * Gets the internal name of a child expression from the oDataV4Parser name
  * @param {object} oDataASTNode
- * @returns String value of the internal name.
+ * @returns {string} String value of the internal name.
  */
 function getChildExpressionName(oDataASTNode) {
 	return getExpressionName(oDataASTNode.value);
@@ -113,7 +113,7 @@ function getConjunctionForGroup(oDataASTNode) {
 /**
  * Gets the internal name of an expression from the oDataV4Parser name.
  * @param {object} oDataASTNode
- * @returns String value of the internal name
+ * @returns {string} String value of the internal name
  */
 function getExpressionName(oDataASTNode) {
 	return oDataV4ParserNameMap[oDataASTNode.type];
@@ -122,7 +122,7 @@ function getExpressionName(oDataASTNode) {
 /**
  * Returns the next expression in the syntax tree that is not a grouping.
  * @param {object} oDataASTNode
- * @returns String value of the internal name of the next expression.
+ * @returns {string} String value of the internal name of the next expression.
  */
 const getNextNonGroupExpressionName = oDataASTNode => {
 	let returnValue;
@@ -144,7 +144,7 @@ const getNextNonGroupExpressionName = oDataASTNode => {
  * @param {boolean} lastNodeWasGroup
  * @param {object} oDataASTNode
  * @param {string} prevConjunction
- * @returns boolean of whether a grouping has different conjunctions.
+ * @returns {boolean} Whether a grouping has different conjunctions.
  */
 function hasDifferentConjunctions({lastNodeWasGroup, oDataASTNode, prevConjunction}) {
 	return prevConjunction !== oDataASTNode.type && !lastNodeWasGroup;
@@ -175,19 +175,21 @@ function isValueType(types, value) {
  * @param {boolean} lastNodeWasGroup
  * @param {object} oDataASTNode
  * @param {string} prevConjunction
- * @returns a boolean of whether a group is necessary.
+ * @returns {boolean} Whether a group is necessary.
  */
 function isRedundantGroup({lastNodeWasGroup, oDataASTNode, prevConjunction}) {
 	const nextNodeExpressionName = getNextNonGroupExpressionName(oDataASTNode);
 
-	return lastNodeWasGroup || oDataV4ParserNameMap[prevConjunction] === nextNodeExpressionName || !isValueType(CONJUNCTIONS, nextNodeExpressionName);
+	return lastNodeWasGroup ||
+		oDataV4ParserNameMap[prevConjunction] === nextNodeExpressionName ||
+		!isValueType(CONJUNCTIONS, nextNodeExpressionName);
 }
 
 /**
  * Removes a grouping node and returns the child node
  * @param {object} oDataASTNode
  * @param {string} prevConjunction
- * @returns Object representing the operation inside the grouping
+ * @returns {object} Object representing the operation inside the grouping
  */
 function skipGroup({oDataASTNode, prevConjunction}) {
 	return {
@@ -228,7 +230,7 @@ function translateQueryToCriteria(queryString) {
  * arguments can be concatenated together.
  * @param {object} context
  * @param {object} context.oDataASTNode
- * @returns Criterion representation of an AST expression node in an array
+ * @returns {Array} Criterion representation of an AST expression node in an array
  */
 function toCriteria(context) {
 	const {oDataASTNode} = context;
@@ -257,7 +259,7 @@ function toCriteria(context) {
  * know operator precedence.
  * @param {object} context
  * @param {object} context.oDataASTNode
- * @returns an array containing the concatenated left and right values of a
+ * @returns {Array} An array containing the concatenated left and right values of a
  * conjunction expression or a new grouping.
  */
 function transformConjunctionNode(context) {
@@ -290,7 +292,7 @@ function transformConjunctionNode(context) {
  * @param {object} context
  * @param {object} context.oDataASTNode
  * @param {string} context.prevConjunction
- * @returns Criterion representation of an AST expression node in an array
+ * @returns {Array} Criterion representation of an AST expression node in an array
  */
 function transformGroupNode(context) {
 	const {oDataASTNode, prevConjunction} = context;
@@ -300,13 +302,13 @@ function transformGroupNode(context) {
 		[{
 			conjunctionName: getConjunctionForGroup(oDataASTNode),
 			groupId: generateGroupId(),
-			items: [...toCriteria(
+			items: toCriteria(
 				{
 					lastNodeWasGroup: true,
 					oDataASTNode: oDataASTNode.value,
 					prevConjunction
 				}
-			)]
+			)
 		}];
 }
 
@@ -314,7 +316,7 @@ function transformGroupNode(context) {
  * Transform an operator expression node into a criterion for the criteria
  * builder.
  * @param {object} oDataASTNode
- * @returns an array containing the object representation of an operator
+ * @returns {Array} An array containing the object representation of an operator
  * criterion
  */
 function transformOperatorNode({oDataASTNode}) {
@@ -329,7 +331,8 @@ function transformOperatorNode({oDataASTNode}) {
 
 /**
  * Wraps the criteria items in a criteria group.
- * @param {array} criteriaArray The list of criterion.
+ * @param {Array} criteriaArray The list of criterion.
+ * @returns {object} A criteria group object.
  */
 function wrapInCriteriaGroup(criteriaArray) {
 	return {

@@ -109,9 +109,7 @@ class CriteriaBuilder extends Component {
 						else {
 							cleanedItem = {
 								...item,
-								...{
-									items: this._cleanCriteriaMapItems(item.items)
-								}
+								items: this._cleanCriteriaMapItems(item.items)
 							};
 						}
 					}
@@ -137,7 +135,9 @@ class CriteriaBuilder extends Component {
 	 * @param {Object} newCriteria The criteria with the most recent changes.
 	 */
 	_handleCriteriaChange = newCriteria => {
-		this.props.onChange(this._cleanCriteriaMapItems([newCriteria], true).pop());
+		const items = this._cleanCriteriaMapItems([newCriteria], true);
+
+		this.props.onChange(items[items.length - 1]);
 	};
 
 	/**
@@ -152,22 +152,10 @@ class CriteriaBuilder extends Component {
 	 * @param {boolean} replace True if the destIndex should replace rather than
 	 * insert.
 	 */
-	_handleCriterionMove = (
-		startGroupId,
-		startIndex,
-		destGroupId,
-		destIndex,
-		criterion,
-		replace
-	) => {
+	_handleCriterionMove = (...args) => {
 		const newCriteria = this._searchAndUpdateCriteria(
 			this.props.criteria,
-			startGroupId,
-			startIndex,
-			destGroupId,
-			destIndex,
-			criterion,
-			replace
+			...args
 		);
 
 		this._handleCriteriaChange(newCriteria);
