@@ -62,6 +62,7 @@ class ODataQueryBuilder extends Component {
 				<div className="form-group">
 					<textarea
 						className="field form-control"
+						data-testid="query-input"
 						id={inputId}
 						name={inputId}
 						readOnly

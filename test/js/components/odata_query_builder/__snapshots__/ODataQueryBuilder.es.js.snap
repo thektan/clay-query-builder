@@ -114,7 +114,7 @@ exports[`ODataQueryBuilder should render with no properties 1`] = `
             <div
               class="sidebar-header"
             >
-              x-properties
+               Properties
             </div>
             <div
               class="sidebar-search"
@@ -294,7 +294,7 @@ exports[`ODataQueryBuilder should render with properties 1`] = `
             <div
               class="sidebar-header"
             >
-              x-properties
+               Properties
             </div>
             <div
               class="sidebar-search"

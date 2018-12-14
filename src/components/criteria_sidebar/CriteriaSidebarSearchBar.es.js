@@ -28,6 +28,7 @@ class CriteriaSidebarSearchBar extends Component {
 				<div className="input-group-item">
 					<input
 						className="form-control input-group-inset input-group-inset-after"
+						data-testid="search-input"
 						onChange={this._handleChange}
 						placeholder={Liferay.Language.get('search')}
 						type="text"
@@ -36,6 +37,7 @@ class CriteriaSidebarSearchBar extends Component {
 
 					<div className="input-group-inset-item input-group-inset-item-after">
 						<ClayButton
+							data-testid="search-button"
 							iconName={searchValue ? 'times' : 'search'}
 							onClick={searchValue ? this._handleClear : undefined}
 							style="unstyled"

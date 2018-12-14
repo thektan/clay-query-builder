@@ -24,10 +24,12 @@ exports[`CriteriaRow should render 1`] = `
       <span
         class="criterion-string"
       >
-        x-with-property-x
+        <span />
+         with property 
+        <b />
       </span>
       <select
-        class="form-control criterion-input operator-input form-control"
+        class="form-control criterion-input operator-input"
       />
       <input
         class="criterion-input form-control"

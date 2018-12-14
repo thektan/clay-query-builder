@@ -108,7 +108,7 @@ exports[`CriteriaBuilder should render 1`] = `
         <div
           class="sidebar-header"
         >
-          x-properties
+           Properties
         </div>
         <div
           class="sidebar-search"
