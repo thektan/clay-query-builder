@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CriteriaSidebarItem should render 1`] = `
+<DocumentFragment>
+  <li
+    class="criteria-sidebar-item-root"
+  >
+    <span
+      class="inline-item"
+    >
+      <svg
+        aria-hidden="true"
+        class="lexicon-icon lexicon-icon-drag"
+        viewBox="0 0 512 512"
+      >
+        <use
+          xlink:href="#drag"
+        />
+      </svg>
+    </span>
+    <span
+      class="criteria-sidebar-item-type sticker sticker-light"
+    >
+      <span
+        class="inline-item"
+      >
+        <svg
+          aria-hidden="true"
+          class="lexicon-icon lexicon-icon-text"
+          viewBox="0 0 512 512"
+        >
+          <use
+            xlink:href="#text"
+          />
+        </svg>
+      </span>
+    </span>
+  </li>
+</DocumentFragment>
+`;
